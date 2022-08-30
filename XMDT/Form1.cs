@@ -1,6 +1,6 @@
-﻿using HtmlAgilityPack;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.IO;
 using System.Linq;
@@ -47,22 +47,22 @@ namespace XMDT
             inf.TwoFA = infAccount[2];
             inf.Email = infAccount[3];
             inf.PassMail = infAccount[4];
-            inf.EmailRecover = infAccount[5];
+            //inf.EmailRecover = infAccount[5];
 
             //Mail mail = new Mail();
-            //mail.Verify(inf.Email, inf.PassMail, "outlook.office365.com", 993);
+            //var code = mail.GetCode(inf.Email, inf.PassMail, "outlook.office365.com", 993, @"\d+");
 
             string chromeDriverPath = currentDirectory + "\\Library";
             
             var options = new ChromeOptions();
             options.AddArgument("no-sandbox");
             //options.AddArgument("--proxy-server=http://" + proxy);
+
             var proxyQA = new Proxy();
             proxyQA.HttpProxy = proxy;
             options.Proxy = proxyQA;
             options.AddArgument("--user-agent=" + userAgent);
             ChromeDriver driver = new ChromeDriver(chromeDriverPath, options, TimeSpan.FromDays(20)); 
-
 
             string url = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
@@ -70,10 +70,11 @@ namespace XMDT
             string urlAddMailFace = "https://m.facebook.com/ntdelegatescreen/?params=%7B%22entry-point%22%3A%22settings%22%7D&path=%2Fcontacts%2Fmanagement%2F";
             //div[@id='u_9_26_O0']       //div[contains(., "Add email address")]
 
-            //string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
+            string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
             //LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
-            //GetCodeHotMail(driver, url, inf.Email, inf.PassMail);
+            //var data = GetFaceInfo(driver, urlFaceInfo, inf.Id);
+            GetCodeHotMail(driver, "https://outlook.live.com/mail/0/", inf.Email, inf.PassMail);
         }
 
         private FaceInfo GetFaceInfo(ChromeDriver driver, string url, string userId)
@@ -105,6 +106,34 @@ namespace XMDT
             var basicInfo = document.DocumentNode.SelectNodes("//div[@id='basic-info']//div[@class='_5cdv r']");
             result.DateOfBirth = basicInfo[0].InnerText;
             result.Gender = basicInfo[1].InnerText;
+
+            var nicknames = document.DocumentNode.SelectNodes("//div[@id='nicknames']//h3[@class='_52jg']");
+            foreach (var item in nicknames)
+            {
+                result.OtherNames.Add(item.InnerText);
+            }
+
+            var relationShip = document.DocumentNode.SelectSingleNode("//div[@id='relationship']//div[@class='_52ja _5cds _5cdt']");
+            result.RelationShip = relationShip.InnerText;
+
+            var familyMembers = document.DocumentNode.SelectNodes("//div[@id='family']//div[@class='title mfsm fcb']");
+            foreach (var item in familyMembers)
+            {
+                result.FamilyMember.Add(item.InnerText);
+            }
+
+            var about = document.DocumentNode.SelectSingleNode("//div[@id='bio']//div[@class='_5cds _2lcw _5cdt']");
+            result.About = about.InnerText;
+
+            var  favourite = document.DocumentNode.SelectSingleNode("//div[@id='quote']//div[@class='_5cds _2lcw _5cdt']");
+            result.Favourite = favourite.InnerText;
+
+            var friends = document.DocumentNode.SelectNodes("//div[@id='profile-card']//div[@class='title mfsm fcb']");
+            foreach (var item in friends)
+            {
+                result.Friends.Add(item.InnerText);
+            }
+
             return result;
         }
 
@@ -159,8 +188,12 @@ namespace XMDT
             driver.FindElement(By.XPath("//input[@id='idSIButton9']")).Click();
             Thread.Sleep(1000);
             driver.FindElement(By.XPath("//input[@id='idSIButton9']")).Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
+            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
+            //IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            //wait.Until(wd => js.ExecuteScript("return document.readyState").ToString() == "complete");
+            var innerHtml = driver.PageSource;
             var html = driver.FindElement(By.XPath("html")).GetInnerHTML();
             HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(html);

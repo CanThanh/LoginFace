@@ -58,6 +58,45 @@ namespace XMDT
                 }
             }
         }
+
+        public string GetCode(string email, string pass, string ipmap, int port, string strRegex)
+        {
+            string result = null;
+            string url = null;
+            using (ImapClient ic = new ImapClient())
+            {
+                ic.Connect(ipmap, port, true, false);
+                ic.Login(email, pass);
+                ic.SelectMailbox("INBOX");
+                int mailcount;
+                for (mailcount = ic.GetMessageCount(); mailcount < 2; mailcount = ic.GetMessageCount())
+                {
+                    Mail.Delay(5);
+                    ic.SelectMailbox("INBOX");
+                }
+                MailMessage[] mm = ic.GetMessages(mailcount - 50, mailcount -1, false, false);
+                //MailMessage[] mm = ic.GetMessages(0, 20, false, false);
+                MailMessage[] array = mm;
+                for (int j = 0; j < array.Length; j++)
+                {
+                    MailMessage i = array[j];
+                    {
+                        if (i.Subject.ToLower().Contains("facebook") && i.From.Address.ToLower().Contains("security"))
+                        {
+                            string sbody = i.Body;
+                            result = Regex.Match(i.Body, strRegex).Value;
+                            if(result.Length  >= 6)
+                            {
+                                return result;
+                            }
+                        }
+                    }
+                }
+                ic.Dispose();
+            }
+            return result;
+        }
+
         private static void Delay(int time)
         {
             for (int i = 0; i < time; i++)

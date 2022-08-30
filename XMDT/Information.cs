@@ -28,7 +28,8 @@ namespace XMDT
         public string Gender { get; set; }
         public string About { get; set; }
         public List<string> OtherNames { get; set; }
-        public List<string> RelationShip { get; set; }
+        public string RelationShip { get; set; }
+        public string Favourite { get; set; }
         public List<string> FamilyMember { get; set; }
         public List<string> Friends { get; set; }
 
@@ -38,7 +39,6 @@ namespace XMDT
             Educations = new List<string>();
             Places = new List<string>();
             OtherNames = new List<string>();
-            RelationShip = new List<string>();
             FamilyMember = new List<string>();
             Friends = new List<string>();
         }
