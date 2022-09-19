@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -14,9 +15,11 @@ namespace XMDT
 {
     public partial class Form1 : Form
     {
+        private List<FaceInfo> faceInfos;
         public Form1()
         {
             InitializeComponent();
+            faceInfos = new List<FaceInfo>();
         }
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
         //100009306396626  snowkvt1234  76IZ6TLE4XTKIWFRIKCVQSWYSRMZRWQN	alishauemargie@hotmail.com  @thainguyenteam@@1022020    alishauemargie2022@getnada.com
@@ -67,18 +70,33 @@ namespace XMDT
 
             string url = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
-            //string urlFace = "https://www.google.com";
             string urlAddMailFace = "https://m.facebook.com/ntdelegatescreen/?params=%7B%22entry-point%22%3A%22settings%22%7D&path=%2Fcontacts%2Fmanagement%2F";
-            //div[@id='u_9_26_O0']       //div[contains(., "Add email address")]
-
             string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
-            //LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
-            //var data = GetFaceInfo(driver, urlFaceInfo, inf.Id);
-            GetCodeHotMail(driver, url, inf.Email, inf.PassMail);
+            LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
+            GetFaceInfo(driver, urlFaceInfo, inf.Id);
+            WriteFile(currentDirectory + "\\File\\userInfo.json");
+            ReadFile(currentDirectory + "\\File\\userInfo.json");
+
+            //GetCodeHotMail(driver, url, inf.Email, inf.PassMail);
         }
 
-        private FaceInfo GetFaceInfo(ChromeDriver driver, string url, string userId)
+        private void ReadFile(string filePath)
+        {
+            faceInfos.Clear();
+            FileHelper fileHelper = new FileHelper();
+            var strData = fileHelper.Read(filePath);
+            faceInfos = JsonConvert.DeserializeObject<List<FaceInfo>>(strData);
+        }
+
+        private void WriteFile(string filePath)
+        {
+            FileHelper fileHelper = new FileHelper();
+            var strData = JsonConvert.SerializeObject(faceInfos);
+            fileHelper.Write(filePath, strData);
+        }
+
+        private void GetFaceInfo(ChromeDriver driver, string url, string userId, bool isUpdate = false)
         {
             FaceInfo result = new FaceInfo();
             driver.Url = url;
@@ -87,55 +105,116 @@ namespace XMDT
             var html = driver.FindElement(By.XPath("html")).GetInnerHTML();
             HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(html);
-            //result.DateOfBirth = document.DocumentNode.SelectSingleNode("//div[contains(@class,'basic - info')]//div[@class='_5cdv r']").InnerText;
             result.Id = userId;
+            var existUser = faceInfos.FirstOrDefault(x => x.Id == userId);
+            if (existUser != null && !isUpdate)
+            {
+                return ;
+            }
+
             var works = document.DocumentNode.SelectNodes("//div[@id='work']//div[@class='_c3u']//span");
-            foreach (var item in works)
-            {
-                result.Works.Add(item.InnerText);
+            if(works != null)
+            {                
+                foreach (var item in works)
+                {
+                    result.Works.Add(item.InnerText);
+                }
             }
+
             var educations = document.DocumentNode.SelectNodes("//div[@id='education']//div[@class='_c3u']//span");
-            foreach (var item in educations)
+            if (educations != null)
             {
-                result.Educations.Add(item.InnerText);
+                foreach (var item in educations)
+                {
+                    result.Educations.Add(item.InnerText);
+                }
             }
+
             var places = document.DocumentNode.SelectNodes("//div[@id='education']//div[@class='_c3u']//span");
-            foreach (var item in places)
+            if (places != null)
             {
-                result.Places.Add(item.InnerText);
+                foreach (var item in places)
+                {
+                    result.Places.Add(item.InnerText);
+                }
             }
+
             var basicInfo = document.DocumentNode.SelectNodes("//div[@id='basic-info']//div[@class='_5cdv r']");
-            result.DateOfBirth = basicInfo[0].InnerText;
-            result.Gender = basicInfo[1].InnerText;
+            if (basicInfo != null)
+            {
+                result.DateOfBirth = basicInfo[0].InnerText;
+                result.Gender = basicInfo[1].InnerText;
+            }
 
             var nicknames = document.DocumentNode.SelectNodes("//div[@id='nicknames']//h3[@class='_52jg']");
-            foreach (var item in nicknames)
+            if (nicknames != null)
             {
-                result.OtherNames.Add(item.InnerText);
+                foreach (var item in nicknames)
+                {
+                    result.OtherNames.Add(item.InnerText);
+                }
             }
 
             var relationShip = document.DocumentNode.SelectSingleNode("//div[@id='relationship']//div[@class='_52ja _5cds _5cdt']");
-            result.RelationShip = relationShip.InnerText;
+            if (relationShip != null)
+            {
+                result.RelationShip = relationShip.InnerText;
+
+            }
 
             var familyMembers = document.DocumentNode.SelectNodes("//div[@id='family']//div[@class='title mfsm fcb']");
-            foreach (var item in familyMembers)
+            if(familyMembers!= null)
             {
-                result.FamilyMember.Add(item.InnerText);
+                foreach (var item in familyMembers)
+                {
+                    result.FamilyMember.Add(item.InnerText);
+                }
             }
 
             var about = document.DocumentNode.SelectSingleNode("//div[@id='bio']//div[@class='_5cds _2lcw _5cdt']");
-            result.About = about.InnerText;
-
-            var favourite = document.DocumentNode.SelectSingleNode("//div[@id='quote']//div[@class='_5cds _2lcw _5cdt']");
-            result.Favourite = favourite.InnerText;
-
-            var friends = document.DocumentNode.SelectNodes("//div[@id='profile-card']//div[@class='title mfsm fcb']");
-            foreach (var item in friends)
+            if (about != null)
             {
-                result.Friends.Add(item.InnerText);
+                result.About = about.InnerText;
+            }
+            
+            var favourite = document.DocumentNode.SelectSingleNode("//div[@id='quote']//div[@class='_5cds _2lcw _5cdt']");
+            if (favourite != null)
+            {
+                result.Favourite = favourite.InnerText;
             }
 
-            return result;
+            var friends = document.DocumentNode.SelectNodes("//div[@id='profile-card']//div[@class='title mfsm fcb']");
+            if (friends != null)
+            {
+                foreach (var item in friends)
+                {
+                    result.Friends.Add(item.InnerText);
+                }
+            }
+            if (existUser != null)
+            {
+                if (isUpdate)
+                {
+                    existUser.Works = result.Works;
+                    existUser.Educations = result.Educations;
+                    existUser.Places = result.Places;
+                    existUser.Email = result.Email;
+                    existUser.DateOfBirth = result.DateOfBirth;
+                    existUser.Gender = result.Gender;
+
+                    existUser.About = result.About;
+                    existUser.OtherNames = result.OtherNames;
+                    existUser.RelationShip = result.RelationShip;
+                    existUser.Favourite = result.Favourite;
+                    existUser.FamilyMember = result.FamilyMember;
+                    existUser.Friends = result.Friends;
+                }
+            }
+            else
+            {
+                faceInfos.Add(result);
+            }
+            //return result;
         }
 
         private void LoginFace(ChromeDriver driver, string url, string user, string pass, string twoFA)
@@ -217,6 +296,7 @@ namespace XMDT
                     }
                 }
             }        
+
             return result;
         }
 
