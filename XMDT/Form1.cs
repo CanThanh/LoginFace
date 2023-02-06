@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools;
+using OpenQA.Selenium.DevTools.V85.IndexedDB;
 using OpenQA.Selenium.Support.UI;
+using OtpNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,21 +55,12 @@ namespace XMDT
             inf.Email = infAccount[3];
             inf.PassMail = infAccount[4];
             //inf.EmailRecover = infAccount[5];
-
             //Mail mail = new Mail();
+
             //var code = mail.GetCode(inf.Email, inf.PassMail, "outlook.office365.com", 993, @"\d+");
+            //string chromeDriverPath = currentDirectory + "\\Library\\chromedriver_win32";
 
-            string chromeDriverPath = currentDirectory + "\\Library";
-
-            var options = new ChromeOptions();
-            options.AddArgument("no-sandbox");
-            //options.AddArgument("--proxy-server=http://" + proxy);
-
-            var proxyQA = new Proxy();
-            proxyQA.HttpProxy = proxy;
-            options.Proxy = proxyQA;
-            options.AddArgument("--user-agent=" + userAgent);
-            ChromeDriver driver = new ChromeDriver(chromeDriverPath, options, TimeSpan.FromDays(20));
+            var driver = InitChromeDriver();
 
             string url = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
@@ -74,13 +68,72 @@ namespace XMDT
             string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
             LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
-            GetFaceInfo(driver, urlFaceInfo, inf.Id);
-            WriteFile(currentDirectory + "\\File\\userInfo.json");
-            ReadFile(currentDirectory + "\\File\\userInfo.json");
+            //GetFaceInfo(driver, urlFaceInfo, inf.Id);
+            //WriteFile(currentDirectory + "\\File\\userInfo.json");
+            //ReadFile(currentDirectory + "\\File\\userInfo.json");
 
             //GetCodeHotMail(driver, url, inf.Email, inf.PassMail);
         }
 
+        private ChromeDriver InitChromeDriver()
+        {
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("no-sandbox");
+            //chromeOptions.AddArguments("incognito");
+            //chromeOptions.AddArgument("--start-maximized");
+            //chromeOptions.AddArgument("--ignore-certificate-errors");
+            //chromeOptions.AddArgument("--disable-popup-blocking");
+            //chromeOptions.AddArgument("--disable-web-security");
+            //chromeOptions.AddExtension("");
+
+            ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService();
+            chromeDriverService.HideCommandPromptWindow = true;
+            //chromeDriverService.SuppressInitialDiagnosticInformation = true;
+
+            //options.AddArgument("--proxy-server=http://" + proxy);
+            //var proxyQA = new Proxy();
+            //proxyQA.HttpProxy = proxy;
+            //options.Proxy = proxyQA;
+            //options.AddArgument("--user-agent=" + userAgent);
+
+            ChromeDriver driver = new ChromeDriver(chromeDriverService, chromeOptions);
+            return driver;
+        }
+
+        private void SendKeyByXPath(ChromeDriver driver, string xPath, string key)
+        {
+            Random random = new Random();
+            var randomValue = random.NextDouble();
+            if(randomValue < 0.9)
+            {
+                foreach (var item in key)
+                {
+                    driver.FindElement(By.XPath(xPath)).SendKeys(item.ToString());
+                    Thread.Sleep(50);
+                }
+            }
+            else
+            {
+                var randomIndex = random.Next(key.Length - 1);
+                for(int i = 0; i < randomIndex; i++)
+                {
+                    driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
+                    Thread.Sleep(50);
+                }
+                //Đánh chữ sai
+                driver.FindElement(By.XPath(xPath)).SendKeys("d");
+                Thread.Sleep(100);
+                driver.FindElement(By.XPath(xPath)).SendKeys(Convert.ToChar(8).ToString());
+                Thread.Sleep(100);
+                driver.FindElement(By.XPath(xPath)).SendKeys(key[randomIndex].ToString());
+                //
+                for (int i = randomIndex + 1; i < key.Length; i++)
+                {
+                    Thread.Sleep(50);
+                    driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
+                }
+            }
+        }
         private void ReadFile(string filePath)
         {
             faceInfos.Clear();
@@ -222,8 +275,8 @@ namespace XMDT
             driver.Url = url;
             driver.Navigate().GoToUrl(url);
             Thread.Sleep(1000);
-            driver.FindElement(By.XPath("//input[@name='email']")).SendKeys(user);
-            Thread.Sleep(1000);
+            //driver.FindElement(By.XPath("//input[@name='email']")).SendKeys(user);
+            SendKeyByXPath(driver, "//input[@name='email']", user);
             driver.FindElement(By.XPath("//input[@name='pass']")).SendKeys(pass);
             Thread.Sleep(1000);
             driver.FindElement(By.XPath("//button[@name='login']")).Click();
@@ -233,12 +286,8 @@ namespace XMDT
             //https://m.facebook.com/checkpoint/?__req=4
             if (nodeCode != null)
             {
-                string url2Fa = "https://2fa.live/tok/";
-                var faCode = GetData(url2Fa + twoFA);
-                string pattern = @"\d+";
-                Regex rg = new Regex(pattern);
-                string code = rg.Match(faCode).Value;
-                driver.FindElement(By.XPath("//input[@name='approvals_code']")).SendKeys(code);
+                string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
+                driver.FindElement(By.XPath("//input[@name='approvals_code']")).SendKeys(faCode);
                 Thread.Sleep(1000);
                 driver.FindElement(By.XPath("//button[@type='submit']")).Click();
                 Thread.Sleep(2000);
@@ -342,6 +391,18 @@ namespace XMDT
                     http.Cookies.Add(temp2[0], temp2[1]);
                 }
             }
-        }               
+        }
+
+        public byte[] FileToByteArray(string fileName)
+        {
+            byte[] buff = null;
+            FileStream fs = new FileStream(fileName,
+                                           FileMode.Open,
+                                           FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            long numBytes = new FileInfo(fileName).Length;
+            buff = br.ReadBytes((int)numBytes);
+            return buff;
+        }
     }
 }
