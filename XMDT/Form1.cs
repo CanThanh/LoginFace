@@ -7,6 +7,7 @@ using OpenQA.Selenium.Support.UI;
 using OtpNet;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -64,10 +65,15 @@ namespace XMDT
 
             string url = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
+            //string urlFace = "https://mbasic.facebook.com";
             string urlAddMailFace = "https://m.facebook.com/ntdelegatescreen/?params=%7B%22entry-point%22%3A%22settings%22%7D&path=%2Fcontacts%2Fmanagement%2F";
             string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
             LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
+            //string eaab = GetEAABToken(driver);
+            //string dtsg = GetDTSGToken(driver);
+            //string eaag = GetEAAGToken(driver, inf.TwoFA);
+
             //GetFaceInfo(driver, urlFaceInfo, inf.Id);
             //WriteFile(currentDirectory + "\\File\\userInfo.json");
             //ReadFile(currentDirectory + "\\File\\userInfo.json");
@@ -120,8 +126,9 @@ namespace XMDT
                     driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
                     Thread.Sleep(50);
                 }
-                //Đánh chữ sai
-                driver.FindElement(By.XPath(xPath)).SendKeys("d");
+                //Ghi 1 chữ cái sai rồi xóa bỏ
+                var character = 65 + random.Next(26);
+                driver.FindElement(By.XPath(xPath)).SendKeys(Convert.ToChar(character).ToString());
                 Thread.Sleep(100);
                 driver.FindElement(By.XPath(xPath)).SendKeys(Convert.ToChar(8).ToString());
                 Thread.Sleep(100);
@@ -133,20 +140,6 @@ namespace XMDT
                     driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
                 }
             }
-        }
-        private void ReadFile(string filePath)
-        {
-            faceInfos.Clear();
-            FileHelper fileHelper = new FileHelper();
-            var strData = fileHelper.Read(filePath);
-            faceInfos = JsonConvert.DeserializeObject<List<FaceInfo>>(strData);
-        }
-
-        private void WriteFile(string filePath)
-        {
-            FileHelper fileHelper = new FileHelper();
-            var strData = JsonConvert.SerializeObject(faceInfos);
-            fileHelper.Write(filePath, strData);
         }
 
         private void GetFaceInfo(ChromeDriver driver, string url, string userId, bool isUpdate = false)
@@ -305,6 +298,63 @@ namespace XMDT
             }
         }
 
+        private bool LoginCookie(ChromeDriver driver, string cookie)
+        {
+            bool result = false;
+            driver.Navigate().GoToUrl("https://www.facebook.com");
+            driver.Manage().Cookies.DeleteAllCookies();
+            var lstCookie = cookie.Split(';');
+            for (int i = 0; i < lstCookie.Length; i++)
+            {
+                string key = lstCookie[i].Split('=')[0].Trim();
+                string value = lstCookie[i].Split('=')[1].Trim();
+                //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,"facebook.com","/", DateTime.Now.AddDays(1));
+                OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
+                driver.Manage().Cookies.AddCookie(osCookie);
+            }
+            driver.Navigate().GoToUrl("https://www.facebook.com");
+            if (!string.IsNullOrEmpty(GetEAABToken(driver)))
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        #region GetToken
+        //private string GetEAAGToken(ChromeDriver driver, string twoFA)
+        //{
+        //    //Vào trang business lấy token
+        //    driver.Url = "https://business.facebook.com/content_management/";
+        //    Thread.Sleep(3000);
+        //    string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
+        //    var sendFaCode = driver.FindElement(By.XPath("//input[@name='approvals_code']"));
+        //    if (sendFaCode != null)
+        //    {
+        //        sendFaCode.SendKeys(faCode);
+        //        Thread.Sleep(2000);
+        //    }
+        //    string source = driver.PageSource;
+        //    string token = "EAAG" + source.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+        //    return token;
+        }
+        private string GetEAABToken(ChromeDriver driver)
+        {
+            //Vào trang quảng cáo pe lấy token
+            driver.Url = "https://www.facebook.com/pe";
+            Thread.Sleep(2000);
+            string source = driver.PageSource;
+            string token = "EAAB" + source.Split(new [] {"EAAB"}, StringSplitOptions.None)[1].Split('"')[0];
+            return token;
+        }
+
+        private string GetDTSGToken(ChromeDriver driver)
+        {
+            string source = driver.PageSource;
+            string token = source.Split(new[] { "\"token\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
+            return token;
+        }
+        #endregion
+
         private List<string> GetCodeHotMail(ChromeDriver driver, string url, string user, string pass)
         {
             List<string> result =new List<string>();
@@ -380,25 +430,61 @@ namespace XMDT
             return html;
         }
 
-        void AddCookie(HttpRequest http, string cookie)
+        private string GetCookie(ChromeDriver driver)
         {
-            var temp = cookie.Split(';');
-            foreach (var item in temp)
+            string cookie = "";
+            try
             {
-                var temp2 = item.Split('=');
-                if (temp2.Count() > 1)
+                var lstCookie = driver.Manage().Cookies.AllCookies;
+                for (int i = 0; i < lstCookie.Count; i++)
                 {
-                    http.Cookies.Add(temp2[0], temp2[1]);
+                    string name = lstCookie.ElementAt(i).Name.ToString().Trim();
+                    string value = lstCookie.ElementAt(i).Value.ToString().Trim();
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        cookie += $"{name}={value};";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+            return cookie;
+        }
+
+        private void AddCookie(HttpRequest http, string cookie)
+        {
+            var lstCookie = cookie.Split(';');
+            foreach (var item in lstCookie)
+            {
+                var nameValue = item.Split('=');
+                if (nameValue.Count() > 1)
+                {
+                    http.Cookies.Add(nameValue[0], nameValue[1]);
                 }
             }
         }
 
-        public byte[] FileToByteArray(string fileName)
+        private void ReadFile(string filePath)
+        {
+            faceInfos.Clear();
+            FileHelper fileHelper = new FileHelper();
+            var strData = fileHelper.Read(filePath);
+            faceInfos = JsonConvert.DeserializeObject<List<FaceInfo>>(strData);
+        }
+
+        private void WriteFile(string filePath)
+        {
+            FileHelper fileHelper = new FileHelper();
+            var strData = JsonConvert.SerializeObject(faceInfos);
+            fileHelper.Write(filePath, strData);
+        }
+
+        public byte[] FileToByteArra(string fileName)
         {
             byte[] buff = null;
-            FileStream fs = new FileStream(fileName,
-                                           FileMode.Open,
-                                           FileAccess.Read);
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
             long numBytes = new FileInfo(fileName).Length;
             buff = br.ReadBytes((int)numBytes);
