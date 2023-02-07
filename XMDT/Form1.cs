@@ -5,6 +5,7 @@ using OpenQA.Selenium.DevTools;
 using OpenQA.Selenium.DevTools.V85.IndexedDB;
 using OpenQA.Selenium.Support.UI;
 using OtpNet;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -69,14 +70,19 @@ namespace XMDT
             string urlAddMailFace = "https://m.facebook.com/ntdelegatescreen/?params=%7B%22entry-point%22%3A%22settings%22%7D&path=%2Fcontacts%2Fmanagement%2F";
             string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
-            LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
+            string cookie = "presence=EDvF3EtimeF1675742421EuserFA21B03574129834A2EstateFDutF0CEchF_7bCC;cppo=1;m_page_voice=100003574129834;xs=10%3AAA9MUI7T-hnOGg%3A2%3A1675742409%3A-1%3A11945;c_user=100003574129834;locale=vi_VN;wd=929x879;m_pixel_ratio=1;fr=05YnzmcTSx7a2u5xz.AWUqjLht6jYAmSiSj46xHsf97qg.Bj4cy5.7Q.AAA.0.0.Bj4czH.AWVw7EQ79Wg;usida=eyJ2ZXIiOjEsImlkIjoiQXJwb3o0aDQwdno4MyIsInRpbWUiOjE2NzU3NDI0MTd9;sb=uczhYxqd-jNUJ7QzKES0Nu_B;datr=uczhY2GY8sB6sc4tUfXL3Lgj";
+
+            string cookie2 = "datr=1LvhY1pGpki2WZzFaXc-8f_v; sb=1LvhY8qSzVz63ESQJCNrjd0F; m_pixel_ratio=1; locale=vi_VN; fr=0Pgf72nltOesLADqP.AWVXDWEUwUp1p8bY1yjfnz6a6UU.Bj4bvU.5z.AAA.0.0.Bj4bvi.AWWjB2-UB7Q; c_user=100003574129834; xs=44%3ATITPFBpdERQNnA%3A2%3A1675738084%3A-1%3A11945; m_page_voice=100003574129834; cppo=1; usida=eyJ2ZXIiOjEsImlkIjoiQXJwb3hyaTE2ZXJ3MWYiLCJ0aW1lIjoxNjc1NzQwNzM1fQ%3D%3D; presence=EDvF3EtimeF1675740790EuserFA21B03574129834A2EstateFDutF0CEchF_7bCC; wd=1920x372";
+
+            // LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
+            LoginCookie(driver, cookie2);
             string eaab = GetEAABToken(driver);
             string dtsg = GetDTSGToken(driver);
 
-            string cookie = GetCookie(driver);
-            //string eaag = GetEAAGTokenApi(inf.Id, cookie);
+            //string cookie = GetCookie(driver);
+            string eaag = GetEAAGTokenApi(inf.Id, cookie2);
 
- 
+            var hoangnv1 = "hoangnv1";
             //string eaag = GetEAAGToken(driver, inf.TwoFA);
 
             //GetFaceInfo(driver, urlFaceInfo, inf.Id);
@@ -345,12 +351,23 @@ namespace XMDT
 
         private string GetEAAGTokenApi(string user, string cookie)
         {
-            HttpRequest request = new HttpRequest();
-            //AddCookie(request, "datr=1LvhY1pGpki2WZzFaXc-8f_v; sb=1LvhY8qSzVz63ESQJCNrjd0F; m_pixel_ratio=1; locale=vi_VN; fr=0Pgf72nltOesLADqP.AWVXDWEUwUp1p8bY1yjfnz6a6UU.Bj4bvU.5z.AAA.0.0.Bj4bvi.AWWjB2-UB7Q; c_user=100003574129834; xs=44%3ATITPFBpdERQNnA%3A2%3A1675738084%3A-1%3A11945; m_page_voice=100003574129834; cppo=1; usida=eyJ2ZXIiOjEsImlkIjoiQXJwb3hyaTE2ZXJ3MWYiLCJ0aW1lIjoxNjc1NzQwNzM1fQ%3D%3D; presence=EDvF3EtimeF1675740790EuserFA21B03574129834A2EstateFDutF0CEchF_7bCC; wd=1920x372");
-            AddCookie(request, cookie);
-            var respone = request.Get("https://business.facebook.com/content_management/");
-            var kq = respone.ToString();
-            string token = "EAAG"  + kq.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+            //HttpRequest request = new HttpRequest();           
+            //AddCookie(request, cookie);
+            //var respone = request.Get("https://business.facebook.com/content_management/");
+            //var kq = respone.ToString();
+            //string token = "EAAG"  + kq.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+            //return token;
+
+            var options = new RestClientOptions("https://business.facebook.com")
+            {
+                MaxTimeout = -1,
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("https://business.facebook.com/content_management/", Method.Get);
+            request.AddHeader("cookie", cookie);
+            var respone = client.Execute(request);
+            string token = "EAAG"  + respone.Content.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
             return token;
         }
         private string GetEAABToken(ChromeDriver driver)
