@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -56,29 +57,33 @@ namespace XMDT
             inf.Email = infAccount[3];
             inf.PassMail = infAccount[4];
             //inf.EmailRecover = infAccount[5];
-            //Mail mail = new Mail();
 
+            //Mail mail = new Mail();
             //var code = mail.GetCode(inf.Email, inf.PassMail, "outlook.office365.com", 993, @"\d+");
             //string chromeDriverPath = currentDirectory + "\\Library\\chromedriver_win32";
 
             var driver = InitChromeDriver();
 
-            string url = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
+            string urlMail = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
-            //string urlFace = "https://mbasic.facebook.com";
             string urlAddMailFace = "https://m.facebook.com/ntdelegatescreen/?params=%7B%22entry-point%22%3A%22settings%22%7D&path=%2Fcontacts%2Fmanagement%2F";
             string urlFaceInfo = "https://m.facebook.com/profile.php?v=info&_rdr";
 
             LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
-            //string eaab = GetEAABToken(driver);
-            //string dtsg = GetDTSGToken(driver);
+            string eaab = GetEAABToken(driver);
+            string dtsg = GetDTSGToken(driver);
+
+            string cookie = GetCookie(driver);
+            //string eaag = GetEAAGTokenApi(inf.Id, cookie);
+
+ 
             //string eaag = GetEAAGToken(driver, inf.TwoFA);
 
             //GetFaceInfo(driver, urlFaceInfo, inf.Id);
             //WriteFile(currentDirectory + "\\File\\userInfo.json");
             //ReadFile(currentDirectory + "\\File\\userInfo.json");
 
-            //GetCodeHotMail(driver, url, inf.Email, inf.PassMail);
+            //GetCodeHotMail(driver, urlMail, inf.Email, inf.PassMail);
         }
 
         private ChromeDriver InitChromeDriver()
@@ -321,21 +326,32 @@ namespace XMDT
         }
 
         #region GetToken
-        //private string GetEAAGToken(ChromeDriver driver, string twoFA)
-        //{
-        //    //Vào trang business lấy token
-        //    driver.Url = "https://business.facebook.com/content_management/";
-        //    Thread.Sleep(3000);
-        //    string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
-        //    var sendFaCode = driver.FindElement(By.XPath("//input[@name='approvals_code']"));
-        //    if (sendFaCode != null)
-        //    {
-        //        sendFaCode.SendKeys(faCode);
-        //        Thread.Sleep(2000);
-        //    }
-        //    string source = driver.PageSource;
-        //    string token = "EAAG" + source.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
-        //    return token;
+        private string GetEAAGToken(ChromeDriver driver, string twoFA)
+        {
+            //Vào trang business lấy token
+            driver.Url = "https://business.facebook.com/content_management/";
+            Thread.Sleep(3000);
+            string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
+            var sendFaCode = driver.FindElement(By.XPath("//input[@name='approvals_code']"));
+            if (sendFaCode != null)
+            {
+                sendFaCode.SendKeys(faCode);
+                Thread.Sleep(2000);
+            }
+            string source = driver.PageSource;
+            string token = "EAAG" + source.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+            return token;
+        }
+
+        private string GetEAAGTokenApi(string user, string cookie)
+        {
+            HttpRequest request = new HttpRequest();
+            //AddCookie(request, "datr=1LvhY1pGpki2WZzFaXc-8f_v; sb=1LvhY8qSzVz63ESQJCNrjd0F; m_pixel_ratio=1; locale=vi_VN; fr=0Pgf72nltOesLADqP.AWVXDWEUwUp1p8bY1yjfnz6a6UU.Bj4bvU.5z.AAA.0.0.Bj4bvi.AWWjB2-UB7Q; c_user=100003574129834; xs=44%3ATITPFBpdERQNnA%3A2%3A1675738084%3A-1%3A11945; m_page_voice=100003574129834; cppo=1; usida=eyJ2ZXIiOjEsImlkIjoiQXJwb3hyaTE2ZXJ3MWYiLCJ0aW1lIjoxNjc1NzQwNzM1fQ%3D%3D; presence=EDvF3EtimeF1675740790EuserFA21B03574129834A2EstateFDutF0CEchF_7bCC; wd=1920x372");
+            AddCookie(request, cookie);
+            var respone = request.Get("https://business.facebook.com/content_management/");
+            var kq = respone.ToString();
+            string token = "EAAG"  + kq.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+            return token;
         }
         private string GetEAABToken(ChromeDriver driver)
         {
