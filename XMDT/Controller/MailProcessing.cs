@@ -1,12 +1,15 @@
 ﻿using AE.Net.Mail;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using xNet;
 
 namespace XMDT
 {
-    internal class Mail
+    internal class MailProcessing : CommonFunction
     {
         public void Verify(string email, string pass, string ipmap, int port)
         {
@@ -19,7 +22,7 @@ namespace XMDT
                 int mailcount;
                 for (mailcount = ic.GetMessageCount(); mailcount < 2; mailcount = ic.GetMessageCount())
                 {
-                    Mail.Delay(5);
+                    MailProcessing.Delay(5);
                     ic.SelectMailbox("INBOX");
                 }
                 MailMessage[] mm = ic.GetMessages(mailcount - 1, mailcount - 1, false, false);
@@ -71,7 +74,7 @@ namespace XMDT
                 int mailcount;
                 for (mailcount = ic.GetMessageCount(); mailcount < 2; mailcount = ic.GetMessageCount())
                 {
-                    Mail.Delay(5);
+                    MailProcessing.Delay(5);
                     ic.SelectMailbox("INBOX");
                 }
                 MailMessage[] mm = ic.GetMessages(mailcount - 50, mailcount -1, false, false);
@@ -103,6 +106,46 @@ namespace XMDT
             {
                 Thread.Sleep(time);
             }
+        }
+
+        private List<string> GetCodeHotMail(ChromeDriver driver, string url, string user, string pass)
+        {
+            List<string> result = new List<string>();
+            driver.Url = url;
+            driver.Navigate().GoToUrl(url);
+            SendKeyByXPath(driver, "//input[@name='loginfmt']", user);
+            driver.FindElement(By.XPath("//input[@id='idSIButton9']")).Click();
+            Thread.Sleep(2000);
+            SendKeyByXPath(driver, "//input[@name='passwd']", pass);
+            driver.FindElement(By.XPath("//input[@id='idSIButton9']")).Click();
+            Thread.Sleep(2000);
+            driver.FindElement(By.XPath("//input[@id='idSIButton9']")).Click();
+            Thread.Sleep(3000);
+
+            var buttons = driver.FindElements(By.XPath("//button[contains(@class,'ms-Pivot-link')]"));
+            foreach (var button in buttons)
+            {
+                button.Click();
+                Thread.Sleep(2000);
+                driver.ExecuteScript("window.scrollTo(0, 10);");
+                Thread.Sleep(1000);
+                var itemnodes = driver.FindElements(By.XPath("//div[contains(@class,'hcptT gDC9O')]"));
+                foreach (var item in itemnodes)
+                {
+                    var temp = item.GetInnerHTML();
+                    var text = item.Text;
+                    if (text.ToLower().Contains("facebook"))
+                    {
+                        var code = Regex.Match(text, @"\d{6,8}").Value;
+                        if (code.Length >= 6)
+                        {
+                            result.Add(code);
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
