@@ -87,6 +87,11 @@ namespace XMDT
 
             var hoangnv1 = "hoangnv1";
         }
-     
+
+        private void btnConfig_Click(object sender, EventArgs e)
+        {
+            ConfigImage configImage = new ConfigImage();
+            configImage.Show();
+        }
     }
 }

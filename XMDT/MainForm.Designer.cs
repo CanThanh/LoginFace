@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.btnProgess = new System.Windows.Forms.Button();
+            this.btnConfig = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnProgess
@@ -41,13 +42,24 @@
             this.btnProgess.UseVisualStyleBackColor = true;
             this.btnProgess.Click += new System.EventHandler(this.btnProgess_Click);
             // 
-            // Form1
+            // btnConfig
+            // 
+            this.btnConfig.Location = new System.Drawing.Point(420, 262);
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.Size = new System.Drawing.Size(99, 23);
+            this.btnConfig.TabIndex = 1;
+            this.btnConfig.Text = "Cấu hình phôi";
+            this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(735, 323);
+            this.Controls.Add(this.btnConfig);
             this.Controls.Add(this.btnProgess);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
 
@@ -56,6 +68,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnProgess;
+        private System.Windows.Forms.Button btnConfig;
     }
 }
 
