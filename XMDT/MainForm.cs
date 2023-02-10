@@ -8,6 +8,10 @@ using OtpNet;
 using RestSharp;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using XMDT.Controller;
 using XMDT.Model;
@@ -52,8 +56,9 @@ namespace XMDT
             inf.PassMail = infAccount[4];
             //inf.EmailRecover = infAccount[5];
 
-            //Mail mail = new Mail();
+            //MailProcessing mail = new MailProcessing();
             //var code = mail.GetCode(inf.Email, inf.PassMail, "outlook.office365.com", 993, @"\d+");
+            
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var driver = facebookProcessing.InitChromeDriver();
 
@@ -75,6 +80,13 @@ namespace XMDT
             facebookProcessing.CallAuthenTwoFa(inf.Id, inf.TwoFA, dtsg, cookie);
             string eaag = facebookProcessing.GetEAAGTokenApi(inf.Id, cookie);
 
+            //var urlInfo = "https://graph.facebook.com/v15.0/me?access_token="+ eaag +"&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
+            //cookie = facebookProcessing.GetCookie(driver);
+            var kq = facebookProcessing.GetUserInfo(inf.Id);
+
+
+            var x = UnicodeToUTF8(kq);
+
             //GetFaceInfo(driver, urlFaceInfo, inf.Id);
             //WriteFile(currentDirectory + "\\File\\userInfo.json");
             //ReadFile(currentDirectory + "\\File\\userInfo.json");
@@ -88,6 +100,32 @@ namespace XMDT
         {
             ConfigImage configImage = new ConfigImage();
             configImage.Show();
+        }
+
+        private string UnicodeToUTF8(string from)
+        {
+            var splitted = Regex.Split(from, @"\\u([a-fA-F\d]{4})");
+            string outString = "";
+            foreach (var s in splitted)
+            {
+                try
+                {
+                    if (s.Length == 4)
+                    {
+                        var decoded = ((char)Convert.ToUInt16(s, 16)).ToString();
+                        outString += decoded;
+                    }
+                    else
+                    {
+                        outString += s;
+                    }
+                }
+                catch (Exception)
+                {
+                    outString += s;
+                }
+            }
+            return outString;
         }
     }
 }

@@ -80,7 +80,7 @@ namespace XMDT.Controller
                 MailMessage[] mm = ic.GetMessages(mailcount - 50, mailcount -1, false, false);
                 //MailMessage[] mm = ic.GetMessages(0, 20, false, false);
                 MailMessage[] array = mm;
-                for (int j = 0; j < array.Length; j++)
+                for (int j = array.Length - 1; j > 0; j--)
                 {
                     MailMessage i = array[j];
                     {
