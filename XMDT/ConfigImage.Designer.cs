@@ -36,7 +36,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbFontColor = new System.Windows.Forms.ComboBox();
-            this.cbFontWeight = new System.Windows.Forms.ComboBox();
+            this.cbFontStyle = new System.Windows.Forms.ComboBox();
             this.cbFont = new System.Windows.Forms.ComboBox();
             this.nUDFontSize = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
@@ -200,7 +200,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.cbFontColor);
-            this.groupBox5.Controls.Add(this.cbFontWeight);
+            this.groupBox5.Controls.Add(this.cbFontStyle);
             this.groupBox5.Controls.Add(this.cbFont);
             this.groupBox5.Controls.Add(this.nUDFontSize);
             this.groupBox5.Controls.Add(this.label12);
@@ -221,13 +221,13 @@
             this.cbFontColor.Size = new System.Drawing.Size(63, 21);
             this.cbFontColor.TabIndex = 20;
             // 
-            // cbFontWeight
+            // cbFontStyle
             // 
-            this.cbFontWeight.FormattingEnabled = true;
-            this.cbFontWeight.Location = new System.Drawing.Point(71, 56);
-            this.cbFontWeight.Name = "cbFontWeight";
-            this.cbFontWeight.Size = new System.Drawing.Size(63, 21);
-            this.cbFontWeight.TabIndex = 18;
+            this.cbFontStyle.FormattingEnabled = true;
+            this.cbFontStyle.Location = new System.Drawing.Point(71, 56);
+            this.cbFontStyle.Name = "cbFontStyle";
+            this.cbFontStyle.Size = new System.Drawing.Size(63, 21);
+            this.cbFontStyle.TabIndex = 18;
             // 
             // cbFont
             // 
@@ -240,11 +240,6 @@
             // nUDFontSize
             // 
             this.nUDFontSize.Location = new System.Drawing.Point(71, 23);
-            this.nUDFontSize.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
             this.nUDFontSize.Name = "nUDFontSize";
             this.nUDFontSize.Size = new System.Drawing.Size(63, 20);
             this.nUDFontSize.TabIndex = 17;
@@ -279,11 +274,11 @@
             // nUDAddressRotate
             // 
             this.nUDAddressRotate.Location = new System.Drawing.Point(242, 145);
-            this.nUDAddressRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDAddressRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDAddressRotate.Name = "nUDAddressRotate";
             this.nUDAddressRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDAddressRotate.TabIndex = 16;
@@ -315,11 +310,11 @@
             // nUDGenderRotate
             // 
             this.nUDGenderRotate.Location = new System.Drawing.Point(242, 119);
-            this.nUDGenderRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDGenderRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDGenderRotate.Name = "nUDGenderRotate";
             this.nUDGenderRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDGenderRotate.TabIndex = 13;
@@ -351,11 +346,11 @@
             // nUDBirthdayRotate
             // 
             this.nUDBirthdayRotate.Location = new System.Drawing.Point(242, 93);
-            this.nUDBirthdayRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDBirthdayRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDBirthdayRotate.Name = "nUDBirthdayRotate";
             this.nUDBirthdayRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDBirthdayRotate.TabIndex = 10;
@@ -387,11 +382,11 @@
             // nUDLastNameRotate
             // 
             this.nUDLastNameRotate.Location = new System.Drawing.Point(242, 67);
-            this.nUDLastNameRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDLastNameRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDLastNameRotate.Name = "nUDLastNameRotate";
             this.nUDLastNameRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDLastNameRotate.TabIndex = 7;
@@ -423,11 +418,11 @@
             // nUDFirstNameRotate
             // 
             this.nUDFirstNameRotate.Location = new System.Drawing.Point(242, 41);
-            this.nUDFirstNameRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDFirstNameRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDFirstNameRotate.Name = "nUDFirstNameRotate";
             this.nUDFirstNameRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDFirstNameRotate.TabIndex = 4;
@@ -537,11 +532,11 @@
             // nUDImgSecondLocationRotate
             // 
             this.nUDImgSecondLocationRotate.Location = new System.Drawing.Point(214, 147);
-            this.nUDImgSecondLocationRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDImgSecondLocationRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDImgSecondLocationRotate.Name = "nUDImgSecondLocationRotate";
             this.nUDImgSecondLocationRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDImgSecondLocationRotate.TabIndex = 30;
@@ -573,11 +568,11 @@
             // nUDImgFirstLocationRotate
             // 
             this.nUDImgFirstLocationRotate.Location = new System.Drawing.Point(214, 66);
-            this.nUDImgFirstLocationRotate.Maximum = new decimal(new int[] {
-            10000,
+            this.nUDImgFirstLocationRotate.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.nUDImgFirstLocationRotate.Name = "nUDImgFirstLocationRotate";
             this.nUDImgFirstLocationRotate.Size = new System.Drawing.Size(48, 20);
             this.nUDImgFirstLocationRotate.TabIndex = 25;
@@ -812,7 +807,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown nUDFontSize;
         private System.Windows.Forms.ComboBox cbFontColor;
-        private System.Windows.Forms.ComboBox cbFontWeight;
+        private System.Windows.Forms.ComboBox cbFontStyle;
         private System.Windows.Forms.ComboBox cbFont;
         private System.Windows.Forms.Button btnSaveConfig;
         private System.Windows.Forms.Button btnPreviewImg;

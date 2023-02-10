@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using xNet;
 
-namespace XMDT
+namespace XMDT.Controller
 {
     internal class MailProcessing : CommonFunction
     {

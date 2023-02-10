@@ -7,14 +7,10 @@ using OpenQA.Selenium.Support.UI;
 using OtpNet;
 using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Forms;
+using XMDT.Controller;
+using XMDT.Model;
 using xNet;
 
 namespace XMDT

@@ -8,9 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using XMDT.Model;
 using xNet;
 
-namespace XMDT
+namespace XMDT.Controller
 {
     public class CommonFunction
     {

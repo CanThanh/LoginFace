@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using xNet;
+using XMDT.Model;
 
-namespace XMDT
+namespace XMDT.Controller
 {
     public  class FacebookProcessing : CommonFunction
     {

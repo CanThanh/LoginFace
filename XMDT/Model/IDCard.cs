@@ -2,7 +2,7 @@
 using System.Drawing;
 using xNet;
 
-namespace XMDT
+namespace XMDT.Model
 {
     internal class IDCard
     {

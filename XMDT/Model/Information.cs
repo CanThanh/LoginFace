@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XMDT
+namespace XMDT.Model
 {
      public class Information
     {

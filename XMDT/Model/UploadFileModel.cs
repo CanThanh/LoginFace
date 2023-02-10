@@ -1,4 +1,4 @@
-﻿namespace XMDT
+﻿namespace XMDT.Model
 {
     internal class UploadFileModel
     {
