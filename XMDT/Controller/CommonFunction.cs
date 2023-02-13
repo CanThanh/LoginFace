@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using XMDT.Model;
@@ -35,6 +37,7 @@ namespace XMDT.Controller
             string html = http.Get(url).ToString();
             return html;
         }
+        
         #region Cookie
         public string GetCookie(ChromeDriver driver)
         {
@@ -137,5 +140,57 @@ namespace XMDT.Controller
             }
         }
         #endregion Input value for input html
+
+        #region FunctionCommon
+        public string GetLinkFaceImage(int age, string gender)
+        {
+            string result = "";
+            string url = "https://fakeface.rest/face/json?maximum_age=" + (age + 2) + "&minimum_age=" + (age - 2) + "&gender=" + gender;
+            HttpRequest httprequest = new HttpRequest();
+            var response = httprequest.Get(url).ToString();
+            JObject obj = JObject.Parse(response);
+            result = (string)obj["image_url"];
+            return result;
+        }
+
+        public string UnicodeToUTF8(string from)
+        {
+            var splitted = Regex.Split(from, @"\\u([a-fA-F\d]{4})");
+            string outString = "";
+            foreach (var s in splitted)
+            {
+                try
+                {
+                    if (s.Length == 4)
+                    {
+                        var decoded = ((char)Convert.ToUInt16(s, 16)).ToString();
+                        outString += decoded;
+                    }
+                    else
+                    {
+                        outString += s;
+                    }
+                }
+                catch (Exception)
+                {
+                    outString += s;
+                }
+            }
+            return outString;
+        }
+
+        public void InitHttpRequest(HttpRequest httpRequest,int typeProxy ,string proxy, string userAgent)
+        {
+            httpRequest.UserAgent = userAgent;
+            if(typeProxy == (int) CommonConstant.TypeProxy.HttpProxy)
+            {
+                httpRequest.Proxy = HttpProxyClient.Parse(proxy);
+            }
+            else if(typeProxy == (int)CommonConstant.TypeProxy.Socks5Proxy)
+            {
+                httpRequest.Proxy = Socks5ProxyClient.Parse(proxy);
+            }
+        }
+        #endregion FunctionCommon
     }
 }

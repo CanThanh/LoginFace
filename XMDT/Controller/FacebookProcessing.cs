@@ -281,7 +281,7 @@ namespace XMDT.Controller
         #region
         public string GetUserInfo(string userId)
         {
-            var url = "https://graph.facebook.com/v15.0/"+ userId + "?access_token=EAAGNO4a7r2wBADXFVasKFIRMz8X36ZAx9mC7P8qi73W0J1d9LwoqkeYNkeCdM02UjTtIfQ7RnBktCXSY24hMrjgqMAwuF8jmTZB96Nu9skhRZBgmAJTpcucNIDsGOnBLZByARWA3NcWapu0EpFcZAlABoQGwB2xZBy1ZA3Fy4ZAFVhzpFx0ZClDcP&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
+            var url = "https://graph.facebook.com/v15.0/"+ userId + "?access_token=EAAGNO4a7r2wBANai5HBi6zfk4jZBzyF3O2JhYJZBb7QK6KrGBoGjWLdE9ZCsX6blS59Rhz13sL0dAl7TapypeLaPaGPmcCZB4Yzrlxsq7IaKtxaZCSTplxtPdf3LqeZACnYqCHipYZAmawWDC2gaAULcahXBqz9xL9EtQjrStzyDahpQMuatWKZB&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
             var cookie = "sb=canhY_SrURrp1sEhshmYmsu8; datr=dqnhYwHHCGAWc_mws1UdDc1W;c_user=100011930435548; fr=001y8RytbFcYQdabf.AWW0ySaWufAIZAo4OkhzixbaY58.Bj5eSK.wk.AAA.0.0.Bj5eec.AWUQi77ufRI; usida=eyJ2ZXIiOjEsImlkIjoiQXJwdXFtanNxd3N6OSIsInRpbWUiOjE2NzYwMTE2ODR9;xs=24%3AGpqfzUv-2uYy7Q%3A2%3A1676011390%3A-1%3A13781;";
             HttpRequest httprequest = new HttpRequest();
             AddCookie(httprequest, cookie);
@@ -291,7 +291,8 @@ namespace XMDT.Controller
 
         public string GetUserInfoSecond(string eaag, string cookie)
         {
-            var url = "https://graph.facebook.com/v15.0/me?access_token=" + eaag + "&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
+            //var url = "https://graph.facebook.com/v15.0/me?access_token=" + eaag + "&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
+            var url = "https://graph.facebook.com/me?fields=first_name,last_name,middle_name,name,birthday,gender&access_token=" + eaag;
             HttpRequest httprequest = new HttpRequest();
             AddCookie(httprequest, cookie);
             var response = httprequest.Get(url).ToString();

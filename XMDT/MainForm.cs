@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using XMDT.Controller;
 using XMDT.Model;
@@ -60,6 +61,8 @@ namespace XMDT
             //var code = mail.GetCode(inf.Email, inf.PassMail, "outlook.office365.com", 993, @"\d+");
             
             FacebookProcessing facebookProcessing = new FacebookProcessing();
+            //var kq = facebookProcessing.GetLinkFaceImage(30, "male");
+
             var driver = facebookProcessing.InitChromeDriver();
 
             string urlMail = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
@@ -78,14 +81,17 @@ namespace XMDT
             string dtsg = facebookProcessing.GetDTSGToken(driver);
             string cookie = facebookProcessing.GetCookie(driver);
             facebookProcessing.CallAuthenTwoFa(inf.Id, inf.TwoFA, dtsg, cookie);
+            Thread.Sleep(2000);
             string eaag = facebookProcessing.GetEAAGTokenApi(inf.Id, cookie);
 
             //var urlInfo = "https://graph.facebook.com/v15.0/me?access_token="+ eaag +"&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
             //cookie = facebookProcessing.GetCookie(driver);
-            var kq = facebookProcessing.GetUserInfo(inf.Id);
 
+            //var kq = facebookProcessing.GetUserInfo(inf.Id);
 
-            var x = UnicodeToUTF8(kq);
+            var kq = facebookProcessing.GetUserInfoSecond(eaag, cookie);
+
+            var x = facebookProcessing.UnicodeToUTF8(kq);
 
             //GetFaceInfo(driver, urlFaceInfo, inf.Id);
             //WriteFile(currentDirectory + "\\File\\userInfo.json");
@@ -102,30 +108,6 @@ namespace XMDT
             configImage.Show();
         }
 
-        private string UnicodeToUTF8(string from)
-        {
-            var splitted = Regex.Split(from, @"\\u([a-fA-F\d]{4})");
-            string outString = "";
-            foreach (var s in splitted)
-            {
-                try
-                {
-                    if (s.Length == 4)
-                    {
-                        var decoded = ((char)Convert.ToUInt16(s, 16)).ToString();
-                        outString += decoded;
-                    }
-                    else
-                    {
-                        outString += s;
-                    }
-                }
-                catch (Exception)
-                {
-                    outString += s;
-                }
-            }
-            return outString;
-        }
+        
     }
 }

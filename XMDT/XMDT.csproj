@@ -110,6 +110,8 @@
       <DependentUpon>ConfigImage.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller\ImageProcessing.cs" />
+    <Compile Include="Controller\OtpProcessing.cs" />
+    <Compile Include="Controller\ProxyProcessing.cs" />
     <Compile Include="FormCore.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +124,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\CommonConstant.cs" />
     <Compile Include="Model\ConfigIdentity.cs" />
     <Compile Include="Model\IDCard.cs" />
     <Compile Include="Model\Information.cs" />
