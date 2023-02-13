@@ -13,8 +13,10 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using XMDT.Controller;
+using XMDT.Facebook;
 using XMDT.Model;
 using xNet;
 
@@ -102,12 +104,34 @@ namespace XMDT
             var hoangnv1 = "hoangnv1";
         }
 
-        private void btnConfig_Click(object sender, EventArgs e)
+        private void MultiThread()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                int val = i;
+                Task t = new Task(() => { GetDataFromHowKteam(val); });
+                t.Start();
+            }
+        }
+
+        private void GetDataFromHowKteam(int val)
+        {
+
+        }
+
+        private void configXMDT_Click(object sender, EventArgs e)
         {
             ConfigImage configImage = new ConfigImage();
             configImage.Show();
         }
 
-        
+        private void facebookerr282_Click(object sender, EventArgs e)
+        {
+            FacebookError282 facebookError282 = new FacebookError282();
+            string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
+            var pathData = currentDirectory + "\\File\\accountQuality.txt";
+            facebookError282.GetAllAccount(pathData);
+            facebookError282.Process(1);
+        }
     }
 }

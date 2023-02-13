@@ -11,6 +11,13 @@ namespace XMDT.Controller
 {
     internal class MailProcessing : CommonFunction
     {
+        /// <summary>
+        /// Xác nhận đồng ý gửi vào tài khoản mail
+        /// </summary>
+        /// <param name="email">user đăng nhập</param>
+        /// <param name="pass">pass đăng nhập</param>
+        /// <param name="ipmap">ipmap</param>
+        /// <param name="port">port</param>
         public void Verify(string email, string pass, string ipmap, int port)
         {
             string url = null;
@@ -65,7 +72,6 @@ namespace XMDT.Controller
         public string GetCode(string email, string pass, string ipmap, int port, string strRegex)
         {
             string result = null;
-            string url = null;
             using (ImapClient ic = new ImapClient())
             {
                 ic.Connect(ipmap, port, true, false);

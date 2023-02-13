@@ -196,7 +196,19 @@ namespace XMDT.Controller
             }
         }
 
-        public bool LoginCookie(ChromeDriver driver, string cookie)
+        public void LoginFace(ChromeDriver driver, string url, string user, string pass)
+        {
+            driver.Url = url;
+            driver.Navigate().GoToUrl(url);
+            Thread.Sleep(1000);
+            SendKeyByXPath(driver, "//input[@name='email']", user);
+            SendKeyByXPath(driver, "//input[@name='pass']", pass);
+            Thread.Sleep(1000);
+            driver.FindElement(By.XPath("//button[@name='login']")).Click();
+            Thread.Sleep(3000);
+        }
+
+        public bool LoginCookieGetEAAB(ChromeDriver driver, string cookie)
         {
             bool result = false;
             driver.Navigate().GoToUrl("https://www.facebook.com");
@@ -216,6 +228,21 @@ namespace XMDT.Controller
                 result = true;
             }
             return result;
+        }
+
+        public void LoginCookie(ChromeDriver driver, string cookie)
+        {
+            driver.Navigate().GoToUrl("https://www.facebook.com");
+            driver.Manage().Cookies.DeleteAllCookies();
+            var lstCookie = cookie.Split(';');
+            for (int i = 0; i < lstCookie.Length; i++)
+            {
+                string key = lstCookie[i].Split('=')[0].Trim();
+                string value = lstCookie[i].Split('=')[1].Trim();
+                //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,".facebook.com","/", DateTime.Now.AddDays(1));
+                OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
+                driver.Manage().Cookies.AddCookie(osCookie);
+            }
         }
         #endregion Login
 
@@ -266,7 +293,11 @@ namespace XMDT.Controller
             driver.Url = "https://www.facebook.com/pe";
             Thread.Sleep(2000);
             string source = driver.PageSource;
-            string token = "EAAB" + source.Split(new[] { "EAAB" }, StringSplitOptions.None)[1].Split('"')[0];
+            string token = "EAAB";
+            if (source.Contains("EAAB"))
+            {
+                token += source.Split(new[] { "EAAB" }, StringSplitOptions.None)[1].Split('"')[0];
+            }             
             return token;
         }
 

@@ -112,6 +112,8 @@
     <Compile Include="Controller\ImageProcessing.cs" />
     <Compile Include="Controller\OtpProcessing.cs" />
     <Compile Include="Controller\ProxyProcessing.cs" />
+    <Compile Include="Controller\ResolveCaptcha.cs" />
+    <Compile Include="Facebook\FacebookError282.cs" />
     <Compile Include="FormCore.cs">
       <SubType>Form</SubType>
     </Compile>
