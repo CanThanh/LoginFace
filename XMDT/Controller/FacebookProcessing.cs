@@ -230,16 +230,18 @@ namespace XMDT.Controller
             return result;
         }
 
-        public void LoginCookie(ChromeDriver driver, string cookie)
+        public void LoginCookie(ChromeDriver driver,string url, string cookie)
         {
-            driver.Navigate().GoToUrl("https://www.facebook.com");
+            //driver.Navigate().GoToUrl("https://mbasic.facebook.com/");
+            //driver.Navigate().GoToUrl("https://www.facebook.com");
+            driver.Navigate().GoToUrl(url);
             driver.Manage().Cookies.DeleteAllCookies();
             var lstCookie = cookie.Split(';');
             for (int i = 0; i < lstCookie.Length; i++)
             {
                 string key = lstCookie[i].Split('=')[0].Trim();
                 string value = lstCookie[i].Split('=')[1].Trim();
-                //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,".facebook.com","/", DateTime.Now.AddDays(1));
+                //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,".facebook.com","/", DateTime.Now.AddDays(10));
                 OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
                 driver.Manage().Cookies.AddCookie(osCookie);
             }

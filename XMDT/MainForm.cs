@@ -131,7 +131,7 @@ namespace XMDT
             string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
             facebookError282.GetAllAccount(pathData);
-            facebookError282.Process(1);
+            facebookError282.ProcessFacbook(9);
         }
     }
 }

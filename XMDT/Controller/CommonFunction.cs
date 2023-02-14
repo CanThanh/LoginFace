@@ -17,24 +17,25 @@ namespace XMDT.Controller
 {
     public class CommonFunction
     {
-        public string GetData(string url, HttpRequest http = null, string userArgent = "", string cookie = null)
+        HttpRequest httpRequest;
+        public string GetData(string url, string userArgent = "", string cookie = null)
         {
-            if (http == null)
+            if (httpRequest == null)
             {
-                http = new HttpRequest();
-                http.Cookies = new CookieDictionary();
+                httpRequest = new HttpRequest();
+                httpRequest.Cookies = new CookieDictionary();
             }
 
             if (!string.IsNullOrEmpty(cookie))
             {
-                AddCookie(http, cookie);
+                AddCookie(httpRequest, cookie);
             }
 
             if (!string.IsNullOrEmpty(userArgent))
             {
-                http.UserAgent = userArgent;
+                httpRequest.UserAgent = userArgent;
             }
-            string html = http.Get(url).ToString();
+            string html = httpRequest.Get(url).ToString();
             return html;
         }
         
@@ -179,8 +180,12 @@ namespace XMDT.Controller
             return outString;
         }
 
-        public void InitHttpRequest(HttpRequest httpRequest,int typeProxy ,string proxy, string userAgent)
+        public void InitHttpRequest(int typeProxy ,string proxy, string userAgent)
         {
+            if(httpRequest == null)
+            {
+                httpRequest = new HttpRequest();
+            }
             httpRequest.UserAgent = userAgent;
             if(typeProxy == (int) CommonConstant.TypeProxy.HttpProxy)
             {
