@@ -4,12 +4,10 @@ using OtpNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using xNet;
 using XMDT.Model;
-using System.Reflection.Emit;
+using OpenQA.Selenium.Interactions;
 
 namespace XMDT.Controller
 {
@@ -19,6 +17,8 @@ namespace XMDT.Controller
         {
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArgument("no-sandbox");
+            //chromeOptions.AddArgument("--auto-open-devtools-for-tabs");
+
             //chromeOptions.AddArguments("incognito");
             //chromeOptions.AddArgument("--start-maximized");
             //chromeOptions.AddArgument("--ignore-certificate-errors");

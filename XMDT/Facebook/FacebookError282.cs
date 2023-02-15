@@ -1,12 +1,20 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using XMDT.Controller;
 using XMDT.Model;
 using xNet;
+using System.Drawing.Imaging;
+using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.IO;
+using System.Reflection.Emit;
+using System.Net;
 
 namespace XMDT.Facebook
 {
@@ -32,93 +40,144 @@ namespace XMDT.Facebook
             }
         }
 
-        public bool ProcessFacbook(int i)
+        public bool ProcessFacbook(int i, string resolveCaptchaKey)
         {
             bool result = false;
-            var client = InitRestClientOption(lstAccount[i].Cookie);
-            FacebookProcessing facebookProcessing = new FacebookProcessing();
-            string url = "https://m.facebook.com/";
-            var driver = facebookProcessing.InitChromeDriver();
-            facebookProcessing.LoginCookie(driver, url, lstAccount[i].Cookie);
-            driver.Navigate().GoToUrl("https://m.facebook.com/");
-            Thread.Sleep(5000);
-            var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-            lstAccount[i].DTSG = dtsg;
-
-            ////https://facebook.com/
-            var variables = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + lstAccount[i].Id + "\",\"action\":\"PROCEED\",\"enrollment_id\":null},\"scale\":1}";
-            var captcha_persist_data1 = "";
-            var response = ApiSubmit(client, lstAccount[i].Id, dtsg, variables);
-            if (response.Contains("captcha_persist_data"))
+            try
             {
-                captcha_persist_data1 = response.Split(new[] { "\"captcha_persist_data\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
-            }
-            driver.Navigate().GoToUrl(url);
-            var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+                var client = InitRestClientOption(lstAccount[i].Cookie);
+                FacebookProcessing facebookProcessing = new FacebookProcessing();
+                string url = "https://m.facebook.com/";
+                var driver = facebookProcessing.InitChromeDriver();
+                facebookProcessing.LoginCookie(driver, url, lstAccount[i].Cookie);
+                driver.Navigate().GoToUrl("https://m.facebook.com/");
+                Thread.Sleep(5000);
+                var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
+                lstAccount[i].DTSG = dtsg;
 
-            var request = new RestRequest("/captcha/recaptcha/iframe/", Method.Get);
-            var options = new RestClientOptions("https://www.fbsbx.com")
+                ////https://facebook.com/
+                var variables = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + lstAccount[i].Id + "\",\"action\":\"PROCEED\",\"enrollment_id\":null},\"scale\":1}";
+                var captcha_persist_data1 = "";
+                var response = ApiSubmit(client, lstAccount[i].Id, dtsg, variables);
+                if (response.Contains("captcha_persist_data"))
+                {
+                    captcha_persist_data1 = response.Split(new[] { "\"captcha_persist_data\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
+                }
+                driver.Navigate().GoToUrl(url);
+                var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+
+                var request = new RestRequest("/captcha/recaptcha/iframe/", Method.Get);
+                var options = new RestClientOptions("https://www.fbsbx.com")
+                {
+                    MaxTimeout = -1,
+                };
+                client = new RestClient(options);
+                request.AddHeader("referer", url);
+                RestResponse responseResolveCaptcha = client.Execute(request);
+                string googleKey = "";
+                if (responseResolveCaptcha.Content.Contains("data-sitekey=\""))
+                {
+                    googleKey = responseResolveCaptcha.Content.Split(new[] { "data-sitekey=\"" }, StringSplitOptions.None)[1].Split('"')[0];
+                }
+
+                ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                resolveCaptcha.APIKey = resolveCaptchaKey;
+                string outputCapcha = "";
+                resolveCaptcha.SolveRecaptchaV2(googleKey, "https://m.facebook.com/checkpoint/1501092823525282/", out outputCapcha);
+
+                client = InitRestClientOption(lstAccount[i].Cookie);
+                var variablesResolveCaptcha = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + lstAccount[i].Id + "\",\"action\":\"SUBMIT_BOT_CAPTCHA_RESPONSE\",\"bot_captcha_persist_data\":\"" + captcha_persist_data + "\",\"bot_captcha_response\":\"" + outputCapcha + "\",\"enrollment_id\":null},\"scale\":1}";
+                var temp = ApiSubmit(client, lstAccount[i].Id, dtsg, variablesResolveCaptcha);
+
+                result = true;
+            }
+            catch (Exception ex)
             {
-                MaxTimeout = -1,
-            };
-            client = new RestClient(options);
-            request.AddHeader("referer", url);
-            RestResponse responseResolveCaptcha = client.Execute(request);
-            string googleKey = "";
-            if (responseResolveCaptcha.Content.Contains("data-sitekey=\"")){
-                googleKey = responseResolveCaptcha.Content.Split(new[] { "data-sitekey=\"" },StringSplitOptions.None)[1].Split('"')[0];
+                Console.WriteLine(ex.Message);
+                result = false;
             }
-
-            ResolveCaptcha resolveCaptcha  = new ResolveCaptcha();
-            resolveCaptcha.APIKey = "90b9de403cd4c42f45a4f9048760dec0";
-            string outputCapcha = "";
-            resolveCaptcha.SolveRecaptchaV2(googleKey, "https://m.facebook.com/checkpoint/1501092823525282/", out outputCapcha);
-
-            client = InitRestClientOption(lstAccount[i].Cookie);
-            var variablesResolveCaptcha = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + lstAccount[i].Id + "\",\"action\":\"SUBMIT_BOT_CAPTCHA_RESPONSE\",\"bot_captcha_persist_data\":\"" + captcha_persist_data + "\",\"bot_captcha_response\":\"" + outputCapcha + "\",\"enrollment_id\":null},\"scale\":1}";
-            var temp = ApiSubmit(client, lstAccount[i].Id, dtsg, variablesResolveCaptcha);
+            
             return result;
         }
 
-        public bool ProcessMBasicFacbook(int i)
+        public bool ProcessMBasicFacbook(int i, string resolveCaptchaKey, int age = 0, string gender = "male")
         {
             bool result = false;
-            var client = InitRestClientOption(lstAccount[i].Cookie);
-            FacebookProcessing facebookProcessing = new FacebookProcessing();
-            var driver = facebookProcessing.InitChromeDriver();
-            string url = "https://mbasic.facebook.com/";
-            facebookProcessing.LoginCookie(driver, url,lstAccount[i].Cookie);
-            driver.Navigate().GoToUrl(url);
-            var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-            var lstImg = driver.FindElements(By.XPath("//img"));
-            string base64Img = "";
-            foreach (var item in lstImg)
+            try
             {
-                var productSrc = item.GetDomAttribute("src");
-                if (!string.IsNullOrEmpty(productSrc) && productSrc.Contains("captcha"))
-                {
-                    HttpRequest http = new HttpRequest();
-                    AddCookie(http, lstAccount[i].Cookie);
-                    var byteImg = http.Get(productSrc);
-                    //base64Img = Convert.ToBase64String(byteImg);
-                    base64Img = byteImg.ToString();
-                }     
-            }
-            lstAccount[i].DTSG = dtsg;
-            var variables = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + lstAccount[i].Id + "\",\"action\":\"PROCEED\",\"enrollment_id\":null},\"scale\":1}";
-            var captcha_persist_data1 = "";
-            var response = ApiSubmit(client, lstAccount[i].Id, dtsg, variables);
-            if (response.Contains("captcha_persist_data"))
-            {
-                captcha_persist_data1 = response.Split(new[] { "\"captcha_persist_data\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
-            }
-            ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-            resolveCaptcha.APIKey = "90b9de403cd4c42f45a4f9048760dec0";
-            string outputCapcha = "";
+                FacebookProcessing facebookProcessing = new FacebookProcessing();
+                var driver = facebookProcessing.InitChromeDriver();
+                //Login by cookie
+                string url = "https://mbasic.facebook.com/";
+                facebookProcessing.LoginCookie(driver, url, lstAccount[i].Cookie);
+                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(2000);
+                HttpRequest httpRequest= new HttpRequest();
+                AddCookie(httpRequest, lstAccount[i].Cookie);
+                var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
+                lstAccount[i].DTSG = dtsg;
+                ////Get base64 captcha
+                //var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+                //ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
+                //Screenshot screenshot = screenshotDriver.GetScreenshot();
+                //string imgPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "SS.png";
+                //screenshot.SaveAsFile(imgPath);
+                //var img = Image.FromFile(imgPath);
+                //Rectangle cropArea = new Rectangle(169, 136, 288, 69);
+                //var imgCaptcha = cropImage(img, cropArea);
+                //string imgCaptchaPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "_captcha.png";
+                //imgCaptcha.Save(imgCaptchaPath);
+                //string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
+                ////Resolve captcha
+                //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                //resolveCaptcha.APIKey = resolveCaptchaKey;
+                //string outputCapcha = "";
+                //resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
+                ////Get data pass captcha and upload img
+                //var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
+                //var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
 
-            resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
-            Thread.Sleep(2000);
+                if (age == 0)
+                {
+                    Random random = new Random();
+                    age = random.Next(18, 60);
+                    var randomGender = random.NextDouble();
+                    gender = randomGender > 0.5 ? "male" : "female";
+                }
+
+                ImageProcessing imageProcessing = new ImageProcessing();
+                string faceFakeUrl = facebookProcessing.GetLinkFaceImage(age, gender);
+                string imgFaceFakePath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + ".jpg";
+                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+
+                driver.FindElement(By.XPath("//input[@name='mobile_image_data']")).SendKeys(imgFaceFakePath);
+                Thread.Sleep(1000);
+                driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                driver.Navigate().GoToUrl(url);
+
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result= false;
+            }
+            
             return result;
+        }
+
+        private Image cropImage(Image img, Rectangle cropArea)
+        {
+            Bitmap bmpImage = new Bitmap(img);
+            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+        }
+        private string ConvertImageToBase64String(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return Convert.ToBase64String(ms.ToArray());
+            }
         }
 
         private string ApiSubmit(RestClient client, string user, string dtsg, string variables)
@@ -170,10 +229,10 @@ namespace XMDT.Facebook
         }
         private RestClient InitRestClientOption(string cookie)
         {
-            var options = new RestClientOptions("https://www.facebook.com")
+            var options = new RestClientOptions("https://mbasic.facebook.com")
             {
                 MaxTimeout = -1,
-                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                //UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
                 //Proxy = new WebProxy("", Int32.Parse("")){
                 //Credentials = new NetworkCredential(proxySettings.Username, proxySettings.Password, proxySettings.Domain)
                 //};,

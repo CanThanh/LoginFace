@@ -53,6 +53,44 @@ namespace XMDT.Controller
             }
         }
 
+        public void getImageFromUrl(string fileName, string url, string pathImg)
+        {
+            try
+            {
+                byte[] content;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                WebResponse response = request.GetResponse();
+                Stream stream = response.GetResponseStream();
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    content = br.ReadBytes(500000);
+                    br.Close();
+                }
+                response.Close();
+
+                FileStream fs = new FileStream(fileName, FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                try
+                {
+                    bw.Write(content);
+                }
+                finally
+                {
+                    fs.Close();
+                    bw.Close();
+                }
+                using (MemoryStream memstr = new MemoryStream(content))
+                {
+                    Image img = Image.FromStream(memstr);
+                    img.Save(pathImg);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public void ProcessImage(FaceInfo faceInfo,Bitmap bitmap, ConfigIdentity configIdentity, Image img)
         {
             try

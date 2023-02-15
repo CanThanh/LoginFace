@@ -1,17 +1,8 @@
-﻿using Newtonsoft.Json;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools;
-using OpenQA.Selenium.DevTools.V85.IndexedDB;
-using OpenQA.Selenium.Support.UI;
-using OtpNet;
-using RestSharp;
+﻿using NAudio.Wave;
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Media;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,7 +18,8 @@ namespace XMDT
         public MainForm()
         {
             InitializeComponent();
-        }
+        }  
+
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
         //100009306396626  snowkvt1234  76IZ6TLE4XTKIWFRIKCVQSWYSRMZRWQN	alishauemargie@hotmail.com  @thainguyenteam@@1022020    alishauemargie2022@getnada.com
         private void btnProgess_Click(object sender, EventArgs e)
@@ -131,7 +123,7 @@ namespace XMDT
             string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
             facebookError282.GetAllAccount(pathData);
-            facebookError282.ProcessFacbook(9);
+            facebookError282.ProcessMBasicFacbook(5, "90b9de403cd4c42f45a4f9048760dec0");
         }
     }
 }
