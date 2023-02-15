@@ -22,7 +22,7 @@ namespace XMDT
 
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
         //100009306396626  snowkvt1234  76IZ6TLE4XTKIWFRIKCVQSWYSRMZRWQN	alishauemargie@hotmail.com  @thainguyenteam@@1022020    alishauemargie2022@getnada.com
-        private void btnProgess_Click(object sender, EventArgs e)
+        private void btnProgess_Click()
         {
             string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
             FileHelper fileHelper = new FileHelper();
@@ -123,7 +123,7 @@ namespace XMDT
             string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
             facebookError282.GetAllAccount(pathData);
-            facebookError282.ProcessMBasicFacbook(5, "90b9de403cd4c42f45a4f9048760dec0");
+            facebookError282.ProcessMBasicFacebook(4, "90b9de403cd4c42f45a4f9048760dec0");
         }
     }
 }

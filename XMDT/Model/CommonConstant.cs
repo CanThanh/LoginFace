@@ -8,6 +8,11 @@ namespace XMDT.Model
 {
     internal class CommonConstant
     {
+        public enum AccountStatus
+        {
+            Ok,
+            Error282,
+        }
         public enum TypeProxy
         {
             HttpProxy,

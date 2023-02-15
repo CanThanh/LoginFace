@@ -17,6 +17,8 @@ namespace XMDT.Model
         public string DTSG { get; set; }
         public string Proxy { get; set; }
         public string UserAgent { get; set; }
+        public string ImgFacePath { get; set; }
+        public string Status { get; set; }
     }
     public class SecondaryEmail
     {

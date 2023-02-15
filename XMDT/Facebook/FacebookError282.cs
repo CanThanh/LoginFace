@@ -40,6 +40,7 @@ namespace XMDT.Facebook
             }
         }
 
+        #region Process facebook
         public bool ProcessFacbook(int i, string resolveCaptchaKey)
         {
             bool result = false;
@@ -100,88 +101,8 @@ namespace XMDT.Facebook
             return result;
         }
 
-        public bool ProcessMBasicFacbook(int i, string resolveCaptchaKey, int age = 0, string gender = "male")
-        {
-            bool result = false;
-            try
-            {
-                FacebookProcessing facebookProcessing = new FacebookProcessing();
-                var driver = facebookProcessing.InitChromeDriver();
-                //Login by cookie
-                string url = "https://mbasic.facebook.com/";
-                facebookProcessing.LoginCookie(driver, url, lstAccount[i].Cookie);
-                driver.Navigate().GoToUrl(url);
-                Thread.Sleep(2000);
-                HttpRequest httpRequest= new HttpRequest();
-                AddCookie(httpRequest, lstAccount[i].Cookie);
-                var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-                lstAccount[i].DTSG = dtsg;
-                ////Get base64 captcha
-                //var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
-                //ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
-                //Screenshot screenshot = screenshotDriver.GetScreenshot();
-                //string imgPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "SS.png";
-                //screenshot.SaveAsFile(imgPath);
-                //var img = Image.FromFile(imgPath);
-                //Rectangle cropArea = new Rectangle(169, 136, 288, 69);
-                //var imgCaptcha = cropImage(img, cropArea);
-                //string imgCaptchaPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "_captcha.png";
-                //imgCaptcha.Save(imgCaptchaPath);
-                //string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
-                ////Resolve captcha
-                //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-                //resolveCaptcha.APIKey = resolveCaptchaKey;
-                //string outputCapcha = "";
-                //resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
-                ////Get data pass captcha and upload img
-                //var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
-                //var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
-
-                if (age == 0)
-                {
-                    Random random = new Random();
-                    age = random.Next(18, 60);
-                    var randomGender = random.NextDouble();
-                    gender = randomGender > 0.5 ? "male" : "female";
-                }
-
-                ImageProcessing imageProcessing = new ImageProcessing();
-                string faceFakeUrl = facebookProcessing.GetLinkFaceImage(age, gender);
-                string imgFaceFakePath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + ".jpg";
-                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
-
-                driver.FindElement(By.XPath("//input[@name='mobile_image_data']")).SendKeys(imgFaceFakePath);
-                Thread.Sleep(1000);
-                driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
-                driver.Navigate().GoToUrl(url);
-
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                result= false;
-            }
-            
-            return result;
-        }
-
-        private Image cropImage(Image img, Rectangle cropArea)
-        {
-            Bitmap bmpImage = new Bitmap(img);
-            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-        }
-        private string ConvertImageToBase64String(Image image)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                image.Save(ms, image.RawFormat);
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
-
         private string ApiSubmit(RestClient client, string user, string dtsg, string variables)
-        {          
+        {
             var request = new RestRequest("/api/graphql/", Method.Post);
             request.AddHeader("authority", "www.facebook.com");
             request.AddHeader("accept", "*/*");
@@ -253,5 +174,100 @@ namespace XMDT.Facebook
             }
             return client;
         }
+        #endregion Process facebook
+
+        #region Process MbasicFacebook
+        public bool ProcessMBasicFacebook(int i, string resolveCaptchaKey, int age = 0, string gender = "male")
+        {
+            bool result = false;
+            try
+            {
+                FacebookProcessing facebookProcessing = new FacebookProcessing();
+                var driver = facebookProcessing.InitChromeDriver();
+                //Login by cookie
+                string url = "https://mbasic.facebook.com/";
+                facebookProcessing.LoginCookie(driver, url, lstAccount[i].Cookie);
+                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(2000);
+                if(driver.Url.Contains("1501092823525282"))
+                {
+                    HttpRequest httpRequest = new HttpRequest();
+                    AddCookie(httpRequest, lstAccount[i].Cookie);
+                    var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
+                    lstAccount[i].DTSG = dtsg;
+                    ////Get base64 captcha
+                    string source = driver.PageSource;
+                    
+                    if (source.Contains("captcha_persist_data"))
+                    {
+                        var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+                        ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
+                        Screenshot screenshot = screenshotDriver.GetScreenshot();
+                        string imgPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "SS.png";
+                        screenshot.SaveAsFile(imgPath);
+                        var img = Image.FromFile(imgPath);
+                        Rectangle cropArea = new Rectangle(169, 136, 288, 69);
+                        var imgCaptcha = cropImage(img, cropArea);
+                        string imgCaptchaPath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + "_captcha.png";
+                        imgCaptcha.Save(imgCaptchaPath);
+                        string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
+                        //Resolve captcha
+                        ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                        resolveCaptcha.APIKey = resolveCaptchaKey;
+                        string outputCapcha = "";
+                        resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
+                        //Get data pass captcha and upload img
+                        var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
+                        var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
+
+                    }
+                    source = driver.PageSource;
+                    
+                    if (source.Contains("mobile_image_data"))
+                    {
+                        if (age == 0)
+                        {
+                            Random random = new Random();
+                            age = random.Next(18, 60);
+                            var randomGender = random.NextDouble();
+                            gender = randomGender > 0.5 ? "male" : "female";
+                        }
+
+                        ImageProcessing imageProcessing = new ImageProcessing();
+                        string faceFakeUrl = facebookProcessing.GetLinkFaceImage(age, gender);
+                        string imgFaceFakePath = "D:\\ABCD\\XMDT\\XMDT\\LoginFace\\XMDT\\bin\\Debug\\" + lstAccount[i].Id + ".jpg";
+                        imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+                        lstAccount[i].ImgFacePath = imgFaceFakePath;
+                        var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                        mobile_image_data.SendKeys(imgFaceFakePath);
+                        Thread.Sleep(1000);
+                        driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                        driver.Navigate().GoToUrl(url);
+                    }
+                }               
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result= false;
+            }
+            return result;
+        }
+
+        private Image cropImage(Image img, Rectangle cropArea)
+        {
+            Bitmap bmpImage = new Bitmap(img);
+            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+        }
+        private string ConvertImageToBase64String(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+        #endregion Process MbasicFacebook
     }
 }

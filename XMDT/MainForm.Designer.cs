@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnProgess = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.xửLýLỗiFacebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facebookerr282 = new System.Windows.Forms.ToolStripMenuItem();
@@ -36,16 +35,6 @@
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnProgess
-            // 
-            this.btnProgess.Location = new System.Drawing.Point(325, 262);
-            this.btnProgess.Name = "btnProgess";
-            this.btnProgess.Size = new System.Drawing.Size(75, 23);
-            this.btnProgess.TabIndex = 0;
-            this.btnProgess.Text = "Xử lý";
-            this.btnProgess.UseVisualStyleBackColor = true;
-            this.btnProgess.Click += new System.EventHandler(this.btnProgess_Click);
             // 
             // menuStrip1
             // 
@@ -93,7 +82,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(735, 323);
-            this.Controls.Add(this.btnProgess);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -106,8 +94,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnProgess;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem xửLýLỗiFacebookToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cấuHìnhToolStripMenuItem;
