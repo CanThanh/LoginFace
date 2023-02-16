@@ -1,8 +1,7 @@
-﻿using NAudio.Wave;
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
-using System.Media;
-using System.Net;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,13 +27,13 @@ namespace XMDT
             FileHelper fileHelper = new FileHelper();
             var pathUserAgent = currentDirectory + "\\File\\ua.txt";
             var userAgent = fileHelper.ReadLine(pathUserAgent)[Rand.Next(0, fileHelper.ReadLine(pathUserAgent).Count)];
-            Information inf = new Information();
+            AccountInfo account = new AccountInfo();
 
             var pathProxy = currentDirectory + "\\File\\proxy.txt";
             var proxy = fileHelper.ReadLine(pathProxy)[Rand.Next(0, fileHelper.ReadLine(pathProxy).Count)];
 
             var pathAccount = currentDirectory + "\\File\\account.txt";
-            var account = fileHelper.ReadLine(pathAccount)[Rand.Next(0, fileHelper.ReadLine(pathAccount).Count)];
+            var accountLst = fileHelper.ReadLine(pathAccount)[Rand.Next(0, fileHelper.ReadLine(pathAccount).Count)];
 
             var pathSecondaryEmail = currentDirectory + "\\File\\secondaryemail.txt";
             var strSecondaryEmail = fileHelper.ReadLine(pathSecondaryEmail)[Rand.Next(0, fileHelper.ReadLine(pathSecondaryEmail).Count)];
@@ -43,12 +42,12 @@ namespace XMDT
             secondaryEmail.Email = infSecondaryEmail[0];
             secondaryEmail.Pass = infSecondaryEmail[1];
 
-            var infAccount = account.Split(' ');
-            inf.Id = infAccount[0];
-            inf.Pass = infAccount[1];
-            inf.TwoFA = infAccount[2];
-            inf.Email = infAccount[3];
-            inf.PassMail = infAccount[4];
+            var infAccount = accountLst.Split(' ');
+            account.Id = infAccount[0];
+            account.Pass = infAccount[1];
+            account.TwoFA = infAccount[2];
+            account.Email = infAccount[3];
+            account.PassMail = infAccount[4];
             //inf.EmailRecover = infAccount[5];
 
             //MailProcessing mail = new MailProcessing();
@@ -57,7 +56,7 @@ namespace XMDT
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             //var kq = facebookProcessing.GetLinkFaceImage(30, "male");
 
-            var driver = facebookProcessing.InitChromeDriver();
+            var driver = facebookProcessing.InitChromeDriver(account);
 
             string urlMail = "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656739386&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7426e649-3fef-467b-6e2b-6026c58ea03b&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015";
             string urlFace = "https://m.facebook.com/login/?ref=dbl&fl";
@@ -70,13 +69,13 @@ namespace XMDT
 
             //facebookProcessing.LoginCookie(driver, cookie);
 
-            facebookProcessing.LoginFace(driver, urlFace, inf.Id, inf.Pass, inf.TwoFA );
+            facebookProcessing.LoginFace(driver, urlFace, account.Id, account.Pass, account.TwoFA );
             string eaab = facebookProcessing.GetEAABToken(driver);
             string dtsg = facebookProcessing.GetDTSGToken(driver);
             string cookie = facebookProcessing.GetCookie(driver);
-            facebookProcessing.CallAuthenTwoFa(inf.Id, inf.TwoFA, dtsg, cookie);
+            facebookProcessing.CallAuthenTwoFa(account.Id, account.TwoFA, dtsg, cookie);
             Thread.Sleep(2000);
-            string eaag = facebookProcessing.GetEAAGTokenApi(inf.Id, cookie);
+            string eaag = facebookProcessing.GetEAAGTokenApi(account.Id, cookie);
 
             //var urlInfo = "https://graph.facebook.com/v15.0/me?access_token="+ eaag +"&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
             //cookie = facebookProcessing.GetCookie(driver);
@@ -96,21 +95,6 @@ namespace XMDT
             var hoangnv1 = "hoangnv1";
         }
 
-        private void MultiThread()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                int val = i;
-                Task t = new Task(() => { GetDataFromHowKteam(val); });
-                t.Start();
-            }
-        }
-
-        private void GetDataFromHowKteam(int val)
-        {
-
-        }
-
         private void configXMDT_Click(object sender, EventArgs e)
         {
             ConfigImage configImage = new ConfigImage();
@@ -122,8 +106,27 @@ namespace XMDT
             FacebookError282 facebookError282 = new FacebookError282();
             string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
-            facebookError282.GetAllAccount(pathData);
-            facebookError282.ProcessMBasicFacebook(4, "90b9de403cd4c42f45a4f9048760dec0");
+            var lstAccount = facebookError282.GetAllAccount(pathData);
+            ////Đa luồng cần proxy đa luồng
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var account = lstAccount[i];
+            //    account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
+            //    account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
+            //    account.Proxy = "170.210.121.190:8080";
+            //    Task t = new Task(() => { 
+            //        facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
+            //    });
+            //    t.Start();
+            //}
+
+            var account = lstAccount[2];
+            //account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
+            account.UserAgent = "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36";
+            account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
+            //account.Proxy = "95.85.24.83:8118";
+            account.Proxy = "154.236.189.5:8080";
+            facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
         }
     }
 }

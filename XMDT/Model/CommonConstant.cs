@@ -15,7 +15,7 @@ namespace XMDT.Model
         }
         public enum TypeProxy
         {
-            HttpProxy,
+            HttpProxy = 1,
             Socks5Proxy
         }
     }

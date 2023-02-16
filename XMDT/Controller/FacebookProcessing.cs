@@ -7,18 +7,17 @@ using System.Linq;
 using System.Threading;
 using xNet;
 using XMDT.Model;
-using OpenQA.Selenium.Interactions;
+using static XMDT.Model.CommonConstant;
 
 namespace XMDT.Controller
 {
     public  class FacebookProcessing : CommonFunction
     {
-        public ChromeDriver InitChromeDriver()
+        public ChromeDriver InitChromeDriver(AccountInfo account)
         {
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArgument("no-sandbox");
             //chromeOptions.AddArgument("--auto-open-devtools-for-tabs");
-
             //chromeOptions.AddArguments("incognito");
             //chromeOptions.AddArgument("--start-maximized");
             //chromeOptions.AddArgument("--ignore-certificate-errors");
@@ -26,15 +25,20 @@ namespace XMDT.Controller
             //chromeOptions.AddArgument("--disable-web-security");
             //chromeOptions.AddExtension("");
 
+
+            if(account.TypeProxy == (int)TypeProxy.HttpProxy)
+            {
+                chromeOptions.AddArgument("--proxy-server=http://" + account.Proxy);
+            }
+            else {
+                chromeOptions.AddArgument("--proxy-server=socks5://" + account.Proxy);
+            }
+
+            chromeOptions.AddArgument("--user-agent=" + account.UserAgent);
+
             ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true;
             //chromeDriverService.SuppressInitialDiagnosticInformation = true;
-
-            //options.AddArgument("--proxy-server=http://" + proxy);
-            //var proxyQA = new Proxy();
-            //proxyQA.HttpProxy = proxy;
-            //options.Proxy = proxyQA;
-            //options.AddArgument("--user-agent=" + userAgent);
 
             ChromeDriver driver = new ChromeDriver(chromeDriverService, chromeOptions);
             return driver;

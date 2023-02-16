@@ -2,7 +2,7 @@
 
 namespace XMDT.Model
 {
-     public class Information
+     public class AccountInfo
     {
         public string Id { get; set; }
         public string Pass { get; set; }
@@ -18,6 +18,7 @@ namespace XMDT.Model
         public string Proxy { get; set; }
         public string UserAgent { get; set; }
         public string ImgFacePath { get; set; }
+        public int TypeProxy { get; set; }
         public string Status { get; set; }
     }
     public class SecondaryEmail
@@ -26,8 +27,10 @@ namespace XMDT.Model
         public string Pass { get; set; }
     }
 
-    public class FaceInfo : Information
+    public class FaceInfo
     {
+        public string Id { get; set; }
+        public string Email { get; set; }
         public string FirtName { get; set; }
         public string LastName { get; set; }
         public string DateOfBirth { get; set; }

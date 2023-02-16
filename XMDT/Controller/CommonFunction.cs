@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,8 @@ namespace XMDT.Controller
 {
     public class CommonFunction
     {
-        HttpRequest httpRequest;
+        public HttpRequest httpRequest;
+        public RestClient restClient;
         public string GetData(string url, string userArgent = "", string cookie = null)
         {
             if (httpRequest == null)
@@ -180,20 +182,46 @@ namespace XMDT.Controller
             return outString;
         }
 
-        public void InitHttpRequest(int typeProxy ,string proxy, string userAgent)
+        public void InitHttpRequest(AccountInfo account)
         {
-            if(httpRequest == null)
+            if (httpRequest == null)
             {
                 httpRequest = new HttpRequest();
             }
-            httpRequest.UserAgent = userAgent;
-            if(typeProxy == (int) CommonConstant.TypeProxy.HttpProxy)
+            httpRequest.UserAgent = account.UserAgent;
+            if(account.TypeProxy == (int) CommonConstant.TypeProxy.HttpProxy)
             {
-                httpRequest.Proxy = HttpProxyClient.Parse(proxy);
+                httpRequest.Proxy = HttpProxyClient.Parse(account.Proxy);
             }
-            else if(typeProxy == (int)CommonConstant.TypeProxy.Socks5Proxy)
+            else if(account.TypeProxy == (int)CommonConstant.TypeProxy.Socks5Proxy)
             {
-                httpRequest.Proxy = Socks5ProxyClient.Parse(proxy);
+                httpRequest.Proxy = Socks5ProxyClient.Parse(account.Proxy);
+            }
+        }
+
+        public void InitRestClientOption(AccountInfo account)
+        {
+            var options = new RestClientOptions()
+            {
+                MaxTimeout = -1,
+                UserAgent = account.UserAgent,
+                //Proxy = new WebProxy("", Int32.Parse("")){
+                //Credentials = new NetworkCredential(proxySettings.Username, proxySettings.Password, proxySettings.Domain)
+                //};,
+
+            };
+            var client = new RestClient(options);
+            if (!string.IsNullOrEmpty(account.Cookie))
+            {
+                var lstCookie = account.Cookie.Split(';');
+                foreach (var item in lstCookie)
+                {
+                    var nameValue = item.Split('=');
+                    if (nameValue.Count() > 1)
+                    {
+                        client.CookieContainer.Add(new System.Net.Cookie(nameValue[0], nameValue[1], "/", "www.facebook.com"));
+                    }
+                }
             }
         }
         #endregion FunctionCommon
