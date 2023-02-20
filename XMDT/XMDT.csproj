@@ -131,6 +131,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigInput.designer.cs">
+      <DependentUpon>ConfigInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controller\CommonFunction.cs" />
     <Compile Include="Controller\FacebookProcessing.cs" />
     <Compile Include="ConfigImage.cs">
@@ -166,6 +172,9 @@
     <Compile Include="Model\UploadFileModel.cs" />
     <EmbeddedResource Include="ConfigImage.resx">
       <DependentUpon>ConfigImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigInput.resx">
+      <DependentUpon>ConfigInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>

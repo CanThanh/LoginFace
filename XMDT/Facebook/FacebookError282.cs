@@ -23,7 +23,7 @@ namespace XMDT.Facebook
             {
                 FileHelper fileHelper = new FileHelper();
                 var lstData = fileHelper.ReadLine(path);
-                for (int i = 0; i < lstData.Count() - 1; i++)
+                for (int i = 0; i < lstData.Count(); i++)
                 {
                     var data = lstData[i].Split('|');
                     lstAccount.Add(new AccountInfo

@@ -108,25 +108,32 @@ namespace XMDT
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
             var lstAccount = facebookError282.GetAllAccount(pathData);
             ////Đa luồng cần proxy đa luồng
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    var account = lstAccount[i];
-            //    account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
-            //    account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
-            //    account.Proxy = "170.210.121.190:8080";
-            //    Task t = new Task(() => { 
-            //        facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
-            //    });
-            //    t.Start();
-            //}
+            for (int i = 0; i < nUDThread.Value; i++)
+            {
+                var account = lstAccount[i];
+                account.UserAgent = txtUserAgent.Text;
+                account.TypeProxy = (int)CommonConstant.TypeProxy.HttpProxy;
+                account.Proxy = txtProxy.Text;
+                Task t = new Task(() =>
+                {
+                    facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
+                });
+                t.Start();
+            }
 
-            var account = lstAccount[2];
-            //account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
-            account.UserAgent = "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36";
-            account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
-            //account.Proxy = "95.85.24.83:8118";
-            account.Proxy = "154.236.189.5:8080";
-            facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
+            //var account = lstAccount[9];
+            ////account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
+            //account.UserAgent = "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36";
+            //account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
+            ////account.Proxy = "95.85.24.83:8118";
+            //account.Proxy = "154.236.189.5:8080";
+            //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
+        }
+
+        private void configInputData_Click(object sender, EventArgs e)
+        {
+            ConfigInput configInput = new ConfigInput();
+            configInput.Show();
         }
     }
 }
