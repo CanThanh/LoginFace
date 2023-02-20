@@ -30,8 +30,10 @@
         {
             this.lvInput = new System.Windows.Forms.ListView();
             this.lvConfig = new System.Windows.Forms.ListView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.Truo = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtSplitCharacter = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lvInput
@@ -68,30 +70,50 @@
             this.lvConfig.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvConfig_MouseMove);
             this.lvConfig.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lvConfig_MouseUp);
             // 
-            // button1
+            // btnSave
             // 
-            this.button1.Location = new System.Drawing.Point(277, 392);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 41);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnSave.Location = new System.Drawing.Point(277, 392);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(99, 41);
+            this.btnSave.TabIndex = 2;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // Truo
             // 
             this.Truo.AutoSize = true;
             this.Truo.Location = new System.Drawing.Point(354, 27);
             this.Truo.Name = "Truo";
-            this.Truo.Size = new System.Drawing.Size(128, 13);
+            this.Truo.Size = new System.Drawing.Size(185, 20);
             this.Truo.TabIndex = 4;
             this.Truo.Text = "Trường thông tin đầu vào";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(135, 354);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(172, 20);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Ký tự phân cách dữ liệu";
+            // 
+            // txtSplitCharacter
+            // 
+            this.txtSplitCharacter.Location = new System.Drawing.Point(358, 348);
+            this.txtSplitCharacter.Name = "txtSplitCharacter";
+            this.txtSplitCharacter.Size = new System.Drawing.Size(238, 26);
+            this.txtSplitCharacter.TabIndex = 6;
+            this.txtSplitCharacter.Text = "|";
+            this.txtSplitCharacter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ConfigInput
             // 
             this.ClientSize = new System.Drawing.Size(656, 467);
+            this.Controls.Add(this.txtSplitCharacter);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.Truo);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lvConfig);
             this.Controls.Add(this.lvInput);
             this.Name = "ConfigInput";
@@ -104,8 +126,10 @@
 
         private System.Windows.Forms.ListView lvInput;
         private System.Windows.Forms.ListView lvConfig;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label Truo;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtSplitCharacter;
     }
 }
 

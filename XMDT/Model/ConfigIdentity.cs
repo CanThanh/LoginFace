@@ -38,4 +38,10 @@ namespace XMDT.Model
         public int cbFontStyle {get; set;}
         public string cbFont { get; set;}
     }
+
+    public class ConfigInputData
+    {
+        public string SplitCharacter { get; set; }
+        public List<string> lstInput { get; set; } = new List<string>();
+    }
 }

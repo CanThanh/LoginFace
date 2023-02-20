@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Drawing;
 using System.Windows.Forms;
-using System.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using XMDT.Model;
 
 namespace XMDT
 {
     public partial class ConfigInput : Form
     {
         private bool lvInput_mDown, lvConfig_mDown;
+        public ConfigInputData configInputData;
         public ConfigInput()
         {
             InitializeComponent();
@@ -36,10 +34,6 @@ namespace XMDT
             lvConfig.Items.Add("PassMail");
             lvConfig.Items.Add("Cookie");
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void lvInput_DragEnter(object sender, DragEventArgs e)
         {
@@ -48,8 +42,6 @@ namespace XMDT
             else
                 e.Effect = DragDropEffects.None;
         }
-
-
 
         private void lvInput_DragDrop(object sender, DragEventArgs e)
         {
@@ -82,7 +74,6 @@ namespace XMDT
             lvInput_mDown = false;
         }
 
-
         private void lvInput_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right) return;
@@ -91,8 +82,6 @@ namespace XMDT
                 lvInput.DoDragDrop(lvInput.SelectedItems[0].Text, DragDropEffects.Move);
             }
         }
-
-
 
         private void lvConfig_MouseDown(object sender, MouseEventArgs e)
         {
@@ -138,6 +127,25 @@ namespace XMDT
             }
             lvInput_mDown = false;
             lvConfig_mDown = false;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtSplitCharacter.Text) || txtSplitCharacter.Text.Length > 2)
+            {
+                MessageBox.Show("Vui lòng nhập 1 ký tụ phân cách giữa các dữ liệu");
+            } else if(lvInput.Items.Count == 0) 
+            {
+                MessageBox.Show("Vui lòng chọn dữ liệu đầu vào");
+            } else {             
+                configInputData = new ConfigInputData();
+                foreach (ListViewItem item in lvInput.Items)
+                {
+                    configInputData.lstInput.Add(item.Text);
+                }
+                configInputData.SplitCharacter = txtSplitCharacter.Text;
+                this.Close();
+            }
         }
     }
 }
