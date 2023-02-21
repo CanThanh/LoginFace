@@ -51,7 +51,7 @@ namespace XMDT.Facebook
                 InitRestClientOption(account);
                 string url = "https://m.facebook.com/";
                 restClient.Options.BaseUrl = new Uri(url);
-                FacebookProcessing facebookProcessing = new FacebookProcessing();   
+                FacebookProcessing facebookProcessing = new FacebookProcessing();
                 var driver = facebookProcessing.InitChromeDriver(account);
                 facebookProcessing.LoginCookie(driver, url, account.Cookie);
                 driver.Navigate().GoToUrl("https://m.facebook.com/");
@@ -95,11 +95,11 @@ namespace XMDT.Facebook
                 Console.WriteLine(ex.Message);
                 result = false;
             }
-            
+
             return result;
         }
 
-        private string ApiSubmit(RestClient client, string url,string user, string dtsg, string variables)
+        private string ApiSubmit(RestClient client, string url, string user, string dtsg, string variables)
         {
             var request = new RestRequest("/api/graphql/", Method.Post);
             client.Options.BaseUrl = new Uri(url);
@@ -162,14 +162,14 @@ namespace XMDT.Facebook
                 facebookProcessing.LoginCookie(driver, url, account.Cookie);
                 driver.Navigate().GoToUrl(url);
                 Thread.Sleep(2000);
-                if(driver.Url.Contains("1501092823525282"))
+                if (driver.Url.Contains("1501092823525282"))
                 {
                     InitHttpRequest(account);
                     AddCookie(httpRequest, account.Cookie);
                     var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
                     account.DTSG = dtsg;
                     ////Get base64 captcha
-                    string source = driver.PageSource;                    
+                    string source = driver.PageSource;
                     if (source.Contains("captcha_persist_data"))
                     {
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
@@ -178,7 +178,9 @@ namespace XMDT.Facebook
                         string imgPath = Environment.CurrentDirectory + "\\Image\\Screenshot" + account.Id + "SS.png";
                         screenshot.SaveAsFile(imgPath);
                         var img = Image.FromFile(imgPath);
-                        Rectangle cropArea = new Rectangle(10, 136, 288, 69);
+                        //Diffrence crop mobile/win
+                        int xLocation = account.UserAgent.Contains("Android") ? 10 : 136;
+                        Rectangle cropArea = new Rectangle(xLocation, 136, 288, 69);
                         var imgCaptcha = cropImage(img, cropArea);
                         string imgCaptchaPath = Environment.CurrentDirectory + "\\Image\\Captcha" + account.Id + "_captcha.png";
                         imgCaptcha.Save(imgCaptchaPath);
@@ -196,7 +198,7 @@ namespace XMDT.Facebook
                         Thread.Sleep(2000);
                     }
 
-                    source = driver.PageSource;                    
+                    source = driver.PageSource;
                     if (source.Contains("mobile_image_data"))
                     {
                         if (age == 0)
@@ -218,13 +220,13 @@ namespace XMDT.Facebook
                         driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
                         driver.Navigate().GoToUrl(url);
                     }
-                }               
+                }
                 result = true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                result= false;
+                result = false;
             }
             return result;
         }
