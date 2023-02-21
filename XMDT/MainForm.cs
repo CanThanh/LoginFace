@@ -108,18 +108,18 @@ namespace XMDT
             var pathData = currentDirectory + "\\File\\accountQuality.txt";
             var lstAccount = facebookError282.GetAllAccount(pathData);
             ////Đa luồng cần proxy đa luồng
-            for (int i = 0; i < nUDThread.Value; i++)
-            {
-                var account = lstAccount[i];
-                account.UserAgent = txtUserAgent.Text;
-                account.TypeProxy = (int)CommonConstant.TypeProxy.HttpProxy;
-                account.Proxy = txtProxy.Text;
-                Task t = new Task(() =>
-                {
-                    facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
-                });
-                t.Start();
-            }
+            //for (int i = 0; i < nUDThread.Value; i++)
+            //{
+            //    var account = lstAccount[i];
+            //    account.UserAgent = txtUserAgent.Text;
+            //    account.TypeProxy = (int)CommonConstant.TypeProxy.HttpProxy;
+            //    account.Proxy = txtProxy.Text;
+            //    Task t = new Task(() =>
+            //    {
+            //        facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
+            //    });
+            //    t.Start();
+            //}
 
             //var account = lstAccount[9];
             ////account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
@@ -129,11 +129,21 @@ namespace XMDT
             //account.Proxy = "154.236.189.5:8080";
             //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
         }
-
+        ConfigInput configInput = new ConfigInput();
         private void configInputData_Click(object sender, EventArgs e)
         {
-            ConfigInput configInput = new ConfigInput();
             configInput.Show();
+        }
+
+        private void btnLoadAccount_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var x = configInput.configInputData;
+                string dataPath = openFileDialog.FileName;
+                
+            }
         }
     }
 }

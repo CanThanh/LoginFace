@@ -12,6 +12,7 @@ namespace XMDT
         {
             InitializeComponent();
             InitListView();
+            SetConfigInputData();
         }
 
         private void InitListView()
@@ -35,6 +36,17 @@ namespace XMDT
             lvConfig.Items.Add("Cookie");
         }
 
+        private void SetConfigInputData()
+        {
+            configInputData = new ConfigInputData();
+            foreach (ListViewItem item in lvConfig.Items)
+            {
+                configInputData.lstInput.Add(item.Text);
+            }
+            configInputData.SplitCharacter = txtSplitCharacter.Text;
+        }
+
+        #region Drag and Drop 2 ListView
         private void lvInput_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.Text))
@@ -62,7 +74,6 @@ namespace XMDT
             lvInput_mDown = false;
             lvConfig_mDown = false;
         }
-
 
         private void lvInput_MouseDown(object sender, MouseEventArgs e)
         {
@@ -128,6 +139,7 @@ namespace XMDT
             lvInput_mDown = false;
             lvConfig_mDown = false;
         }
+        #endregion 
 
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -137,13 +149,8 @@ namespace XMDT
             } else if(lvInput.Items.Count == 0) 
             {
                 MessageBox.Show("Vui lòng chọn dữ liệu đầu vào");
-            } else {             
-                configInputData = new ConfigInputData();
-                foreach (ListViewItem item in lvInput.Items)
-                {
-                    configInputData.lstInput.Add(item.Text);
-                }
-                configInputData.SplitCharacter = txtSplitCharacter.Text;
+            } else {
+                SetConfigInputData();
                 this.Close();
             }
         }

@@ -33,15 +33,24 @@
             this.facebookerr282 = new System.Windows.Forms.ToolStripMenuItem();
             this.config = new System.Windows.Forms.ToolStripMenuItem();
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtUserAgent = new System.Windows.Forms.TextBox();
-            this.txtProxy = new System.Windows.Forms.TextBox();
-            this.nUDThread = new System.Windows.Forms.NumericUpDown();
             this.configInputData = new System.Windows.Forms.ToolStripMenuItem();
+            this.dgViewInput = new System.Windows.Forms.DataGridView();
+            this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTwoFA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCookie = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEmailRecover = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPassMail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAccountInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colProxy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnLoadAccount = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDThread)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -51,7 +60,7 @@
             this.config});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(735, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1058, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -66,7 +75,7 @@
             // facebookerr282
             // 
             this.facebookerr282.Name = "facebookerr282";
-            this.facebookerr282.Size = new System.Drawing.Size(180, 22);
+            this.facebookerr282.Size = new System.Drawing.Size(120, 22);
             this.facebookerr282.Text = "Error 282";
             this.facebookerr282.Click += new System.EventHandler(this.facebookerr282_Click);
             // 
@@ -86,54 +95,6 @@
             this.configXMDT.Text = "Phôi xác minh danh tính";
             this.configXMDT.Click += new System.EventHandler(this.configXMDT_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Số luồng";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 72);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "User Agent";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 103);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(33, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Proxy";
-            // 
-            // txtUserAgent
-            // 
-            this.txtUserAgent.Location = new System.Drawing.Point(111, 64);
-            this.txtUserAgent.Name = "txtUserAgent";
-            this.txtUserAgent.Size = new System.Drawing.Size(479, 20);
-            this.txtUserAgent.TabIndex = 6;
-            // 
-            // txtProxy
-            // 
-            this.txtProxy.Location = new System.Drawing.Point(111, 96);
-            this.txtProxy.Name = "txtProxy";
-            this.txtProxy.Size = new System.Drawing.Size(479, 20);
-            this.txtProxy.TabIndex = 7;
-            // 
-            // nUDThread
-            // 
-            this.nUDThread.Location = new System.Drawing.Point(111, 32);
-            this.nUDThread.Name = "nUDThread";
-            this.nUDThread.Size = new System.Drawing.Size(47, 20);
-            this.nUDThread.TabIndex = 8;
-            // 
             // configInputData
             // 
             this.configInputData.Name = "configInputData";
@@ -141,24 +102,131 @@
             this.configInputData.Text = "Dữ liệu đầu vào";
             this.configInputData.Click += new System.EventHandler(this.configInputData_Click);
             // 
+            // dgViewInput
+            // 
+            this.dgViewInput.AllowUserToOrderColumns = true;
+            this.dgViewInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgViewInput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgViewInput.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCheck,
+            this.colIndex,
+            this.colID,
+            this.colPass,
+            this.colTwoFA,
+            this.colCookie,
+            this.colEmailRecover,
+            this.colPassMail,
+            this.colAccountInfo,
+            this.colProxy,
+            this.colUserAgent,
+            this.colStatus,
+            this.colNote});
+            this.dgViewInput.Location = new System.Drawing.Point(0, 84);
+            this.dgViewInput.Name = "dgViewInput";
+            this.dgViewInput.RowHeadersVisible = false;
+            this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
+            this.dgViewInput.TabIndex = 3;
+            // 
+            // colCheck
+            // 
+            this.colCheck.HeaderText = "Chọn";
+            this.colCheck.Name = "colCheck";
+            this.colCheck.Width = 50;
+            // 
+            // colIndex
+            // 
+            this.colIndex.HeaderText = "STT";
+            this.colIndex.Name = "colIndex";
+            this.colIndex.Width = 50;
+            // 
+            // colID
+            // 
+            this.colID.HeaderText = "UID";
+            this.colID.Name = "colID";
+            this.colID.Width = 80;
+            // 
+            // colPass
+            // 
+            this.colPass.HeaderText = "Mật khẩu";
+            this.colPass.Name = "colPass";
+            this.colPass.Width = 80;
+            // 
+            // colTwoFA
+            // 
+            this.colTwoFA.HeaderText = "Mã 2 FA";
+            this.colTwoFA.Name = "colTwoFA";
+            this.colTwoFA.Width = 80;
+            // 
+            // colCookie
+            // 
+            this.colCookie.HeaderText = "Cookie";
+            this.colCookie.Name = "colCookie";
+            // 
+            // colEmailRecover
+            // 
+            this.colEmailRecover.HeaderText = "Email khôi phục";
+            this.colEmailRecover.Name = "colEmailRecover";
+            this.colEmailRecover.Width = 80;
+            // 
+            // colPassMail
+            // 
+            this.colPassMail.HeaderText = "Mật khẩu mail";
+            this.colPassMail.Name = "colPassMail";
+            this.colPassMail.Width = 80;
+            // 
+            // colAccountInfo
+            // 
+            this.colAccountInfo.HeaderText = "Thông tin tài khoản";
+            this.colAccountInfo.Name = "colAccountInfo";
+            // 
+            // colProxy
+            // 
+            this.colProxy.HeaderText = "Proxy";
+            this.colProxy.Name = "colProxy";
+            this.colProxy.Width = 80;
+            // 
+            // colUserAgent
+            // 
+            this.colUserAgent.HeaderText = "User Agent";
+            this.colUserAgent.Name = "colUserAgent";
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Tình trạng";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.Width = 80;
+            // 
+            // colNote
+            // 
+            this.colNote.HeaderText = "Ghi chú";
+            this.colNote.Name = "colNote";
+            // 
+            // btnLoadAccount
+            // 
+            this.btnLoadAccount.Location = new System.Drawing.Point(13, 40);
+            this.btnLoadAccount.Name = "btnLoadAccount";
+            this.btnLoadAccount.Size = new System.Drawing.Size(90, 23);
+            this.btnLoadAccount.TabIndex = 4;
+            this.btnLoadAccount.Text = "Nhập tài khoản";
+            this.btnLoadAccount.UseVisualStyleBackColor = true;
+            this.btnLoadAccount.Click += new System.EventHandler(this.btnLoadAccount_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(735, 323);
-            this.Controls.Add(this.nUDThread);
-            this.Controls.Add(this.txtProxy);
-            this.Controls.Add(this.txtUserAgent);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(1058, 544);
+            this.Controls.Add(this.btnLoadAccount);
+            this.Controls.Add(this.dgViewInput);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDThread)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,13 +238,22 @@
         private System.Windows.Forms.ToolStripMenuItem config;
         private System.Windows.Forms.ToolStripMenuItem configXMDT;
         private System.Windows.Forms.ToolStripMenuItem facebookerr282;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtUserAgent;
-        private System.Windows.Forms.TextBox txtProxy;
-        private System.Windows.Forms.NumericUpDown nUDThread;
         private System.Windows.Forms.ToolStripMenuItem configInputData;
+        private System.Windows.Forms.DataGridView dgViewInput;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTwoFA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCookie;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colEmailRecover;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPassMail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAccountInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colProxy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
+        private System.Windows.Forms.Button btnLoadAccount;
     }
 }
 
