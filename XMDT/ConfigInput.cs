@@ -41,7 +41,7 @@ namespace XMDT
             configInputData = new ConfigInputData();
             foreach (ListViewItem item in lvConfig.Items)
             {
-                configInputData.lstInput.Add(item.Text);
+                configInputData.lstInput.Add(item.Text, lvConfig.Items.IndexOf(item));
             }
             configInputData.SplitCharacter = txtSplitCharacter.Text;
         }

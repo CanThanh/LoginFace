@@ -14,9 +14,13 @@ namespace XMDT
 {
     public partial class MainForm : Form
     {
+        CommonFunction commonFunction;
+        ConfigInput configInput;
         public MainForm()
         {
             InitializeComponent();
+            commonFunction = new CommonFunction();
+            configInput = new ConfigInput();
         }  
 
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
@@ -129,7 +133,7 @@ namespace XMDT
             //account.Proxy = "154.236.189.5:8080";
             //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
         }
-        ConfigInput configInput = new ConfigInput();
+        
         private void configInputData_Click(object sender, EventArgs e)
         {
             configInput.Show();
@@ -140,9 +144,20 @@ namespace XMDT
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var x = configInput.configInputData;
-                string dataPath = openFileDialog.FileName;
-                
+                this.dgViewInput.Rows.Clear();
+                var lstAccountInfo = commonFunction.GetAccountInfos(openFileDialog.FileName, configInput.configInputData);
+                if(lstAccountInfo.Count == 0)
+                {
+                    MessageBox.Show("Dữ liệu đầu vào không đúng định dạng. Vui lòng kiểm tra lại");
+                }
+                else
+                {
+                    foreach (var item in lstAccountInfo)
+                    {
+                        this.dgViewInput.Rows.Add(false,lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                                            item.Email, item.PassMail,"", item.Proxy, item.UserAgent,"","");
+                    }                    
+                }
             }
         }
     }
