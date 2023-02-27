@@ -225,5 +225,37 @@ namespace XMDT.Controller
             }
         }
         #endregion FunctionCommon
+
+        #region Load Accout Info
+        public List<AccountInfo> GetAccountInfos(string filePath, ConfigInputData configInput)
+        {
+            var lstAccountInfo = new List<AccountInfo>();
+            try
+            {
+
+                var listOfFieldNames = typeof(AccountInfo).GetProperties().Select(f => f.Name).ToList();
+                FileHelper fileHelper = new FileHelper();
+                var allData = fileHelper.Read(filePath);
+                var lstLineData = allData.Split('\n');
+                foreach (var lineData in lstLineData)
+                {
+                    var accountInfo = new AccountInfo();
+                    var data = lineData.Split(configInput.SplitCharacter.ToCharArray());
+                    foreach (var input in configInput.lstInput.Keys)
+                    {
+                        accountInfo.GetType().GetProperty(input).SetValue(accountInfo, data[configInput.lstInput[input]]);
+                    }
+                    lstAccountInfo.Add(accountInfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                lstAccountInfo = new List<AccountInfo>();
+            }
+
+            return lstAccountInfo;
+        }
+        #endregion
     }
 }

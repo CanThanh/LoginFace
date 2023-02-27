@@ -42,6 +42,6 @@ namespace XMDT.Model
     public class ConfigInputData
     {
         public string SplitCharacter { get; set; }
-        public List<string> lstInput { get; set; } = new List<string>();
+        public Dictionary<string, int> lstInput { get; set; } = new Dictionary<string, int>();
     }
 }
