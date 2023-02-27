@@ -118,6 +118,12 @@
     <Compile Include="ConfigInput.designer.cs">
       <DependentUpon>ConfigInput.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigUserAgent_Proxy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigUserAgent_Proxy.Designer.cs">
+      <DependentUpon>ConfigUserAgent_Proxy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controller\CommonFunction.cs" />
     <Compile Include="Controller\FacebookProcessing.cs" />
     <Compile Include="ConfigImage.cs">
@@ -156,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigInput.resx">
       <DependentUpon>ConfigInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigUserAgent_Proxy.resx">
+      <DependentUpon>ConfigUserAgent_Proxy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>

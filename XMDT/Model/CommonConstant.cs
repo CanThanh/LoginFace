@@ -18,5 +18,11 @@ namespace XMDT.Model
             HttpProxy = 1,
             Socks5Proxy
         }
+
+        public enum TypeForm
+        {
+            UserAgent,
+            Proxy
+        }
     }
 }

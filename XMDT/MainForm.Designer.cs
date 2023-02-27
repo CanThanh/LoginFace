@@ -49,6 +49,8 @@
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnLoadAccount = new System.Windows.Forms.Button();
+            this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
+            this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.SuspendLayout();
@@ -83,7 +85,9 @@
             // 
             this.config.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configXMDT,
-            this.configInputData});
+            this.configInputData,
+            this.configUserAgent,
+            this.configProxy});
             this.config.Name = "config";
             this.config.Size = new System.Drawing.Size(67, 20);
             this.config.Text = "Cấu hình";
@@ -213,6 +217,20 @@
             this.btnLoadAccount.UseVisualStyleBackColor = true;
             this.btnLoadAccount.Click += new System.EventHandler(this.btnLoadAccount_Click);
             // 
+            // configUserAgent
+            // 
+            this.configUserAgent.Name = "configUserAgent";
+            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
+            this.configUserAgent.Text = "User Agent";
+            this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
+            // 
+            // configProxy
+            // 
+            this.configProxy.Name = "configProxy";
+            this.configProxy.Size = new System.Drawing.Size(204, 22);
+            this.configProxy.Text = "Proxy";
+            this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -254,6 +272,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
         private System.Windows.Forms.Button btnLoadAccount;
+        private System.Windows.Forms.ToolStripMenuItem configUserAgent;
+        private System.Windows.Forms.ToolStripMenuItem configProxy;
     }
 }
 

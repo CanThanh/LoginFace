@@ -9,11 +9,13 @@ using XMDT.Controller;
 using XMDT.Facebook;
 using XMDT.Model;
 using xNet;
+using static XMDT.Model.CommonConstant;
 
 namespace XMDT
 {
     public partial class MainForm : Form
     {
+        ConfigInput configInput = new ConfigInput();       
         public MainForm()
         {
             InitializeComponent();
@@ -129,7 +131,7 @@ namespace XMDT
             //account.Proxy = "154.236.189.5:8080";
             //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
         }
-        ConfigInput configInput = new ConfigInput();
+
         private void configInputData_Click(object sender, EventArgs e)
         {
             configInput.Show();
@@ -144,6 +146,20 @@ namespace XMDT
                 string dataPath = openFileDialog.FileName;
                 
             }
+        }
+
+        private void configUserAgent_Click(object sender, EventArgs e)
+        {
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
+            configUserAgent_Proxy.Show();
+        }
+
+        private void configProxy_Click(object sender, EventArgs e)
+        {
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
+            configUserAgent_Proxy.Show();
         }
     }
 }
