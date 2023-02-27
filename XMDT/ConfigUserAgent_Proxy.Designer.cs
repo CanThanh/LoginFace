@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.lblList = new System.Windows.Forms.Label();
-            this.rtxInput = new System.Windows.Forms.RichTextBox();
+            this.rtbInput = new System.Windows.Forms.RichTextBox();
             this.lblAccount = new System.Windows.Forms.Label();
             this.nUDAccount = new System.Windows.Forms.NumericUpDown();
             this.lblRadio = new System.Windows.Forms.Label();
@@ -50,13 +50,13 @@
             this.lblList.TabIndex = 0;
             this.lblList.Text = "Danh sách User Agent: ";
             // 
-            // rtxInput
+            // rtbInput
             // 
-            this.rtxInput.Location = new System.Drawing.Point(16, 39);
-            this.rtxInput.Name = "rtxInput";
-            this.rtxInput.Size = new System.Drawing.Size(524, 191);
-            this.rtxInput.TabIndex = 1;
-            this.rtxInput.Text = "";
+            this.rtbInput.Location = new System.Drawing.Point(16, 39);
+            this.rtbInput.Name = "rtbInput";
+            this.rtbInput.Size = new System.Drawing.Size(524, 191);
+            this.rtbInput.TabIndex = 1;
+            this.rtbInput.Text = "";
             // 
             // lblAccount
             // 
@@ -86,6 +86,7 @@
             // rbSequence
             // 
             this.rbSequence.AutoSize = true;
+            this.rbSequence.Checked = true;
             this.rbSequence.Location = new System.Drawing.Point(168, 276);
             this.rbSequence.Name = "rbSequence";
             this.rbSequence.Size = new System.Drawing.Size(63, 17);
@@ -132,6 +133,7 @@
             this.btnConfirn.TabIndex = 9;
             this.btnConfirn.Text = "Xác nhận";
             this.btnConfirn.UseVisualStyleBackColor = true;
+            this.btnConfirn.Click += new System.EventHandler(this.btnConfirn_Click);
             // 
             // ConfigUserAgent_Proxy
             // 
@@ -144,7 +146,7 @@
             this.Controls.Add(this.lblRadio);
             this.Controls.Add(this.nUDAccount);
             this.Controls.Add(this.lblAccount);
-            this.Controls.Add(this.rtxInput);
+            this.Controls.Add(this.rtbInput);
             this.Controls.Add(this.lblList);
             this.Name = "ConfigUserAgent_Proxy";
             this.Load += new System.EventHandler(this.ConfigUserAgent_Proxy_Load);
@@ -157,7 +159,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblList;
-        private System.Windows.Forms.RichTextBox rtxInput;
+        private System.Windows.Forms.RichTextBox rtbInput;
         private System.Windows.Forms.Label lblAccount;
         private System.Windows.Forms.NumericUpDown nUDAccount;
         private System.Windows.Forms.Label lblRadio;

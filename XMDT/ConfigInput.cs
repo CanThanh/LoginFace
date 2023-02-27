@@ -7,12 +7,12 @@ namespace XMDT
     public partial class ConfigInput : Form
     {
         private bool lvInput_mDown, lvConfig_mDown;
-        public ConfigInputData configInputData;
+        public ConfigInputModel configInputModel;
         public ConfigInput()
         {
             InitializeComponent();
             InitListView();
-            SetConfigInputData();
+            SetConfigInputModel();
         }
 
         private void InitListView()
@@ -36,14 +36,14 @@ namespace XMDT
             lvConfig.Items.Add("Cookie");
         }
 
-        private void SetConfigInputData()
+        private void SetConfigInputModel()
         {
-            configInputData = new ConfigInputData();
+            configInputModel = new ConfigInputModel();
             foreach (ListViewItem item in lvConfig.Items)
             {
-                configInputData.lstInput.Add(item.Text, lvConfig.Items.IndexOf(item));
+                configInputModel.lstInput.Add(item.Text, lvConfig.Items.IndexOf(item));
             }
-            configInputData.SplitCharacter = txtSplitCharacter.Text;
+            configInputModel.SplitCharacter = txtSplitCharacter.Text;
         }
 
         #region Drag and Drop 2 ListView
@@ -150,7 +150,7 @@ namespace XMDT
             {
                 MessageBox.Show("Vui lòng chọn dữ liệu đầu vào");
             } else {
-                SetConfigInputData();
+                SetConfigInputModel();
                 this.Close();
             }
         }

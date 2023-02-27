@@ -227,7 +227,7 @@ namespace XMDT.Controller
         #endregion FunctionCommon
 
         #region Load Accout Info
-        public List<AccountInfo> GetAccountInfos(string filePath, ConfigInputData configInput)
+        public List<AccountInfo> GetAccountInfos(string filePath, ConfigInputModel configInput)
         {
             var lstAccountInfo = new List<AccountInfo>();
             try

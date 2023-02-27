@@ -91,7 +91,7 @@ namespace XMDT.Controller
             }
         }
 
-        public void ProcessImage(FaceInfo faceInfo,Bitmap bitmap, ConfigIdentity configIdentity, Image img)
+        public void ProcessImage(FaceInfo faceInfo,Bitmap bitmap, ConfigIdentityModel configIdentity, Image img)
         {
             try
             {

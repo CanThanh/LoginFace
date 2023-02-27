@@ -15,6 +15,7 @@ using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using XMDT.Model;
 using xNet;
 using static XMDT.Model.CommonConstant;
 
@@ -23,6 +24,7 @@ namespace XMDT
     public partial class ConfigUserAgent_Proxy : Form
     {
         public int typeForm;
+        public ConfigUserAgentProxyModel configUserAgentProxyModel;
         public ConfigUserAgent_Proxy()
         {
             InitializeComponent();            
@@ -51,6 +53,24 @@ namespace XMDT
         private void ConfigUserAgent_Proxy_Load(object sender, EventArgs e)
         {
             InitForm();
+        }
+
+        private void ConfigUserAgentProxyModel()
+        {
+            configUserAgentProxyModel = new ConfigUserAgentProxyModel
+            {
+                Data = rtbInput.Text,
+                AccountPerData = (int) nUDAccount.Value,
+                IsRandom = rbRandom.Checked,
+                CkeckExistData = ckExistAccount.Checked
+            };
+            
+        }
+
+        private void btnConfirn_Click(object sender, EventArgs e)
+        {
+            ConfigUserAgentProxyModel();
+            this.Close();
         }
     }
 }

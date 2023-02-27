@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XMDT.Model
 {
-    internal class ConfigIdentity
+    internal class ConfigIdentityModel
     {
         public int nUDFirstNameRotate {get; set;}
         public int nUDFirstNameY {get; set;}
@@ -39,9 +39,17 @@ namespace XMDT.Model
         public string cbFont { get; set;}
     }
 
-    public class ConfigInputData
+    public class ConfigInputModel
     {
         public string SplitCharacter { get; set; }
         public Dictionary<string, int> lstInput { get; set; } = new Dictionary<string, int>();
+    }
+
+    public class ConfigUserAgentProxyModel
+    {
+        public string Data { get; set; }
+        public int AccountPerData { get; set; }
+        public bool IsRandom { get; set; }
+        public bool CkeckExistData { get; set; }
     }
 }

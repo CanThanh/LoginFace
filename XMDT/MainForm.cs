@@ -17,11 +17,13 @@ namespace XMDT
     {
         CommonFunction commonFunction;
         ConfigInput configInput;
+        ConfigUserAgent_Proxy configUserAgent_Proxy;
         public MainForm()
         {
             InitializeComponent();
             commonFunction = new CommonFunction();
             configInput = new ConfigInput();
+            configUserAgent_Proxy = new ConfigUserAgent_Proxy();
         }  
 
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
@@ -137,6 +139,10 @@ namespace XMDT
         
         private void configInputData_Click(object sender, EventArgs e)
         {
+            if(configInput.IsDisposed)
+            {
+                configInput = new ConfigInput();
+            }
             configInput.Show();
         }
 
@@ -146,7 +152,7 @@ namespace XMDT
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.dgViewInput.Rows.Clear();
-                var lstAccountInfo = commonFunction.GetAccountInfos(openFileDialog.FileName, configInput.configInputData);
+                var lstAccountInfo = commonFunction.GetAccountInfos(openFileDialog.FileName, configInput.configInputModel);
                 if(lstAccountInfo.Count == 0)
                 {
                     MessageBox.Show("Dữ liệu đầu vào không đúng định dạng. Vui lòng kiểm tra lại");
@@ -164,14 +170,31 @@ namespace XMDT
 
         private void configUserAgent_Click(object sender, EventArgs e)
         {
-            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+
+            if (configUserAgent_Proxy.IsDisposed)
+            {
+                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            }
             configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
             configUserAgent_Proxy.Show();
+            var result = configUserAgent_Proxy.configUserAgentProxyModel;
+            if (string.IsNullOrEmpty(result.Data))
+            {
+                MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+            }
+            else
+            {
+                var lstUserAgent = result.Data.Split('\n');
+                
+            }
         }
 
         private void configProxy_Click(object sender, EventArgs e)
         {
-            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            if (configUserAgent_Proxy.IsDisposed)
+            {
+                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            }
             configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
             configUserAgent_Proxy.Show();
         }

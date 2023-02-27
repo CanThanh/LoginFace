@@ -131,9 +131,9 @@ namespace XMDT
             }
         }
         
-        private ConfigIdentity GetConfigIdentityForm()
+        private ConfigIdentityModel GetConfigIdentityForm()
         {
-            var configIdentity = new ConfigIdentity
+            var configIdentity = new ConfigIdentityModel
             {
                 nUDFirstNameRotate = (int) nUDFirstNameRotate.Value,
                 nUDFirstNameY = (int) nUDFirstNameY.Value,
