@@ -47,9 +47,7 @@ namespace XMDT.Model
 
     public class ConfigUserAgentProxyModel
     {
-        public string Data { get; set; }
-        public int AccountPerData { get; set; }
-        public bool IsRandom { get; set; }
+        public List<string> LstData { get; set; } = new List<string>();
         public bool CkeckExistData { get; set; }
     }
 }

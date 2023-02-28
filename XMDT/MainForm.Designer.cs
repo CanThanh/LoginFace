@@ -34,6 +34,8 @@
             this.config = new System.Windows.Forms.ToolStripMenuItem();
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
             this.configInputData = new System.Windows.Forms.ToolStripMenuItem();
+            this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
+            this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.dgViewInput = new System.Windows.Forms.DataGridView();
             this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,8 +51,8 @@
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnLoadAccount = new System.Windows.Forms.Button();
-            this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
-            this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnUserAgent = new System.Windows.Forms.Button();
+            this.btnProxy = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.SuspendLayout();
@@ -105,6 +107,20 @@
             this.configInputData.Size = new System.Drawing.Size(204, 22);
             this.configInputData.Text = "Dữ liệu đầu vào";
             this.configInputData.Click += new System.EventHandler(this.configInputData_Click);
+            // 
+            // configUserAgent
+            // 
+            this.configUserAgent.Name = "configUserAgent";
+            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
+            this.configUserAgent.Text = "User Agent";
+            this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
+            // 
+            // configProxy
+            // 
+            this.configProxy.Name = "configProxy";
+            this.configProxy.Size = new System.Drawing.Size(204, 22);
+            this.configProxy.Text = "Proxy";
+            this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
             // 
             // dgViewInput
             // 
@@ -217,25 +233,33 @@
             this.btnLoadAccount.UseVisualStyleBackColor = true;
             this.btnLoadAccount.Click += new System.EventHandler(this.btnLoadAccount_Click);
             // 
-            // configUserAgent
+            // btnUserAgent
             // 
-            this.configUserAgent.Name = "configUserAgent";
-            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
-            this.configUserAgent.Text = "User Agent";
-            this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
+            this.btnUserAgent.Location = new System.Drawing.Point(109, 40);
+            this.btnUserAgent.Name = "btnUserAgent";
+            this.btnUserAgent.Size = new System.Drawing.Size(103, 23);
+            this.btnUserAgent.TabIndex = 5;
+            this.btnUserAgent.Text = "Nhập UserAgent";
+            this.btnUserAgent.UseVisualStyleBackColor = true;
+            this.btnUserAgent.Click += new System.EventHandler(this.btnUserAgent_Click);
             // 
-            // configProxy
+            // btnProxy
             // 
-            this.configProxy.Name = "configProxy";
-            this.configProxy.Size = new System.Drawing.Size(204, 22);
-            this.configProxy.Text = "Proxy";
-            this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
+            this.btnProxy.Location = new System.Drawing.Point(218, 40);
+            this.btnProxy.Name = "btnProxy";
+            this.btnProxy.Size = new System.Drawing.Size(90, 23);
+            this.btnProxy.TabIndex = 6;
+            this.btnProxy.Text = "Nhập Proxy";
+            this.btnProxy.UseVisualStyleBackColor = true;
+            this.btnProxy.Click += new System.EventHandler(this.btnProxy_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1058, 544);
+            this.Controls.Add(this.btnProxy);
+            this.Controls.Add(this.btnUserAgent);
             this.Controls.Add(this.btnLoadAccount);
             this.Controls.Add(this.dgViewInput);
             this.Controls.Add(this.menuStrip1);
@@ -274,6 +298,8 @@
         private System.Windows.Forms.Button btnLoadAccount;
         private System.Windows.Forms.ToolStripMenuItem configUserAgent;
         private System.Windows.Forms.ToolStripMenuItem configProxy;
+        private System.Windows.Forms.Button btnUserAgent;
+        private System.Windows.Forms.Button btnProxy;
     }
 }
 

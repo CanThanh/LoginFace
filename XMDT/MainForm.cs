@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
@@ -177,16 +178,6 @@ namespace XMDT
             }
             configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
             configUserAgent_Proxy.Show();
-            var result = configUserAgent_Proxy.configUserAgentProxyModel;
-            if (string.IsNullOrEmpty(result.Data))
-            {
-                MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
-            }
-            else
-            {
-                var lstUserAgent = result.Data.Split('\n');
-                
-            }
         }
 
         private void configProxy_Click(object sender, EventArgs e)
@@ -197,6 +188,58 @@ namespace XMDT
             }
             configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
             configUserAgent_Proxy.Show();
+        }
+
+        private void btnUserAgent_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var countData = configUserAgent_Proxy.configUserAgentProxyModel.LstData.Count;
+                if (configUserAgent_Proxy.typeForm == (int)TypeForm.Proxy ||
+                    countData == 0)
+                {
+                    MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+                }
+                else
+                {
+                    for (int i = 0; i < dgViewInput.Rows.Count; i++)
+                    {
+                        dgViewInput.Rows[i].Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+            }
+            
+        }
+
+        private void btnProxy_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var countData = configUserAgent_Proxy.configUserAgentProxyModel.LstData.Count;
+                if (configUserAgent_Proxy.typeForm == (int)TypeForm.UserAgent ||
+                    countData == 0)
+                {
+                    MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+                }
+                else
+                {
+                    for (int i = 0; i < dgViewInput.Rows.Count; i++)
+                    {
+                        dgViewInput.Rows[i].Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+            }
+            
         }
     }
 }

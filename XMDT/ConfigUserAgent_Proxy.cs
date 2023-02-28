@@ -53,23 +53,56 @@ namespace XMDT
         private void ConfigUserAgent_Proxy_Load(object sender, EventArgs e)
         {
             InitForm();
+            SetConfigUserAgentProxyModel();
         }
 
-        private void ConfigUserAgentProxyModel()
+        //private void ConfigUserAgentProxyModel()
+        //{
+        //    configUserAgentProxyModel = new ConfigUserAgentProxyModel
+        //    {
+        //        Data = rtbInput.Text,
+        //        AccountPerData = (int) nUDAccount.Value,
+        //        IsRandom = rbRandom.Checked,
+        //        CkeckExistData = ckExistAccount.Checked
+        //    };            
+        //}
+
+        private void SetConfigUserAgentProxyModel()
         {
+            var result = new List<string>();
+            var lstData = rtbInput.Text.Split('\n');
+            List<string> temp = new List<string>();
+            Random random = new Random();
+            foreach (var item in lstData)
+            {
+                for (int i = 0; i < (int)nUDAccount.Value; i++)
+                {
+                    temp.Add(item);
+                }
+            }
+            if (!rbRandom.Checked)
+            {
+                result.AddRange(temp);
+            }
+            else
+            {
+                while (temp.Count > 0)
+                {
+                    var index = random.Next(temp.Count);
+                    result.Add(temp[index]);
+                    temp.RemoveAt(index);
+                }
+            }
             configUserAgentProxyModel = new ConfigUserAgentProxyModel
             {
-                Data = rtbInput.Text,
-                AccountPerData = (int) nUDAccount.Value,
-                IsRandom = rbRandom.Checked,
+                LstData = result,
                 CkeckExistData = ckExistAccount.Checked
             };
-            
         }
 
         private void btnConfirn_Click(object sender, EventArgs e)
         {
-            ConfigUserAgentProxyModel();
+            SetConfigUserAgentProxyModel();
             this.Close();
         }
     }
