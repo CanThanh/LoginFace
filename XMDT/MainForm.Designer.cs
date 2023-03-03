@@ -50,7 +50,6 @@
             this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnLoadAccount = new System.Windows.Forms.Button();
             this.btnUserAgent = new System.Windows.Forms.Button();
             this.btnProxy = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
@@ -59,12 +58,14 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xửLýLỗiFacebookToolStripMenuItem,
             this.config});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1058, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1587, 35);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -73,13 +74,13 @@
             this.xửLýLỗiFacebookToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.facebookerr282});
             this.xửLýLỗiFacebookToolStripMenuItem.Name = "xửLýLỗiFacebookToolStripMenuItem";
-            this.xửLýLỗiFacebookToolStripMenuItem.Size = new System.Drawing.Size(113, 20);
+            this.xửLýLỗiFacebookToolStripMenuItem.Size = new System.Drawing.Size(171, 29);
             this.xửLýLỗiFacebookToolStripMenuItem.Text = "Xử lý lỗi facebook";
             // 
             // facebookerr282
             // 
             this.facebookerr282.Name = "facebookerr282";
-            this.facebookerr282.Size = new System.Drawing.Size(120, 22);
+            this.facebookerr282.Size = new System.Drawing.Size(187, 34);
             this.facebookerr282.Text = "Error 282";
             this.facebookerr282.Click += new System.EventHandler(this.facebookerr282_Click);
             // 
@@ -91,34 +92,34 @@
             this.configUserAgent,
             this.configProxy});
             this.config.Name = "config";
-            this.config.Size = new System.Drawing.Size(67, 20);
+            this.config.Size = new System.Drawing.Size(97, 29);
             this.config.Text = "Cấu hình";
             // 
             // configXMDT
             // 
             this.configXMDT.Name = "configXMDT";
-            this.configXMDT.Size = new System.Drawing.Size(204, 22);
+            this.configXMDT.Size = new System.Drawing.Size(304, 34);
             this.configXMDT.Text = "Phôi xác minh danh tính";
             this.configXMDT.Click += new System.EventHandler(this.configXMDT_Click);
             // 
             // configInputData
             // 
             this.configInputData.Name = "configInputData";
-            this.configInputData.Size = new System.Drawing.Size(204, 22);
+            this.configInputData.Size = new System.Drawing.Size(304, 34);
             this.configInputData.Text = "Dữ liệu đầu vào";
             this.configInputData.Click += new System.EventHandler(this.configInputData_Click);
             // 
             // configUserAgent
             // 
             this.configUserAgent.Name = "configUserAgent";
-            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
+            this.configUserAgent.Size = new System.Drawing.Size(304, 34);
             this.configUserAgent.Text = "User Agent";
             this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
             // 
             // configProxy
             // 
             this.configProxy.Name = "configProxy";
-            this.configProxy.Size = new System.Drawing.Size(204, 22);
+            this.configProxy.Size = new System.Drawing.Size(304, 34);
             this.configProxy.Text = "Proxy";
             this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
             // 
@@ -143,101 +144,111 @@
             this.colUserAgent,
             this.colStatus,
             this.colNote});
-            this.dgViewInput.Location = new System.Drawing.Point(0, 84);
+            this.dgViewInput.Location = new System.Drawing.Point(0, 129);
+            this.dgViewInput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgViewInput.Name = "dgViewInput";
             this.dgViewInput.RowHeadersVisible = false;
-            this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
+            this.dgViewInput.RowHeadersWidth = 62;
+            this.dgViewInput.Size = new System.Drawing.Size(1587, 706);
             this.dgViewInput.TabIndex = 3;
             // 
             // colCheck
             // 
             this.colCheck.HeaderText = "Chọn";
+            this.colCheck.MinimumWidth = 8;
             this.colCheck.Name = "colCheck";
             this.colCheck.Width = 50;
             // 
             // colIndex
             // 
             this.colIndex.HeaderText = "STT";
+            this.colIndex.MinimumWidth = 8;
             this.colIndex.Name = "colIndex";
             this.colIndex.Width = 50;
             // 
             // colID
             // 
             this.colID.HeaderText = "UID";
+            this.colID.MinimumWidth = 8;
             this.colID.Name = "colID";
             this.colID.Width = 80;
             // 
             // colPass
             // 
             this.colPass.HeaderText = "Mật khẩu";
+            this.colPass.MinimumWidth = 8;
             this.colPass.Name = "colPass";
             this.colPass.Width = 80;
             // 
             // colTwoFA
             // 
             this.colTwoFA.HeaderText = "Mã 2 FA";
+            this.colTwoFA.MinimumWidth = 8;
             this.colTwoFA.Name = "colTwoFA";
             this.colTwoFA.Width = 80;
             // 
             // colCookie
             // 
             this.colCookie.HeaderText = "Cookie";
+            this.colCookie.MinimumWidth = 8;
             this.colCookie.Name = "colCookie";
+            this.colCookie.Width = 150;
             // 
             // colEmailRecover
             // 
             this.colEmailRecover.HeaderText = "Email khôi phục";
+            this.colEmailRecover.MinimumWidth = 8;
             this.colEmailRecover.Name = "colEmailRecover";
             this.colEmailRecover.Width = 80;
             // 
             // colPassMail
             // 
             this.colPassMail.HeaderText = "Mật khẩu mail";
+            this.colPassMail.MinimumWidth = 8;
             this.colPassMail.Name = "colPassMail";
             this.colPassMail.Width = 80;
             // 
             // colAccountInfo
             // 
             this.colAccountInfo.HeaderText = "Thông tin tài khoản";
+            this.colAccountInfo.MinimumWidth = 8;
             this.colAccountInfo.Name = "colAccountInfo";
+            this.colAccountInfo.Width = 150;
             // 
             // colProxy
             // 
             this.colProxy.HeaderText = "Proxy";
+            this.colProxy.MinimumWidth = 8;
             this.colProxy.Name = "colProxy";
             this.colProxy.Width = 80;
             // 
             // colUserAgent
             // 
             this.colUserAgent.HeaderText = "User Agent";
+            this.colUserAgent.MinimumWidth = 8;
             this.colUserAgent.Name = "colUserAgent";
+            this.colUserAgent.Width = 150;
             // 
             // colStatus
             // 
             this.colStatus.HeaderText = "Tình trạng";
+            this.colStatus.MinimumWidth = 8;
             this.colStatus.Name = "colStatus";
             this.colStatus.Width = 80;
             // 
             // colNote
             // 
             this.colNote.HeaderText = "Ghi chú";
+            this.colNote.MinimumWidth = 8;
             this.colNote.Name = "colNote";
-            // 
-            // btnLoadAccount
-            // 
-            this.btnLoadAccount.Location = new System.Drawing.Point(13, 40);
-            this.btnLoadAccount.Name = "btnLoadAccount";
-            this.btnLoadAccount.Size = new System.Drawing.Size(90, 23);
-            this.btnLoadAccount.TabIndex = 4;
-            this.btnLoadAccount.Text = "Nhập tài khoản";
-            this.btnLoadAccount.UseVisualStyleBackColor = true;
-            this.btnLoadAccount.Click += new System.EventHandler(this.btnLoadAccount_Click);
+            this.colNote.Width = 150;
             // 
             // btnUserAgent
             // 
-            this.btnUserAgent.Location = new System.Drawing.Point(109, 40);
+            this.btnUserAgent.Location = new System.Drawing.Point(13, 62);
+            this.btnUserAgent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnUserAgent.Name = "btnUserAgent";
-            this.btnUserAgent.Size = new System.Drawing.Size(103, 23);
+            this.btnUserAgent.Size = new System.Drawing.Size(154, 35);
             this.btnUserAgent.TabIndex = 5;
             this.btnUserAgent.Text = "Nhập UserAgent";
             this.btnUserAgent.UseVisualStyleBackColor = true;
@@ -245,9 +256,10 @@
             // 
             // btnProxy
             // 
-            this.btnProxy.Location = new System.Drawing.Point(218, 40);
+            this.btnProxy.Location = new System.Drawing.Point(189, 62);
+            this.btnProxy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnProxy.Name = "btnProxy";
-            this.btnProxy.Size = new System.Drawing.Size(90, 23);
+            this.btnProxy.Size = new System.Drawing.Size(135, 35);
             this.btnProxy.TabIndex = 6;
             this.btnProxy.Text = "Nhập Proxy";
             this.btnProxy.UseVisualStyleBackColor = true;
@@ -255,15 +267,15 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1058, 544);
+            this.ClientSize = new System.Drawing.Size(1587, 837);
             this.Controls.Add(this.btnProxy);
             this.Controls.Add(this.btnUserAgent);
-            this.Controls.Add(this.btnLoadAccount);
             this.Controls.Add(this.dgViewInput);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
@@ -295,7 +307,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
-        private System.Windows.Forms.Button btnLoadAccount;
         private System.Windows.Forms.ToolStripMenuItem configUserAgent;
         private System.Windows.Forms.ToolStripMenuItem configProxy;
         private System.Windows.Forms.Button btnUserAgent;

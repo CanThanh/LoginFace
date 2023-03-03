@@ -1,18 +1,26 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using XMDT.Model;
+using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace XMDT
 {
     public partial class ConfigInput : Form
     {
+        string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory));
+        string pathFile =  "\\File\\setting\\inputformat.json";
         private bool lvInput_mDown, lvConfig_mDown;
         public ConfigInputModel configInputModel;
+        public List<ConfigInputModel> lstConfigInputModel = new List<ConfigInputModel>();
         public ConfigInput()
         {
             InitializeComponent();
-            InitListView();
+            //InitListView();
             SetConfigInputModel();
+            InitComboBoxInput();
         }
 
         private void InitListView()
@@ -34,6 +42,24 @@ namespace XMDT
             lvConfig.Items.Add("Email");
             lvConfig.Items.Add("PassMail");
             lvConfig.Items.Add("Cookie");
+        }
+
+        private void InitComboBoxInput()
+        {
+            FileHelper fileHelper = new FileHelper();
+            var content = fileHelper.Read(currentDirectory + pathFile);
+            lstConfigInputModel.Clear();
+            cbInput.Items.Clear();
+            var lst = JsonConvert.DeserializeObject<List<ConfigInputModel>>(content);
+            if(lst != null && lst.Count > 0)
+            {
+                lstConfigInputModel.AddRange(lst);
+            }
+            foreach (var item in lstConfigInputModel)
+            {
+                var cbInputItem = string.Join(item.SplitCharacter, item.lstInput.Keys);
+                cbInput.Items.Add($"{cbInputItem}");
+            }
         }
 
         private void SetConfigInputModel()
@@ -140,6 +166,65 @@ namespace XMDT
             lvConfig_mDown = false;
         }
         #endregion 
+
+        private void SaveFileInputFomat()
+        {
+            FileHelper fileHelper = new FileHelper();
+            string content = JsonConvert.SerializeObject(lstConfigInputModel);
+            fileHelper.Write(currentDirectory + pathFile, content);
+        }
+
+        private void btnAddDirection_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddOtherInput_Click(object sender, EventArgs e)
+        {
+            configInputModel = new ConfigInputModel();
+            foreach (ListViewItem item in lvConfig.Items)
+            {
+                configInputModel.lstInput.Add(item.Text, lvConfig.Items.IndexOf(item));
+            }
+            configInputModel.SplitCharacter = txtSplitCharacter.Text;
+            lstConfigInputModel.Add(configInputModel);
+            SaveFileInputFomat();
+            InitComboBoxInput();
+        }
+
+        private void ckOtherFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckOtherFormat.Checked)
+            {
+                InitListView();
+            }
+            else
+            {
+                lvConfig.Items.Clear();
+                lvInput.Items.Clear();
+            }
+        }
+
+        private void btnRemoveItemInput_Click(object sender, EventArgs e)
+        {
+            var index = cbInput.SelectedIndex;
+            if (index >= 0 && cbInput.Items.Count > 0)
+            {
+                cbInput.Items.RemoveAt(index);
+                lstConfigInputModel.RemoveAt(index);
+            }
+            SaveFileInputFomat();
+        }
+
+        private void btnAddAccount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
