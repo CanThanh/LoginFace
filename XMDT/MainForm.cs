@@ -25,6 +25,9 @@ namespace XMDT
             commonFunction = new CommonFunction();
             configInput = new ConfigInput();
             configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            //SQLiteProcessing sQLiteProcessing = new SQLiteProcessing();
+            //sQLiteProcessing.createTable();
+            LoadDataGridView();
         }  
 
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
@@ -238,8 +241,18 @@ namespace XMDT
             {
                 Console.WriteLine(ex.Message);
                 MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
+            }            
+        }
+
+        private void LoadDataGridView()
+        {
+            SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
+            var lstAccountInfo = sqLiteProcessing.getAllAccount();
+            foreach (var item in lstAccountInfo)
+            {
+                this.dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                                    item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
             }
-            
         }
     }
 }

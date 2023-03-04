@@ -5,6 +5,8 @@ using XMDT.Model;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using XMDT.Controller;
+using static System.Net.WebRequestMethods;
 
 namespace XMDT
 {
@@ -15,12 +17,14 @@ namespace XMDT
         private bool lvInput_mDown, lvConfig_mDown;
         public ConfigInputModel configInputModel;
         public List<ConfigInputModel> lstConfigInputModel = new List<ConfigInputModel>();
+        SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         public ConfigInput()
         {
             InitializeComponent();
             //InitListView();
             SetConfigInputModel();
             InitComboBoxInput();
+            InitComboBoxFile();
         }
 
         private void InitListView()
@@ -42,6 +46,15 @@ namespace XMDT
             lvConfig.Items.Add("Email");
             lvConfig.Items.Add("PassMail");
             lvConfig.Items.Add("Cookie");
+        }
+        private void InitComboBoxFile()
+        {
+            cbFile.Items.Clear();
+            var lstFile = sqLiteProcessing.getAllFile();
+            foreach (var item in lstFile)
+            {
+                cbFile.Items.Add(item);
+            }
         }
 
         private void InitComboBoxInput()
@@ -218,7 +231,9 @@ namespace XMDT
 
         private void btnAddAccount_Click(object sender, EventArgs e)
         {
-
+            CommonFunction commonFunction = new CommonFunction();
+            var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, lstConfigInputModel[cbInput.SelectedIndex]);
+            sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo);
         }
 
         private void btnClose_Click(object sender, EventArgs e)
