@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.xửLýLỗiFacebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facebookerr282 = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,8 +55,14 @@
             this.btnProxy = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFile = new System.Windows.Forms.ComboBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -128,9 +135,11 @@
             // dgViewInput
             // 
             this.dgViewInput.AllowUserToOrderColumns = true;
+            this.dgViewInput.AllowUserToResizeRows = false;
             this.dgViewInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgViewInput.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dgViewInput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgViewInput.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCheck,
@@ -146,10 +155,13 @@
             this.colUserAgent,
             this.colStatus,
             this.colNote});
+            this.dgViewInput.ContextMenuStrip = this.contextMenuStrip;
             this.dgViewInput.Location = new System.Drawing.Point(0, 84);
             this.dgViewInput.Name = "dgViewInput";
             this.dgViewInput.RowHeadersVisible = false;
             this.dgViewInput.RowHeadersWidth = 62;
+            this.dgViewInput.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dgViewInput.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
             this.dgViewInput.TabIndex = 3;
             // 
@@ -281,6 +293,50 @@
             this.cbFile.Size = new System.Drawing.Size(121, 21);
             this.cbFile.TabIndex = 8;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsSelected,
+            this.cmsUnselectedAll});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.contextMenuStrip.ShowCheckMargin = true;
+            this.contextMenuStrip.ShowImageMargin = false;
+            this.contextMenuStrip.Size = new System.Drawing.Size(161, 51);
+            // 
+            // cmsSelected
+            // 
+            this.cmsSelected.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsSelectAll,
+            this.cmsSelectHightlight});
+            this.cmsSelected.Name = "cmsSelected";
+            this.cmsSelected.Size = new System.Drawing.Size(180, 22);
+            this.cmsSelected.Text = "Chọn";
+            // 
+            // cmsSelectAll
+            // 
+            this.cmsSelectAll.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsSelectAll.Name = "cmsSelectAll";
+            this.cmsSelectAll.Size = new System.Drawing.Size(100, 23);
+            this.cmsSelectAll.Text = "Tất cả";
+            this.cmsSelectAll.Click += new System.EventHandler(this.cmsSelectAll_Click);
+            // 
+            // cmsSelectHightlight
+            // 
+            this.cmsSelectHightlight.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsSelectHightlight.Name = "cmsSelectHightlight";
+            this.cmsSelectHightlight.Size = new System.Drawing.Size(100, 23);
+            this.cmsSelectHightlight.Text = "Bôi đen";
+            this.cmsSelectHightlight.Click += new System.EventHandler(this.cmsSelectHightlight_Click);
+            // 
+            // cmsUnselectedAll
+            // 
+            this.cmsUnselectedAll.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsUnselectedAll.Name = "cmsUnselectedAll";
+            this.cmsUnselectedAll.Size = new System.Drawing.Size(100, 23);
+            this.cmsUnselectedAll.Text = "Bỏ chọn tất cả";
+            this.cmsUnselectedAll.Click += new System.EventHandler(this.cmsUnselectedAll_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -298,6 +354,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
+            this.contextMenuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,6 +388,11 @@
         private System.Windows.Forms.Button btnProxy;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFile;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem cmsSelected;
+        private System.Windows.Forms.ToolStripTextBox cmsSelectAll;
+        private System.Windows.Forms.ToolStripTextBox cmsSelectHightlight;
+        private System.Windows.Forms.ToolStripTextBox cmsUnselectedAll;
     }
 }
 

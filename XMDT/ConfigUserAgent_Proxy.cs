@@ -96,7 +96,7 @@ namespace XMDT
             configUserAgentProxyModel = new ConfigUserAgentProxyModel
             {
                 LstData = result,
-                CkeckExistData = ckExistAccount.Checked
+                CheckExistData = ckExistAccount.Checked
             };
         }
 

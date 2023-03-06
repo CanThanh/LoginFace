@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.PerformanceData;
 using System.IO;
 using System.Security.Principal;
 using System.Threading;
@@ -224,11 +225,28 @@ namespace XMDT
                 }
                 else
                 {
-                    var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
-                    for (int i = 0; i < maxSetIndex; i++)
+                    int count = 0;
+                    foreach (DataGridViewRow item in dgViewInput.Rows)
                     {
-                        dgViewInput.Rows[i].Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
+                        if(count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
+                        {
+                            if (!configUserAgent_Proxy.configUserAgentProxyModel.CheckExistData)
+                            {
+                                item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
+                                count++;
+                            }else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells["colUserAgent"].Value)))
+                            {
+                                item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
+                                count++;
+                            }
+                            
+                        }                        
                     }
+                    //var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
+                    //for (int i = 0; i < maxSetIndex; i++)
+                    //{
+                    //    dgViewInput.Rows[i].Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
+                    //}
                 }
             }
             catch (Exception ex)
@@ -251,10 +269,23 @@ namespace XMDT
                 }
                 else
                 {
-                    var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
-                    for (int i = 0; i < maxSetIndex; i++)
+                    int count = 0;
+                    foreach (DataGridViewRow item in dgViewInput.Rows)
                     {
-                        dgViewInput.Rows[i].Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
+                        if (count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
+                        {
+                            if (!configUserAgent_Proxy.configUserAgentProxyModel.CheckExistData)
+                            {
+                                item.Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
+                                count++;
+                            }
+                            else if (string.IsNullOrEmpty(Convert.ToString(item.Cells["colProxy"].Value)))
+                            {
+                                item.Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
+                                count++;
+                            }
+
+                        }
                     }
                 }
             }
@@ -275,5 +306,44 @@ namespace XMDT
                                     item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
             }
         }
+
+        #region
+        private void SetCheckColUIdGridView()
+        {
+            if (dgViewInput.SelectedRows.Count > 0)
+            {
+                dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
+            }
+
+            dgViewInput.ContextMenuStrip.Close();
+        }
+        private void cmsUnselectedAll_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                item.Cells["colCheck"].Value = false;
+            }
+            SetCheckColUIdGridView();
+        }
+
+        private void cmsSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                item.Cells["colCheck"].Value = true;
+            }
+            SetCheckColUIdGridView();
+        }
+
+        private void cmsSelectHightlight_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.SelectedRows)
+            {
+                item.Cells["colCheck"].Value = true;
+            }
+            SetCheckColUIdGridView();
+        }
+        #endregion
+
     }
 }
