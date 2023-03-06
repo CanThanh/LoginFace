@@ -25,16 +25,22 @@ namespace XMDT.Controller
             //chromeOptions.AddArgument("--disable-web-security");
             //chromeOptions.AddExtension("");
 
-
-            if(account.TypeProxy == (int)TypeProxy.HttpProxy)
+            if (!string.IsNullOrEmpty(account.Proxy))
             {
-                chromeOptions.AddArgument("--proxy-server=http://" + account.Proxy);
-            }
-            else {
-                chromeOptions.AddArgument("--proxy-server=socks5://" + account.Proxy);
+                if (account.TypeProxy == (int)TypeProxy.HttpProxy)
+                {
+                    chromeOptions.AddArgument("--proxy-server=http://" + account.Proxy);
+                }
+                else
+                {
+                    chromeOptions.AddArgument("--proxy-server=socks5://" + account.Proxy);
+                }
             }
 
-            chromeOptions.AddArgument("--user-agent=" + account.UserAgent);
+            if (!string.IsNullOrEmpty(account.UserAgent))
+            {
+                chromeOptions.AddArgument("--user-agent=" + account.UserAgent);
+            }
 
             ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true;

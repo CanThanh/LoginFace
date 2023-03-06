@@ -30,11 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.xửLýLỗiFacebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.facebookerr282 = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataInput = new System.Windows.Forms.ToolStripMenuItem();
+            this.addAccount = new System.Windows.Forms.ToolStripMenuItem();
+            this.addUserAgent = new System.Windows.Forms.ToolStripMenuItem();
+            this.addProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.config = new System.Windows.Forms.ToolStripMenuItem();
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
-            this.configInputData = new System.Windows.Forms.ToolStripMenuItem();
             this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
             this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.dgViewInput = new System.Windows.Forms.DataGridView();
@@ -51,15 +52,17 @@
             this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnUserAgent = new System.Windows.Forms.Button();
-            this.btnProxy = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbFile = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
             this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
             this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
+            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbFile = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -69,7 +72,7 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xửLýLỗiFacebookToolStripMenuItem,
+            this.dataInput,
             this.config});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -78,26 +81,41 @@
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // xửLýLỗiFacebookToolStripMenuItem
+            // dataInput
             // 
-            this.xửLýLỗiFacebookToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.facebookerr282});
-            this.xửLýLỗiFacebookToolStripMenuItem.Name = "xửLýLỗiFacebookToolStripMenuItem";
-            this.xửLýLỗiFacebookToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.xửLýLỗiFacebookToolStripMenuItem.Text = "Xử lý lỗi facebook";
+            this.dataInput.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addAccount,
+            this.addUserAgent,
+            this.addProxy});
+            this.dataInput.Name = "dataInput";
+            this.dataInput.Size = new System.Drawing.Size(101, 22);
+            this.dataInput.Text = "Dữ liệu đầu vào";
             // 
-            // facebookerr282
+            // addAccount
             // 
-            this.facebookerr282.Name = "facebookerr282";
-            this.facebookerr282.Size = new System.Drawing.Size(120, 22);
-            this.facebookerr282.Text = "Error 282";
-            this.facebookerr282.Click += new System.EventHandler(this.facebookerr282_Click);
+            this.addAccount.Name = "addAccount";
+            this.addAccount.Size = new System.Drawing.Size(162, 22);
+            this.addAccount.Text = "Thêm tài khoản";
+            this.addAccount.Click += new System.EventHandler(this.addAccount_Click);
+            // 
+            // addUserAgent
+            // 
+            this.addUserAgent.Name = "addUserAgent";
+            this.addUserAgent.Size = new System.Drawing.Size(162, 22);
+            this.addUserAgent.Text = "Thêm user agent";
+            this.addUserAgent.Click += new System.EventHandler(this.addUserAgent_Click);
+            // 
+            // addProxy
+            // 
+            this.addProxy.Name = "addProxy";
+            this.addProxy.Size = new System.Drawing.Size(162, 22);
+            this.addProxy.Text = "Thêm proxy";
+            this.addProxy.Click += new System.EventHandler(this.addProxy_Click);
             // 
             // config
             // 
             this.config.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configXMDT,
-            this.configInputData,
             this.configUserAgent,
             this.configProxy});
             this.config.Name = "config";
@@ -110,13 +128,6 @@
             this.configXMDT.Size = new System.Drawing.Size(204, 22);
             this.configXMDT.Text = "Phôi xác minh danh tính";
             this.configXMDT.Click += new System.EventHandler(this.configXMDT_Click);
-            // 
-            // configInputData
-            // 
-            this.configInputData.Name = "configInputData";
-            this.configInputData.Size = new System.Drawing.Size(204, 22);
-            this.configInputData.Text = "Dữ liệu đầu vào";
-            this.configInputData.Click += new System.EventHandler(this.configInputData_Click);
             // 
             // configUserAgent
             // 
@@ -156,6 +167,7 @@
             this.colStatus,
             this.colNote});
             this.dgViewInput.ContextMenuStrip = this.contextMenuStrip;
+            this.dgViewInput.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgViewInput.Location = new System.Drawing.Point(0, 84);
             this.dgViewInput.Name = "dgViewInput";
             this.dgViewInput.RowHeadersVisible = false;
@@ -256,53 +268,17 @@
             this.colNote.Name = "colNote";
             this.colNote.Width = 150;
             // 
-            // btnUserAgent
-            // 
-            this.btnUserAgent.Location = new System.Drawing.Point(231, 29);
-            this.btnUserAgent.Name = "btnUserAgent";
-            this.btnUserAgent.Size = new System.Drawing.Size(103, 23);
-            this.btnUserAgent.TabIndex = 5;
-            this.btnUserAgent.Text = "Nhập UserAgent";
-            this.btnUserAgent.UseVisualStyleBackColor = true;
-            this.btnUserAgent.Click += new System.EventHandler(this.btnUserAgent_Click);
-            // 
-            // btnProxy
-            // 
-            this.btnProxy.Location = new System.Drawing.Point(360, 29);
-            this.btnProxy.Name = "btnProxy";
-            this.btnProxy.Size = new System.Drawing.Size(90, 23);
-            this.btnProxy.TabIndex = 6;
-            this.btnProxy.Text = "Nhập Proxy";
-            this.btnProxy.UseVisualStyleBackColor = true;
-            this.btnProxy.Click += new System.EventHandler(this.btnProxy_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Chọn thư mục";
-            // 
-            // cbFile
-            // 
-            this.cbFile.FormattingEnabled = true;
-            this.cbFile.Location = new System.Drawing.Point(104, 31);
-            this.cbFile.Name = "cbFile";
-            this.cbFile.Size = new System.Drawing.Size(121, 21);
-            this.cbFile.TabIndex = 8;
-            // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsSelected,
-            this.cmsUnselectedAll});
+            this.cmsUnselectedAll,
+            this.cmsFacebook});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip.ShowCheckMargin = true;
             this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(161, 51);
+            this.contextMenuStrip.Size = new System.Drawing.Size(161, 73);
             // 
             // cmsSelected
             // 
@@ -337,6 +313,55 @@
             this.cmsUnselectedAll.Text = "Bỏ chọn tất cả";
             this.cmsUnselectedAll.Click += new System.EventHandler(this.cmsUnselectedAll_Click);
             // 
+            // cmsFacebook
+            // 
+            this.cmsFacebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsCheckpoint282mabsic,
+            this.checkpoint282mface,
+            this.cmsCheckpoint956});
+            this.cmsFacebook.Name = "cmsFacebook";
+            this.cmsFacebook.Size = new System.Drawing.Size(180, 22);
+            this.cmsFacebook.Text = "Giải check point";
+            // 
+            // cmsCheckpoint282mabsic
+            // 
+            this.cmsCheckpoint282mabsic.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCheckpoint282mabsic.Name = "cmsCheckpoint282mabsic";
+            this.cmsCheckpoint282mabsic.Size = new System.Drawing.Size(100, 23);
+            this.cmsCheckpoint282mabsic.Text = "Checkpoint 282 (mbasic)";
+            this.cmsCheckpoint282mabsic.Click += new System.EventHandler(this.cmsCheckpoint282mbasic_Click);
+            // 
+            // checkpoint282mface
+            // 
+            this.checkpoint282mface.Name = "checkpoint282mface";
+            this.checkpoint282mface.Size = new System.Drawing.Size(200, 22);
+            this.checkpoint282mface.Text = "Checkpoint 282 (mface)";
+            this.checkpoint282mface.Click += new System.EventHandler(this.checkpoint282mface_Click);
+            // 
+            // cmsCheckpoint956
+            // 
+            this.cmsCheckpoint956.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCheckpoint956.Name = "cmsCheckpoint956";
+            this.cmsCheckpoint956.Size = new System.Drawing.Size(100, 23);
+            this.cmsCheckpoint956.Text = "Check point 956";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 43);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Chọn thư mục";
+            // 
+            // cbFile
+            // 
+            this.cbFile.FormattingEnabled = true;
+            this.cbFile.Location = new System.Drawing.Point(92, 40);
+            this.cbFile.Name = "cbFile";
+            this.cbFile.Size = new System.Drawing.Size(121, 21);
+            this.cbFile.TabIndex = 8;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -344,8 +369,6 @@
             this.ClientSize = new System.Drawing.Size(1058, 544);
             this.Controls.Add(this.cbFile);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnProxy);
-            this.Controls.Add(this.btnUserAgent);
             this.Controls.Add(this.dgViewInput);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -363,11 +386,9 @@
 
         #endregion
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem xửLýLỗiFacebookToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem config;
         private System.Windows.Forms.ToolStripMenuItem configXMDT;
-        private System.Windows.Forms.ToolStripMenuItem facebookerr282;
-        private System.Windows.Forms.ToolStripMenuItem configInputData;
+        private System.Windows.Forms.ToolStripMenuItem addAccount;
         private System.Windows.Forms.DataGridView dgViewInput;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
@@ -384,8 +405,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
         private System.Windows.Forms.ToolStripMenuItem configUserAgent;
         private System.Windows.Forms.ToolStripMenuItem configProxy;
-        private System.Windows.Forms.Button btnUserAgent;
-        private System.Windows.Forms.Button btnProxy;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFile;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
@@ -393,6 +412,13 @@
         private System.Windows.Forms.ToolStripTextBox cmsSelectAll;
         private System.Windows.Forms.ToolStripTextBox cmsSelectHightlight;
         private System.Windows.Forms.ToolStripTextBox cmsUnselectedAll;
+        private System.Windows.Forms.ToolStripMenuItem cmsFacebook;
+        private System.Windows.Forms.ToolStripTextBox cmsCheckpoint282mabsic;
+        private System.Windows.Forms.ToolStripTextBox cmsCheckpoint956;
+        private System.Windows.Forms.ToolStripMenuItem dataInput;
+        private System.Windows.Forms.ToolStripMenuItem addUserAgent;
+        private System.Windows.Forms.ToolStripMenuItem addProxy;
+        private System.Windows.Forms.ToolStripMenuItem checkpoint282mface;
     }
 }
 

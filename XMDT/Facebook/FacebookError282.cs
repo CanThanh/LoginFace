@@ -162,7 +162,7 @@ namespace XMDT.Facebook
                 facebookProcessing.LoginCookie(driver, url, account.Cookie);
                 driver.Navigate().GoToUrl(url);
                 Thread.Sleep(2000);
-                if (driver.Url.Contains("1501092823525282"))
+                if (driver.Url.Contains("282")) //1501092823525282
                 {
                     InitHttpRequest(account);
                     AddCookie(httpRequest, account.Cookie);
@@ -175,14 +175,14 @@ namespace XMDT.Facebook
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
                         ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
                         Screenshot screenshot = screenshotDriver.GetScreenshot();
-                        string imgPath = Environment.CurrentDirectory + "\\Image\\Screenshot" + account.Id + "SS.png";
+                        string imgPath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Screenshot\\" + account.Id + "SS.png";
                         screenshot.SaveAsFile(imgPath);
                         var img = Image.FromFile(imgPath);
                         //Diffrence crop mobile/win
-                        int xLocation = account.UserAgent.Contains("Android") ? 10 : 136;
+                        int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
                         Rectangle cropArea = new Rectangle(xLocation, 136, 288, 69);
                         var imgCaptcha = cropImage(img, cropArea);
-                        string imgCaptchaPath = Environment.CurrentDirectory + "\\Image\\Captcha" + account.Id + "_captcha.png";
+                        string imgCaptchaPath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha\\" + account.Id + "_captcha.png";
                         imgCaptcha.Save(imgCaptchaPath);
                         string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
                         //Resolve captcha
@@ -191,9 +191,12 @@ namespace XMDT.Facebook
                         string outputCapcha = "";
                         resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
                         //Get data pass captcha and upload img
-                        var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
-                        var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
+                        //var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
+                        //var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
                         //Load page to up img
+                        facebookProcessing.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
+                        Thread.Sleep(300);
+                        driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
                         driver.Navigate().GoToUrl(url);
                         Thread.Sleep(2000);
                     }
@@ -211,12 +214,12 @@ namespace XMDT.Facebook
 
                         ImageProcessing imageProcessing = new ImageProcessing();
                         string faceFakeUrl = facebookProcessing.GetLinkFaceImage(age, gender);
-                        string imgFaceFakePath = Environment.CurrentDirectory + "\\Image\\Face\\" + account.Id + ".jpg";
+                        string imgFaceFakePath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Face\\" + account.Id + ".jpg";
                         imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                         account.ImgFacePath = imgFaceFakePath;
                         var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
                         mobile_image_data.SendKeys(imgFaceFakePath);
-                        Thread.Sleep(1000);
+                        Thread.Sleep(200);
                         driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
                         driver.Navigate().GoToUrl(url);
                     }

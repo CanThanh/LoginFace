@@ -22,6 +22,8 @@ namespace XMDT
         ConfigInput configInput;
         ConfigUserAgent_Proxy configUserAgent_Proxy;
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
+        List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
+        string KeyResovelCatcha;
         public MainForm()
         {
             InitializeComponent();
@@ -32,9 +34,10 @@ namespace XMDT
             //sQLiteProcessing.createTable();
             InitComboBoxFile();
             LoadDataGridView();
+            KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
         }
 
-        #region InitData
+        #region InitData when Form Load
         private void InitComboBoxFile()
         {
             cbFile.Items.Clear();
@@ -132,12 +135,79 @@ namespace XMDT
             configImage.Show();
         }
 
-        private void facebookerr282_Click(object sender, EventArgs e)
+        private void configUserAgent_Click(object sender, EventArgs e)
         {
-            FacebookError282 facebookError282 = new FacebookError282();
-            string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)));
-            var pathData = currentDirectory + "\\File\\accountQuality.txt";
-            var lstAccount = facebookError282.GetAllAccount(pathData);
+
+            if (configUserAgent_Proxy.IsDisposed)
+            {
+                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            }
+            configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
+            configUserAgent_Proxy.Show();
+        }
+
+        private void configProxy_Click(object sender, EventArgs e)
+        {
+            if (configUserAgent_Proxy.IsDisposed)
+            {
+                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            }
+            configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
+            configUserAgent_Proxy.Show();
+        }        
+
+        private void LoadDataGridView()
+        {
+            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
+            foreach (var item in lstAccountInfo)
+            {
+                this.dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                                    item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
+            }
+        }
+
+        #region Context Menu GridView
+        private void SetCheckColUIdGridView()
+        {
+            if (dgViewInput.SelectedRows.Count > 0)
+            {
+                dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
+            }
+
+            dgViewInput.ContextMenuStrip.Close();
+        }
+        private void cmsUnselectedAll_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                item.Cells["colCheck"].Value = false;
+            }
+            SetCheckColUIdGridView();
+        }
+
+        private void cmsSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                item.Cells["colCheck"].Value = true;
+            }
+            SetCheckColUIdGridView();
+        }
+
+        private void cmsSelectHightlight_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.SelectedRows)
+            {
+                item.Cells["colCheck"].Value = true;
+            }
+            SetCheckColUIdGridView();
+        }
+        #endregion
+
+        #region Process Error Facebook in contextmenu DatagridView
+        private void cmsCheckpoint282_Click(object sender, EventArgs e)
+        {
             ////Đa luồng cần proxy đa luồng
             //for (int i = 0; i < nUDThread.Value; i++)
             //{
@@ -160,60 +230,28 @@ namespace XMDT
             //account.Proxy = "154.236.189.5:8080";
             //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
         }
-        
-        private void configInputData_Click(object sender, EventArgs e)
-        {
-            if(configInput.IsDisposed)
-            {
-                configInput = new ConfigInput();
-            }
-            configInput.Show();
-        }
 
-        private void btnLoadAccount_Click(object sender, EventArgs e)
+        private void cmsCheckpoint282mbasic_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            dgViewInput.ContextMenuStrip.Close();
+            FacebookError282 facebookError282 = new FacebookError282();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
             {
-                this.dgViewInput.Rows.Clear();
-                var lstAccountInfo = commonFunction.GetAccountInfos(openFileDialog.FileName, configInput.configInputModel);
-                if(lstAccountInfo.Count == 0)
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
                 {
-                    MessageBox.Show("Dữ liệu đầu vào không đúng định dạng. Vui lòng kiểm tra lại");
-                }
-                else
-                {
-                    foreach (var item in lstAccountInfo)
-                    {
-                        this.dgViewInput.Rows.Add(false,lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
-                                            item.Email, item.PassMail,"", item.Proxy, item.UserAgent,"","");
-                    }                    
+                    var index = dgViewInput.Rows.IndexOf(item);
+                    facebookError282.ProcessMBasicFacebook(lstAccountInfo[index], KeyResovelCatcha);
                 }
             }
         }
-
-        private void configUserAgent_Click(object sender, EventArgs e)
+        private void checkpoint282mface_Click(object sender, EventArgs e)
         {
-
-            if (configUserAgent_Proxy.IsDisposed)
-            {
-                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
-            }
-            configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
-            configUserAgent_Proxy.Show();
+            dgViewInput.ContextMenuStrip.Close();
         }
+        #endregion
 
-        private void configProxy_Click(object sender, EventArgs e)
-        {
-            if (configUserAgent_Proxy.IsDisposed)
-            {
-                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
-            }
-            configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
-            configUserAgent_Proxy.Show();
-        }
-
-        private void btnUserAgent_Click(object sender, EventArgs e)
+        #region Data Input        
+        private void addUserAgent_Click(object sender, EventArgs e)
         {
             try
             {
@@ -228,19 +266,20 @@ namespace XMDT
                     int count = 0;
                     foreach (DataGridViewRow item in dgViewInput.Rows)
                     {
-                        if(count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
+                        if (count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
                         {
                             if (!configUserAgent_Proxy.configUserAgentProxyModel.CheckExistData)
                             {
                                 item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
                                 count++;
-                            }else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells["colUserAgent"].Value)))
+                            }
+                            else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells["colUserAgent"].Value)))
                             {
                                 item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
                                 count++;
                             }
-                            
-                        }                        
+
+                        }
                     }
                     //var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
                     //for (int i = 0; i < maxSetIndex; i++)
@@ -254,10 +293,9 @@ namespace XMDT
                 Console.WriteLine(ex.Message);
                 MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
             }
-            
         }
 
-        private void btnProxy_Click(object sender, EventArgs e)
+        private void addProxy_Click(object sender, EventArgs e)
         {
             try
             {
@@ -293,55 +331,15 @@ namespace XMDT
             {
                 Console.WriteLine(ex.Message);
                 MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
-            }            
-        }
-
-        private void LoadDataGridView()
-        {
-            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
-            var lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
-            foreach (var item in lstAccountInfo)
-            {
-                this.dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
-                                    item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
             }
         }
-
-        #region
-        private void SetCheckColUIdGridView()
+        private void addAccount_Click(object sender, EventArgs e)
         {
-            if (dgViewInput.SelectedRows.Count > 0)
+            if (configInput.IsDisposed)
             {
-                dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
+                configInput = new ConfigInput();
             }
-
-            dgViewInput.ContextMenuStrip.Close();
-        }
-        private void cmsUnselectedAll_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow item in dgViewInput.Rows)
-            {
-                item.Cells["colCheck"].Value = false;
-            }
-            SetCheckColUIdGridView();
-        }
-
-        private void cmsSelectAll_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow item in dgViewInput.Rows)
-            {
-                item.Cells["colCheck"].Value = true;
-            }
-            SetCheckColUIdGridView();
-        }
-
-        private void cmsSelectHightlight_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow item in dgViewInput.SelectedRows)
-            {
-                item.Cells["colCheck"].Value = true;
-            }
-            SetCheckColUIdGridView();
+            configInput.Show();
         }
         #endregion
 
