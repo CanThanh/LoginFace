@@ -11,6 +11,7 @@ using XMDT.Facebook;
 using XMDT.Model;
 using xNet;
 using static XMDT.Model.CommonConstant;
+using static XMDT.Model.FaceInfo;
 
 namespace XMDT
 {
@@ -19,6 +20,7 @@ namespace XMDT
         CommonFunction commonFunction;
         ConfigInput configInput;
         ConfigUserAgent_Proxy configUserAgent_Proxy;
+        SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         public MainForm()
         {
             InitializeComponent();
@@ -27,8 +29,25 @@ namespace XMDT
             configUserAgent_Proxy = new ConfigUserAgent_Proxy();
             //SQLiteProcessing sQLiteProcessing = new SQLiteProcessing();
             //sQLiteProcessing.createTable();
+            InitComboBoxFile();
             LoadDataGridView();
-        }  
+        }
+
+        #region InitData
+        private void InitComboBoxFile()
+        {
+            cbFile.Items.Clear();
+            var lstFile = sqLiteProcessing.getAllFile();
+            foreach (var item in lstFile)
+            {
+                cbFile.Items.Add(item);
+            }
+            if(lstFile.Count > 0)
+            {
+                cbFile.SelectedIndex = 0;
+            }
+        }
+        #endregion
 
         //100007557514409  snowkvt123  B6R546Q2K26FCFOTLU2MUKT3ANYWLRYY   micshidevon@hotmail.com     @thainguyenteam@@1022020    micshidevon2022 @getnada.com
         //100009306396626  snowkvt1234  76IZ6TLE4XTKIWFRIKCVQSWYSRMZRWQN	alishauemargie@hotmail.com  @thainguyenteam@@1022020    alishauemargie2022@getnada.com
@@ -205,7 +224,8 @@ namespace XMDT
                 }
                 else
                 {
-                    for (int i = 0; i < dgViewInput.Rows.Count; i++)
+                    var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
+                    for (int i = 0; i < maxSetIndex; i++)
                     {
                         dgViewInput.Rows[i].Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
                     }
@@ -231,7 +251,8 @@ namespace XMDT
                 }
                 else
                 {
-                    for (int i = 0; i < dgViewInput.Rows.Count; i++)
+                    var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
+                    for (int i = 0; i < maxSetIndex; i++)
                     {
                         dgViewInput.Rows[i].Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
                     }
@@ -246,8 +267,8 @@ namespace XMDT
 
         private void LoadDataGridView()
         {
-            SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
-            var lstAccountInfo = sqLiteProcessing.getAllAccount();
+            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            var lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
             foreach (var item in lstAccountInfo)
             {
                 this.dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,

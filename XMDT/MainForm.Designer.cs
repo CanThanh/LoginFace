@@ -52,20 +52,22 @@
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUserAgent = new System.Windows.Forms.Button();
             this.btnProxy = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbFile = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xửLýLỗiFacebookToolStripMenuItem,
             this.config});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1587, 35);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(1058, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -74,13 +76,13 @@
             this.xửLýLỗiFacebookToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.facebookerr282});
             this.xửLýLỗiFacebookToolStripMenuItem.Name = "xửLýLỗiFacebookToolStripMenuItem";
-            this.xửLýLỗiFacebookToolStripMenuItem.Size = new System.Drawing.Size(171, 29);
+            this.xửLýLỗiFacebookToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.xửLýLỗiFacebookToolStripMenuItem.Text = "Xử lý lỗi facebook";
             // 
             // facebookerr282
             // 
             this.facebookerr282.Name = "facebookerr282";
-            this.facebookerr282.Size = new System.Drawing.Size(187, 34);
+            this.facebookerr282.Size = new System.Drawing.Size(120, 22);
             this.facebookerr282.Text = "Error 282";
             this.facebookerr282.Click += new System.EventHandler(this.facebookerr282_Click);
             // 
@@ -92,34 +94,34 @@
             this.configUserAgent,
             this.configProxy});
             this.config.Name = "config";
-            this.config.Size = new System.Drawing.Size(97, 29);
+            this.config.Size = new System.Drawing.Size(67, 22);
             this.config.Text = "Cấu hình";
             // 
             // configXMDT
             // 
             this.configXMDT.Name = "configXMDT";
-            this.configXMDT.Size = new System.Drawing.Size(304, 34);
+            this.configXMDT.Size = new System.Drawing.Size(204, 22);
             this.configXMDT.Text = "Phôi xác minh danh tính";
             this.configXMDT.Click += new System.EventHandler(this.configXMDT_Click);
             // 
             // configInputData
             // 
             this.configInputData.Name = "configInputData";
-            this.configInputData.Size = new System.Drawing.Size(304, 34);
+            this.configInputData.Size = new System.Drawing.Size(204, 22);
             this.configInputData.Text = "Dữ liệu đầu vào";
             this.configInputData.Click += new System.EventHandler(this.configInputData_Click);
             // 
             // configUserAgent
             // 
             this.configUserAgent.Name = "configUserAgent";
-            this.configUserAgent.Size = new System.Drawing.Size(304, 34);
+            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
             this.configUserAgent.Text = "User Agent";
             this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
             // 
             // configProxy
             // 
             this.configProxy.Name = "configProxy";
-            this.configProxy.Size = new System.Drawing.Size(304, 34);
+            this.configProxy.Size = new System.Drawing.Size(204, 22);
             this.configProxy.Text = "Proxy";
             this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
             // 
@@ -144,12 +146,11 @@
             this.colUserAgent,
             this.colStatus,
             this.colNote});
-            this.dgViewInput.Location = new System.Drawing.Point(0, 129);
-            this.dgViewInput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dgViewInput.Location = new System.Drawing.Point(0, 84);
             this.dgViewInput.Name = "dgViewInput";
             this.dgViewInput.RowHeadersVisible = false;
             this.dgViewInput.RowHeadersWidth = 62;
-            this.dgViewInput.Size = new System.Drawing.Size(1587, 706);
+            this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
             this.dgViewInput.TabIndex = 3;
             // 
             // colCheck
@@ -245,10 +246,9 @@
             // 
             // btnUserAgent
             // 
-            this.btnUserAgent.Location = new System.Drawing.Point(13, 62);
-            this.btnUserAgent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnUserAgent.Location = new System.Drawing.Point(231, 29);
             this.btnUserAgent.Name = "btnUserAgent";
-            this.btnUserAgent.Size = new System.Drawing.Size(154, 35);
+            this.btnUserAgent.Size = new System.Drawing.Size(103, 23);
             this.btnUserAgent.TabIndex = 5;
             this.btnUserAgent.Text = "Nhập UserAgent";
             this.btnUserAgent.UseVisualStyleBackColor = true;
@@ -256,26 +256,43 @@
             // 
             // btnProxy
             // 
-            this.btnProxy.Location = new System.Drawing.Point(189, 62);
-            this.btnProxy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnProxy.Location = new System.Drawing.Point(360, 29);
             this.btnProxy.Name = "btnProxy";
-            this.btnProxy.Size = new System.Drawing.Size(135, 35);
+            this.btnProxy.Size = new System.Drawing.Size(90, 23);
             this.btnProxy.TabIndex = 6;
             this.btnProxy.Text = "Nhập Proxy";
             this.btnProxy.UseVisualStyleBackColor = true;
             this.btnProxy.Click += new System.EventHandler(this.btnProxy_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Chọn thư mục";
+            // 
+            // cbFile
+            // 
+            this.cbFile.FormattingEnabled = true;
+            this.cbFile.Location = new System.Drawing.Point(104, 31);
+            this.cbFile.Name = "cbFile";
+            this.cbFile.Size = new System.Drawing.Size(121, 21);
+            this.cbFile.TabIndex = 8;
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1587, 837);
+            this.ClientSize = new System.Drawing.Size(1058, 544);
+            this.Controls.Add(this.cbFile);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnProxy);
             this.Controls.Add(this.btnUserAgent);
             this.Controls.Add(this.dgViewInput);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
@@ -311,6 +328,8 @@
         private System.Windows.Forms.ToolStripMenuItem configProxy;
         private System.Windows.Forms.Button btnUserAgent;
         private System.Windows.Forms.Button btnProxy;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbFile;
     }
 }
 

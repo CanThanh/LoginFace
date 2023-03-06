@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using XMDT.Controller;
 using static System.Net.WebRequestMethods;
+using static XMDT.Model.FaceInfo;
 
 namespace XMDT
 {
@@ -189,7 +190,11 @@ namespace XMDT
 
         private void btnAddDirection_Click(object sender, EventArgs e)
         {
-
+            if (!string.IsNullOrEmpty(txtDirectory.Text))
+            {
+                sqLiteProcessing.InsertOrUpdateFile(txtDirectory.Text);
+                InitComboBoxFile();
+            }
         }
 
         private void btnAddOtherInput_Click(object sender, EventArgs e)
@@ -220,25 +225,54 @@ namespace XMDT
 
         private void btnRemoveItemInput_Click(object sender, EventArgs e)
         {
-            var index = cbInput.SelectedIndex;
-            if (index >= 0 && cbInput.Items.Count > 0)
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xoá định dạng nhập này?", "Xoá", buttons);
+            if (result == DialogResult.Yes)
             {
-                cbInput.Items.RemoveAt(index);
-                lstConfigInputModel.RemoveAt(index);
-            }
-            SaveFileInputFomat();
+                var index = cbInput.SelectedIndex;
+                if (index >= 0 && cbInput.Items.Count > 0)
+                {
+                    cbInput.Items.RemoveAt(index);
+                    lstConfigInputModel.RemoveAt(index);
+                }
+                SaveFileInputFomat();
+            }           
         }
 
         private void btnAddAccount_Click(object sender, EventArgs e)
         {
-            CommonFunction commonFunction = new CommonFunction();
-            var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, lstConfigInputModel[cbInput.SelectedIndex]);
-            sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo);
+            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            if (itemSelected != null)
+            {
+                CommonFunction commonFunction = new CommonFunction();
+                var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, lstConfigInputModel[cbInput.SelectedIndex]);
+                sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo, itemSelected.Value);
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn thư mục muốn lưu");
+            }
+
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnRemoveFile_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xoá thư mục này?", "Xoá", buttons);
+            if (result == DialogResult.Yes)
+            {
+                var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+                if (itemSelected != null && cbInput.Items.Count > 0)
+                {
+                    cbFile.Items.RemoveAt(Convert.ToInt32(itemSelected.Value));
+                    sqLiteProcessing.DeleteFile(itemSelected.Value);
+                }
+            }
         }
 
         private void btnSave_Click(object sender, EventArgs e)

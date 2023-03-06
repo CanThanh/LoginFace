@@ -7,6 +7,7 @@ using XMDT.Model;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.IO;
+using static XMDT.Model.FaceInfo;
 
 namespace XMDT.Controller
 {
@@ -29,11 +30,11 @@ namespace XMDT.Controller
         {
             createConection();
             string sql = "CREATE TABLE IF NOT EXISTS FILES (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                " Name TEXT)"; 
+                " Name TEXT, CreatedDate TEXT, Active INTEGER)"; 
             SQLiteCommand command = new SQLiteCommand(sql, _con);
             command.ExecuteNonQuery();
             sql = "CREATE TABLE IF NOT EXISTS ACCOUNTS (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, UId TEXT," +
-                " Info TEXT)";
+                " Info TEXT, IdFile INTEGER)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
             sql = "CREATE TABLE IF NOT EXISTS INTERACTS (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
@@ -44,25 +45,32 @@ namespace XMDT.Controller
         }
 
         #region File
-        public List<string> getAllFile()
+        public List<ComboboxItem> getAllFile()
         {
-            var result = new List<string>();
+            var result = new List<ComboboxItem>();
             try
             {
                 createConection();
-                string sql = "SELECT Name FROM FILES";
+                string sql = "SELECT Id, Name FROM FILES WHERE Active = 1";
                 SQLiteCommand command = new SQLiteCommand(sql, _con);
                 SQLiteDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    result.Add(reader.GetString(0));
+                    var value = reader.GetInt32(0).ToString();
+                    var text = reader.GetString(1);
+                    ComboboxItem item = new ComboboxItem()
+                    {
+                        Value = value,
+                        Text = text,
+                    };
+                    result.Add(item);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                result = new List<string>();
+                result = new List<ComboboxItem>();
             }
             finally
             {
@@ -83,7 +91,9 @@ namespace XMDT.Controller
                 var count = Convert.ToInt32(command.ExecuteScalar());
                 if(count == 0)
                 {
-                    sql = "INSERT INTO FILES(Name) VALUES(@name)";
+                    command.CommandText = "INSERT INTO FILES (Name, CreatedDate, Active) VALUES (@name, @createdate, @active)";
+                    command.Parameters.AddWithValue("@createdate", DateTime.Now.ToString());
+                    command.Parameters.AddWithValue("@active", 1);
                     command.ExecuteNonQuery();
                 }
             }
@@ -99,15 +109,16 @@ namespace XMDT.Controller
             return result;
         }
 
-        public bool DeleteFile(string name)
+        public bool DeleteFile(string idFile)
         {
             var result = true;
             try
             {
                 createConection();
-                string sql = "DELTE FROM FILES WHERE name = @name";
+                //string sql = "DELTE FROM FILES WHERE name = @name";
+                string sql = "UPDATE FROM FILES Set Active = 0 WHERE Id = @idFile";
                 SQLiteCommand command = new SQLiteCommand(sql, _con);
-                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@idFile", idFile);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -124,14 +135,15 @@ namespace XMDT.Controller
         #endregion File
 
         #region Account
-        public List<AccountInfo> getAllAccount()
+        public List<AccountInfo> getAllAccount(string idfile)
         {
             var result = new List<AccountInfo>();
             try
             {
                 createConection();
-                string sql = "SELECT Info FROM ACCOUNTS";
+                string sql = "SELECT Info FROM ACCOUNTS WHERE IdFile = @idfile";
                 SQLiteCommand command = new SQLiteCommand(sql, _con);
+                command.Parameters.AddWithValue("@idfile", idfile);
                 SQLiteDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -154,30 +166,34 @@ namespace XMDT.Controller
             }
             return result;
         }
-        public bool InsertOrUpdateLstAccount(List<AccountInfo> lstAccountInfo)
+        public bool InsertOrUpdateLstAccount(List<AccountInfo> lstAccountInfo, string idFile)
         {
             var result = true;
             try
             {
                 createConection();
                 SQLiteCommand command = new SQLiteCommand(_con);
+                //command.CommandText = "SELECT Id FROM FILES WHERE Name = @fileName";
+                //command.Parameters.AddWithValue("@fileName", fileName);
+                //var idFile = Convert.ToInt32(command.ExecuteScalar());
                 using (var transaction = _con.BeginTransaction())
                 {
                     foreach (var accountInfo in lstAccountInfo)
                     {
                         command.Parameters.Clear();
-                        command.CommandText = "SELECT COUNT(*) FROM ACCOUNTS WHERE UId = @uid";
+                        command.CommandText = "SELECT COUNT(*) FROM ACCOUNTS WHERE UId = @uid AND IdFile = @idfile";
                         command.Parameters.AddWithValue("@uid", accountInfo.Id);
+                        command.Parameters.AddWithValue("@idfile", idFile);
                         var count = Convert.ToInt32(command.ExecuteScalar());
                         if (count == 0)
                         {
-                            command.CommandText = "INSERT INTO ACCOUNTS(UId, Info) VALUES(@uid, @info)";
+                            command.CommandText = "INSERT INTO ACCOUNTS(UId, Info, IdFile) VALUES(@uid, @info, @idfile)";
                             command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                             command.ExecuteNonQuery();
                         }
                         else
                         {
-                            command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid";
+                            command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid AND IdFile = @idfile";
                             command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                             command.ExecuteNonQuery();
                         }
@@ -196,26 +212,30 @@ namespace XMDT.Controller
             }
             return result;
         }
-            public bool InsertOrUpdateAccount(AccountInfo accountInfo)
+            public bool InsertOrUpdateAccount(AccountInfo accountInfo, string idFile)
         {
             var result = true;
             try
             {
                 createConection();
                 SQLiteCommand command = new SQLiteCommand(_con);
+                //command.CommandText = "SELECT Id FROM FILES WHERE Name = @fileName";
+                //command.Parameters.AddWithValue("@fileName", fileName);
+                //var idFile = Convert.ToInt32(command.ExecuteScalar());
                 command.Parameters.Clear();
-                command.CommandText = "SELECT COUNT(*) FROM ACCOUNTS WHERE UId = @uid";
+                command.CommandText = "SELECT COUNT(*) FROM ACCOUNTS WHERE UId = @uid AND IdFile = @idfile";
                 command.Parameters.AddWithValue("@uid", accountInfo.Id);
+                command.Parameters.AddWithValue("@idfile", idFile);
                 var count = Convert.ToInt32(command.ExecuteScalar());
                 if (count == 0)
                 {
-                    command.CommandText = "INSERT INTO ACCOUNTS(UId, Info) VALUES(@uid, @info)";
+                    command.CommandText = "INSERT INTO ACCOUNTS(UId, Info, IdFile) VALUES(@uid, @info, @idfile)";
                     command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                     command.ExecuteNonQuery();
                 }
                 else
                 {
-                    command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid";
+                    command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid AND IdFile = @idfile";
                     command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                     command.ExecuteNonQuery();
                 }                   
@@ -231,15 +251,16 @@ namespace XMDT.Controller
             }
             return result;
         }
-        public bool DeleteAccount(string uid)
+        public bool DeleteAccount(string uid, string idFile)
         {
             var result = true;
             try
             {
                 createConection();
-                string sql = "DELTE FROM ACCOUNTS WHERE Uid = @uid";
+                string sql = "DELTE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
                 SQLiteCommand command = new SQLiteCommand(sql, _con);
                 command.Parameters.AddWithValue("@uid", uid);
+                command.Parameters.AddWithValue("@idfile", idFile);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)

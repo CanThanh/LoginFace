@@ -46,6 +46,7 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.txtDirectory = new System.Windows.Forms.TextBox();
+            this.btnRemoveFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvInput
@@ -97,7 +98,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(131, 497);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(172, 20);
+            this.label1.Size = new System.Drawing.Size(119, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Ký tự phân cách dữ liệu";
             // 
@@ -105,7 +106,7 @@
             // 
             this.txtSplitCharacter.Location = new System.Drawing.Point(309, 491);
             this.txtSplitCharacter.Name = "txtSplitCharacter";
-            this.txtSplitCharacter.Size = new System.Drawing.Size(53, 26);
+            this.txtSplitCharacter.Size = new System.Drawing.Size(53, 20);
             this.txtSplitCharacter.TabIndex = 10;
             this.txtSplitCharacter.Text = "|";
             this.txtSplitCharacter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -115,7 +116,7 @@
             this.cbFile.FormattingEnabled = true;
             this.cbFile.Location = new System.Drawing.Point(161, 14);
             this.cbFile.Name = "cbFile";
-            this.cbFile.Size = new System.Drawing.Size(176, 28);
+            this.cbFile.Size = new System.Drawing.Size(176, 21);
             this.cbFile.TabIndex = 1;
             // 
             // rtbAccount
@@ -131,7 +132,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 22);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 20);
+            this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 9;
             this.label2.Text = "Thư mục";
             // 
@@ -140,7 +141,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(13, 73);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(142, 20);
+            this.label3.Size = new System.Drawing.Size(99, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "Định dạng đầu vào";
             // 
@@ -149,7 +150,7 @@
             this.ckOtherFormat.AutoSize = true;
             this.ckOtherFormat.Location = new System.Drawing.Point(12, 333);
             this.ckOtherFormat.Name = "ckOtherFormat";
-            this.ckOtherFormat.Size = new System.Drawing.Size(146, 24);
+            this.ckOtherFormat.Size = new System.Drawing.Size(102, 17);
             this.ckOtherFormat.TabIndex = 7;
             this.ckOtherFormat.Text = "Định dạng khác";
             this.ckOtherFormat.UseVisualStyleBackColor = true;
@@ -160,7 +161,7 @@
             this.cbInput.FormattingEnabled = true;
             this.cbInput.Location = new System.Drawing.Point(161, 65);
             this.cbInput.Name = "cbInput";
-            this.cbInput.Size = new System.Drawing.Size(598, 28);
+            this.cbInput.Size = new System.Drawing.Size(598, 21);
             this.cbInput.TabIndex = 4;
             // 
             // btnAddDirection
@@ -213,7 +214,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(451, 19);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 20);
+            this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 18;
             this.label4.Text = "Thêm thư mục";
             // 
@@ -221,12 +222,25 @@
             // 
             this.txtDirectory.Location = new System.Drawing.Point(567, 16);
             this.txtDirectory.Name = "txtDirectory";
-            this.txtDirectory.Size = new System.Drawing.Size(192, 26);
+            this.txtDirectory.Size = new System.Drawing.Size(192, 20);
             this.txtDirectory.TabIndex = 2;
+            // 
+            // btnRemoveFile
+            // 
+            this.btnRemoveFile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnRemoveFile.BackgroundImage")));
+            this.btnRemoveFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnRemoveFile.Location = new System.Drawing.Point(343, 9);
+            this.btnRemoveFile.Name = "btnRemoveFile";
+            this.btnRemoveFile.Size = new System.Drawing.Size(31, 28);
+            this.btnRemoveFile.TabIndex = 19;
+            this.btnRemoveFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnRemoveFile.UseVisualStyleBackColor = true;
+            this.btnRemoveFile.Click += new System.EventHandler(this.btnRemoveFile_Click);
             // 
             // ConfigInput
             // 
             this.ClientSize = new System.Drawing.Size(810, 539);
+            this.Controls.Add(this.btnRemoveFile);
             this.Controls.Add(this.txtDirectory);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnClose);
@@ -269,6 +283,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtDirectory;
+        private System.Windows.Forms.Button btnRemoveFile;
     }
 }
 
