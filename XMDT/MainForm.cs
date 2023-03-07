@@ -24,9 +24,11 @@ namespace XMDT
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
         string KeyResovelCatcha;
+        int countThread = 3;
         public MainForm()
         {
             InitializeComponent();
+            RunMultiThread(TestThread);
             commonFunction = new CommonFunction();
             configInput = new ConfigInput();
             configUserAgent_Proxy = new ConfigUserAgent_Proxy();
@@ -35,6 +37,7 @@ namespace XMDT
             InitComboBoxFile();
             LoadDataGridView();
             KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
+ 
         }
 
         #region InitData when Form Load
@@ -240,7 +243,7 @@ namespace XMDT
                 if (Convert.ToBoolean(item.Cells["colCheck"].Value))
                 {
                     var index = dgViewInput.Rows.IndexOf(item);
-                    facebookError282.ProcessMBasicFacebook(lstAccountInfo[index], KeyResovelCatcha);
+                    facebookError282.ProcessFacbook(lstAccountInfo[index], KeyResovelCatcha);
                 }
             }
         }
@@ -343,5 +346,27 @@ namespace XMDT
         }
         #endregion
 
+        #region MultiThread
+        private void RunMultiThread(Action<int> functionCall)
+        {
+            for (int i = 0; i < countThread; i++)
+            {
+                int temp = i;
+                Thread t = new Thread(() => {
+                    functionCall(temp);
+                });
+                t.Start();
+            }
+        }
+        private void TestThread(int currentIndex)
+        {
+            for (int i = currentIndex; i < 10; i+=countThread)
+            {
+                //Thay bằng hàm cần chạy ở đây
+                MessageBox.Show("currentIndex:" + currentIndex + " Hello:" + i);
+                //Console.WriteLine("currentIndex:"+ currentIndex + " Hello:" + i);
+            }
+        }
+        #endregion
     }
 }
