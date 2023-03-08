@@ -188,6 +188,28 @@ namespace XMDT
         #endregion
 
         #region Process Error Facebook in contextmenu DatagridView
+        private AccountInfo ConvertRowGridViewToAccountInfo(int rowIndex)
+        {
+            var accountInfo = new AccountInfo();
+            try
+            {
+                accountInfo.Id = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colID"].Value);
+                accountInfo.Pass = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colPass"].Value);
+                accountInfo.TwoFA = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colTwoFA"].Value);
+                accountInfo.Cookie = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colCookie"].Value);
+                accountInfo.Email = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colEmail"].Value);
+                accountInfo.Pass = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colPassMail"].Value);
+                accountInfo.Proxy = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colProxy"].Value);
+                accountInfo.UserAgent = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colUserAgent"].Value);
+                accountInfo.Status = Convert.ToString(dgViewInput.Rows[rowIndex].Cells["colStatus"].Value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                accountInfo = new AccountInfo();
+            }
+            return accountInfo;
+        }
         private void cmsCheckpoint282_Click(object sender, EventArgs e)
         {
             ////Đa luồng cần proxy đa luồng
@@ -264,13 +286,11 @@ namespace XMDT
                         if (!configUserAgentProxyModel.CheckExistData)
                         {
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
- 
                             count++;
                         }
                         else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells[colName].Value)))
                         {
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
- 
                             count++;
                         }
                     }

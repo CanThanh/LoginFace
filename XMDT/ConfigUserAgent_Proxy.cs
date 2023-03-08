@@ -55,17 +55,6 @@ namespace XMDT
             InitForm();
         }
 
-        //private void ConfigUserAgentProxyModel()
-        //{
-        //    configUserAgentProxyModel = new ConfigUserAgentProxyModel
-        //    {
-        //        Data = rtbInput.Text,
-        //        AccountPerData = (int) nUDAccount.Value,
-        //        IsRandom = rbRandom.Checked,
-        //        CkeckExistData = ckExistAccount.Checked
-        //    };            
-        //}
-
         private void SetConfigUserAgentProxyModel()
         {
             var result = new List<string>();

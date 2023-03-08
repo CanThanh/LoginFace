@@ -37,19 +37,6 @@
             this.config = new System.Windows.Forms.ToolStripMenuItem();
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
             this.dgViewInput = new System.Windows.Forms.DataGridView();
-            this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTwoFA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCookie = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colEmailRecover = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPassMail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAccountInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colProxy = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
@@ -65,6 +52,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rbLoginCookie = new System.Windows.Forms.RadioButton();
             this.rbLoginUP = new System.Windows.Forms.RadioButton();
+            this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTwoFA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCookie = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPassMail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAccountInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colProxy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -146,7 +146,7 @@
             this.colPass,
             this.colTwoFA,
             this.colCookie,
-            this.colEmailRecover,
+            this.colEmail,
             this.colPassMail,
             this.colAccountInfo,
             this.colProxy,
@@ -163,98 +163,6 @@
             this.dgViewInput.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
             this.dgViewInput.TabIndex = 3;
-            // 
-            // colCheck
-            // 
-            this.colCheck.HeaderText = "Chọn";
-            this.colCheck.IndeterminateValue = "false";
-            this.colCheck.MinimumWidth = 8;
-            this.colCheck.Name = "colCheck";
-            this.colCheck.Width = 50;
-            // 
-            // colIndex
-            // 
-            this.colIndex.HeaderText = "STT";
-            this.colIndex.MinimumWidth = 8;
-            this.colIndex.Name = "colIndex";
-            this.colIndex.Width = 50;
-            // 
-            // colID
-            // 
-            this.colID.HeaderText = "UID";
-            this.colID.MinimumWidth = 8;
-            this.colID.Name = "colID";
-            this.colID.Width = 80;
-            // 
-            // colPass
-            // 
-            this.colPass.HeaderText = "Mật khẩu";
-            this.colPass.MinimumWidth = 8;
-            this.colPass.Name = "colPass";
-            this.colPass.Width = 80;
-            // 
-            // colTwoFA
-            // 
-            this.colTwoFA.HeaderText = "Mã 2 FA";
-            this.colTwoFA.MinimumWidth = 8;
-            this.colTwoFA.Name = "colTwoFA";
-            this.colTwoFA.Width = 80;
-            // 
-            // colCookie
-            // 
-            this.colCookie.HeaderText = "Cookie";
-            this.colCookie.MinimumWidth = 8;
-            this.colCookie.Name = "colCookie";
-            this.colCookie.Width = 150;
-            // 
-            // colEmailRecover
-            // 
-            this.colEmailRecover.HeaderText = "Email khôi phục";
-            this.colEmailRecover.MinimumWidth = 8;
-            this.colEmailRecover.Name = "colEmailRecover";
-            this.colEmailRecover.Width = 80;
-            // 
-            // colPassMail
-            // 
-            this.colPassMail.HeaderText = "Mật khẩu mail";
-            this.colPassMail.MinimumWidth = 8;
-            this.colPassMail.Name = "colPassMail";
-            this.colPassMail.Width = 80;
-            // 
-            // colAccountInfo
-            // 
-            this.colAccountInfo.HeaderText = "Thông tin tài khoản";
-            this.colAccountInfo.MinimumWidth = 8;
-            this.colAccountInfo.Name = "colAccountInfo";
-            this.colAccountInfo.Width = 150;
-            // 
-            // colProxy
-            // 
-            this.colProxy.HeaderText = "Proxy";
-            this.colProxy.MinimumWidth = 8;
-            this.colProxy.Name = "colProxy";
-            this.colProxy.Width = 80;
-            // 
-            // colUserAgent
-            // 
-            this.colUserAgent.HeaderText = "User Agent";
-            this.colUserAgent.MinimumWidth = 8;
-            this.colUserAgent.Name = "colUserAgent";
-            this.colUserAgent.Width = 150;
-            // 
-            // colStatus
-            // 
-            this.colStatus.HeaderText = "Tình trạng";
-            this.colStatus.MinimumWidth = 8;
-            this.colStatus.Name = "colStatus";
-            this.colStatus.Width = 80;
-            // 
-            // colNote
-            // 
-            this.colNote.HeaderText = "Ghi chú";
-            this.colNote.MinimumWidth = 8;
-            this.colNote.Name = "colNote";
-            this.colNote.Width = 150;
             // 
             // contextMenuStrip
             // 
@@ -393,6 +301,98 @@
             this.rbLoginUP.Text = "Đăng nhập U/P";
             this.rbLoginUP.UseVisualStyleBackColor = true;
             // 
+            // colCheck
+            // 
+            this.colCheck.HeaderText = "Chọn";
+            this.colCheck.IndeterminateValue = "false";
+            this.colCheck.MinimumWidth = 8;
+            this.colCheck.Name = "colCheck";
+            this.colCheck.Width = 50;
+            // 
+            // colIndex
+            // 
+            this.colIndex.HeaderText = "STT";
+            this.colIndex.MinimumWidth = 8;
+            this.colIndex.Name = "colIndex";
+            this.colIndex.Width = 50;
+            // 
+            // colID
+            // 
+            this.colID.HeaderText = "UID";
+            this.colID.MinimumWidth = 8;
+            this.colID.Name = "colID";
+            this.colID.Width = 80;
+            // 
+            // colPass
+            // 
+            this.colPass.HeaderText = "Mật khẩu";
+            this.colPass.MinimumWidth = 8;
+            this.colPass.Name = "colPass";
+            this.colPass.Width = 80;
+            // 
+            // colTwoFA
+            // 
+            this.colTwoFA.HeaderText = "Mã 2 FA";
+            this.colTwoFA.MinimumWidth = 8;
+            this.colTwoFA.Name = "colTwoFA";
+            this.colTwoFA.Width = 80;
+            // 
+            // colCookie
+            // 
+            this.colCookie.HeaderText = "Cookie";
+            this.colCookie.MinimumWidth = 8;
+            this.colCookie.Name = "colCookie";
+            this.colCookie.Width = 150;
+            // 
+            // colEmail
+            // 
+            this.colEmail.HeaderText = "Email";
+            this.colEmail.MinimumWidth = 8;
+            this.colEmail.Name = "colEmail";
+            this.colEmail.Width = 80;
+            // 
+            // colPassMail
+            // 
+            this.colPassMail.HeaderText = "Pass email";
+            this.colPassMail.MinimumWidth = 8;
+            this.colPassMail.Name = "colPassMail";
+            this.colPassMail.Width = 80;
+            // 
+            // colAccountInfo
+            // 
+            this.colAccountInfo.HeaderText = "Thông tin tài khoản";
+            this.colAccountInfo.MinimumWidth = 8;
+            this.colAccountInfo.Name = "colAccountInfo";
+            this.colAccountInfo.Width = 150;
+            // 
+            // colProxy
+            // 
+            this.colProxy.HeaderText = "Proxy";
+            this.colProxy.MinimumWidth = 8;
+            this.colProxy.Name = "colProxy";
+            this.colProxy.Width = 80;
+            // 
+            // colUserAgent
+            // 
+            this.colUserAgent.HeaderText = "User Agent";
+            this.colUserAgent.MinimumWidth = 8;
+            this.colUserAgent.Name = "colUserAgent";
+            this.colUserAgent.Width = 150;
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Tình trạng";
+            this.colStatus.MinimumWidth = 8;
+            this.colStatus.Name = "colStatus";
+            this.colStatus.Width = 80;
+            // 
+            // colNote
+            // 
+            this.colNote.HeaderText = "Ghi chú";
+            this.colNote.MinimumWidth = 8;
+            this.colNote.Name = "colNote";
+            this.colNote.Width = 150;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -441,21 +441,21 @@
         private System.Windows.Forms.ToolStripMenuItem checkpoint282mface;
         private System.Windows.Forms.Button btnRemoveAccount;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RadioButton rbLoginCookie;
+        private System.Windows.Forms.RadioButton rbLoginUP;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTwoFA;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCookie;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colEmailRecover;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colEmail;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPassMail;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAccountInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colProxy;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
-        private System.Windows.Forms.RadioButton rbLoginCookie;
-        private System.Windows.Forms.RadioButton rbLoginUP;
     }
 }
 
