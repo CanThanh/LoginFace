@@ -284,6 +284,14 @@ namespace XMDT.Controller
 
             return lstAccountInfo;
         }
+
+        public string CreatDirectory(string path)
+        {
+            bool exists = Directory.Exists(path);
+            if (!exists)
+                Directory.CreateDirectory(path);
+            return path;
+        }
         #endregion
     }
 }

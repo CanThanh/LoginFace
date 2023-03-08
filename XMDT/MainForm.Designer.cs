@@ -39,6 +39,19 @@
             this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
             this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.dgViewInput = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
+            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbFile = new System.Windows.Forms.ComboBox();
+            this.btnRemoveAccount = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,17 +65,8 @@
             this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
-            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbFile = new System.Windows.Forms.ComboBox();
+            this.rbLoginCookie = new System.Windows.Forms.RadioButton();
+            this.rbLoginUP = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -177,9 +181,124 @@
             this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
             this.dgViewInput.TabIndex = 3;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsSelected,
+            this.cmsUnselectedAll,
+            this.cmsFacebook});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.contextMenuStrip.ShowCheckMargin = true;
+            this.contextMenuStrip.ShowImageMargin = false;
+            this.contextMenuStrip.Size = new System.Drawing.Size(161, 73);
+            // 
+            // cmsSelected
+            // 
+            this.cmsSelected.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsSelectAll,
+            this.cmsSelectHightlight});
+            this.cmsSelected.Name = "cmsSelected";
+            this.cmsSelected.Size = new System.Drawing.Size(160, 22);
+            this.cmsSelected.Text = "Chọn";
+            // 
+            // cmsSelectAll
+            // 
+            this.cmsSelectAll.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsSelectAll.Name = "cmsSelectAll";
+            this.cmsSelectAll.Size = new System.Drawing.Size(100, 23);
+            this.cmsSelectAll.Text = "Tất cả";
+            this.cmsSelectAll.Click += new System.EventHandler(this.cmsSelectAll_Click);
+            // 
+            // cmsSelectHightlight
+            // 
+            this.cmsSelectHightlight.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsSelectHightlight.Name = "cmsSelectHightlight";
+            this.cmsSelectHightlight.Size = new System.Drawing.Size(100, 23);
+            this.cmsSelectHightlight.Text = "Bôi đen";
+            this.cmsSelectHightlight.Click += new System.EventHandler(this.cmsSelectHightlight_Click);
+            // 
+            // cmsUnselectedAll
+            // 
+            this.cmsUnselectedAll.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsUnselectedAll.Name = "cmsUnselectedAll";
+            this.cmsUnselectedAll.Size = new System.Drawing.Size(100, 23);
+            this.cmsUnselectedAll.Text = "Bỏ chọn tất cả";
+            this.cmsUnselectedAll.Click += new System.EventHandler(this.cmsUnselectedAll_Click);
+            // 
+            // cmsFacebook
+            // 
+            this.cmsFacebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsCheckpoint282mabsic,
+            this.checkpoint282mface,
+            this.cmsCheckpoint956});
+            this.cmsFacebook.Name = "cmsFacebook";
+            this.cmsFacebook.Size = new System.Drawing.Size(160, 22);
+            this.cmsFacebook.Text = "Giải check point";
+            // 
+            // cmsCheckpoint282mabsic
+            // 
+            this.cmsCheckpoint282mabsic.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCheckpoint282mabsic.Name = "cmsCheckpoint282mabsic";
+            this.cmsCheckpoint282mabsic.Size = new System.Drawing.Size(100, 23);
+            this.cmsCheckpoint282mabsic.Text = "Checkpoint 282 (mbasic)";
+            this.cmsCheckpoint282mabsic.Click += new System.EventHandler(this.cmsCheckpoint282mbasic_Click);
+            // 
+            // checkpoint282mface
+            // 
+            this.checkpoint282mface.Name = "checkpoint282mface";
+            this.checkpoint282mface.Size = new System.Drawing.Size(200, 22);
+            this.checkpoint282mface.Text = "Checkpoint 282 (mface)";
+            this.checkpoint282mface.Click += new System.EventHandler(this.checkpoint282mface_Click);
+            // 
+            // cmsCheckpoint956
+            // 
+            this.cmsCheckpoint956.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCheckpoint956.Name = "cmsCheckpoint956";
+            this.cmsCheckpoint956.Size = new System.Drawing.Size(100, 23);
+            this.cmsCheckpoint956.Text = "Check point 956";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 43);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Chọn thư mục";
+            // 
+            // cbFile
+            // 
+            this.cbFile.FormattingEnabled = true;
+            this.cbFile.Location = new System.Drawing.Point(92, 40);
+            this.cbFile.Name = "cbFile";
+            this.cbFile.Size = new System.Drawing.Size(121, 21);
+            this.cbFile.TabIndex = 8;
+            // 
+            // btnRemoveAccount
+            // 
+            this.btnRemoveAccount.BackgroundImage = global::XMDT.Properties.Resources.minus;
+            this.btnRemoveAccount.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnRemoveAccount.Location = new System.Drawing.Point(339, 40);
+            this.btnRemoveAccount.Name = "btnRemoveAccount";
+            this.btnRemoveAccount.Size = new System.Drawing.Size(30, 23);
+            this.btnRemoveAccount.TabIndex = 9;
+            this.btnRemoveAccount.UseVisualStyleBackColor = true;
+            this.btnRemoveAccount.Click += new System.EventHandler(this.btnRemoveAccount_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(260, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Xoá tài khoản";
+            // 
             // colCheck
             // 
             this.colCheck.HeaderText = "Chọn";
+            this.colCheck.IndeterminateValue = "false";
             this.colCheck.MinimumWidth = 8;
             this.colCheck.Name = "colCheck";
             this.colCheck.Width = 50;
@@ -268,105 +387,38 @@
             this.colNote.Name = "colNote";
             this.colNote.Width = 150;
             // 
-            // contextMenuStrip
+            // rbLoginCookie
             // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmsSelected,
-            this.cmsUnselectedAll,
-            this.cmsFacebook});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.contextMenuStrip.ShowCheckMargin = true;
-            this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(161, 73);
+            this.rbLoginCookie.AutoSize = true;
+            this.rbLoginCookie.Checked = true;
+            this.rbLoginCookie.Location = new System.Drawing.Point(398, 43);
+            this.rbLoginCookie.Name = "rbLoginCookie";
+            this.rbLoginCookie.Size = new System.Drawing.Size(113, 17);
+            this.rbLoginCookie.TabIndex = 11;
+            this.rbLoginCookie.TabStop = true;
+            this.rbLoginCookie.Text = "Đăng nhập cookie";
+            this.rbLoginCookie.UseVisualStyleBackColor = true;
             // 
-            // cmsSelected
+            // rbLoginUP
             // 
-            this.cmsSelected.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmsSelectAll,
-            this.cmsSelectHightlight});
-            this.cmsSelected.Name = "cmsSelected";
-            this.cmsSelected.Size = new System.Drawing.Size(180, 22);
-            this.cmsSelected.Text = "Chọn";
-            // 
-            // cmsSelectAll
-            // 
-            this.cmsSelectAll.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsSelectAll.Name = "cmsSelectAll";
-            this.cmsSelectAll.Size = new System.Drawing.Size(100, 23);
-            this.cmsSelectAll.Text = "Tất cả";
-            this.cmsSelectAll.Click += new System.EventHandler(this.cmsSelectAll_Click);
-            // 
-            // cmsSelectHightlight
-            // 
-            this.cmsSelectHightlight.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsSelectHightlight.Name = "cmsSelectHightlight";
-            this.cmsSelectHightlight.Size = new System.Drawing.Size(100, 23);
-            this.cmsSelectHightlight.Text = "Bôi đen";
-            this.cmsSelectHightlight.Click += new System.EventHandler(this.cmsSelectHightlight_Click);
-            // 
-            // cmsUnselectedAll
-            // 
-            this.cmsUnselectedAll.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsUnselectedAll.Name = "cmsUnselectedAll";
-            this.cmsUnselectedAll.Size = new System.Drawing.Size(100, 23);
-            this.cmsUnselectedAll.Text = "Bỏ chọn tất cả";
-            this.cmsUnselectedAll.Click += new System.EventHandler(this.cmsUnselectedAll_Click);
-            // 
-            // cmsFacebook
-            // 
-            this.cmsFacebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmsCheckpoint282mabsic,
-            this.checkpoint282mface,
-            this.cmsCheckpoint956});
-            this.cmsFacebook.Name = "cmsFacebook";
-            this.cmsFacebook.Size = new System.Drawing.Size(180, 22);
-            this.cmsFacebook.Text = "Giải check point";
-            // 
-            // cmsCheckpoint282mabsic
-            // 
-            this.cmsCheckpoint282mabsic.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCheckpoint282mabsic.Name = "cmsCheckpoint282mabsic";
-            this.cmsCheckpoint282mabsic.Size = new System.Drawing.Size(100, 23);
-            this.cmsCheckpoint282mabsic.Text = "Checkpoint 282 (mbasic)";
-            this.cmsCheckpoint282mabsic.Click += new System.EventHandler(this.cmsCheckpoint282mbasic_Click);
-            // 
-            // checkpoint282mface
-            // 
-            this.checkpoint282mface.Name = "checkpoint282mface";
-            this.checkpoint282mface.Size = new System.Drawing.Size(200, 22);
-            this.checkpoint282mface.Text = "Checkpoint 282 (mface)";
-            this.checkpoint282mface.Click += new System.EventHandler(this.checkpoint282mface_Click);
-            // 
-            // cmsCheckpoint956
-            // 
-            this.cmsCheckpoint956.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCheckpoint956.Name = "cmsCheckpoint956";
-            this.cmsCheckpoint956.Size = new System.Drawing.Size(100, 23);
-            this.cmsCheckpoint956.Text = "Check point 956";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 43);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Chọn thư mục";
-            // 
-            // cbFile
-            // 
-            this.cbFile.FormattingEnabled = true;
-            this.cbFile.Location = new System.Drawing.Point(92, 40);
-            this.cbFile.Name = "cbFile";
-            this.cbFile.Size = new System.Drawing.Size(121, 21);
-            this.cbFile.TabIndex = 8;
+            this.rbLoginUP.AutoSize = true;
+            this.rbLoginUP.Location = new System.Drawing.Point(518, 45);
+            this.rbLoginUP.Name = "rbLoginUP";
+            this.rbLoginUP.Size = new System.Drawing.Size(101, 17);
+            this.rbLoginUP.TabIndex = 12;
+            this.rbLoginUP.TabStop = true;
+            this.rbLoginUP.Text = "Đăng nhập U/P";
+            this.rbLoginUP.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1058, 544);
+            this.Controls.Add(this.rbLoginUP);
+            this.Controls.Add(this.rbLoginCookie);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnRemoveAccount);
             this.Controls.Add(this.cbFile);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgViewInput);
@@ -390,19 +442,6 @@
         private System.Windows.Forms.ToolStripMenuItem configXMDT;
         private System.Windows.Forms.ToolStripMenuItem addAccount;
         private System.Windows.Forms.DataGridView dgViewInput;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPass;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTwoFA;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCookie;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colEmailRecover;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPassMail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAccountInfo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colProxy;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
         private System.Windows.Forms.ToolStripMenuItem configUserAgent;
         private System.Windows.Forms.ToolStripMenuItem configProxy;
         private System.Windows.Forms.Label label1;
@@ -419,6 +458,23 @@
         private System.Windows.Forms.ToolStripMenuItem addUserAgent;
         private System.Windows.Forms.ToolStripMenuItem addProxy;
         private System.Windows.Forms.ToolStripMenuItem checkpoint282mface;
+        private System.Windows.Forms.Button btnRemoveAccount;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTwoFA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCookie;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colEmailRecover;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPassMail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAccountInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colProxy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
+        private System.Windows.Forms.RadioButton rbLoginCookie;
+        private System.Windows.Forms.RadioButton rbLoginUP;
     }
 }
 

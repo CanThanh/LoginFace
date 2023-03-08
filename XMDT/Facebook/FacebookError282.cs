@@ -93,14 +93,14 @@ namespace XMDT.Facebook
                 string url = "https://m.facebook.com/";
                 FacebookProcessing facebookProcessing = new FacebookProcessing();
                 var driver = facebookProcessing.InitChromeDriver(account);
-                facebookProcessing.LoginCookie(driver, url, account.Cookie);
-                //driver.Navigate().GoToUrl(url);
-                //Thread.Sleep(1000);
-                //SendKeyByXPath(driver, "//input[@name='email']", account.Id);
-                //SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
-                //Thread.Sleep(1000);
-                //driver.FindElement(By.XPath("//button[@name='login']")).Click();
-                //Thread.Sleep(3000);
+                facebookProcessing.LoginFace(driver, url, account.Id, account.Pass);
+                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(1000);
+                SendKeyByXPath(driver, "//input[@name='email']", account.Id);
+                SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
+                Thread.Sleep(1000);
+                driver.FindElement(By.XPath("//button[@name='login']")).Click();
+                Thread.Sleep(3000);
                 //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                 //var divGoogleKey = driver.FindElement(By.XPath("//div[@class='g-recaptcha']"));
                 //string googleKey = "";
@@ -195,14 +195,14 @@ namespace XMDT.Facebook
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
                         ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
                         Screenshot screenshot = screenshotDriver.GetScreenshot();
-                        string imgPath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Screenshot\\" + account.Id + "SS.png";
+                        string imgPath = CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Screenshot") + "\\" + account.Id + "SS.png";
                         screenshot.SaveAsFile(imgPath);
                         var img = Image.FromFile(imgPath);
                         //Diffrence crop mobile/win
                         int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
                         Rectangle cropArea = new Rectangle(xLocation, 136, 288, 69);
                         var imgCaptcha = cropImage(img, cropArea);
-                        string imgCaptchaPath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha\\" + account.Id + "_captcha.png";
+                        string imgCaptchaPath = CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
                         imgCaptcha.Save(imgCaptchaPath);
                         string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
                         //Resolve captcha
@@ -234,7 +234,7 @@ namespace XMDT.Facebook
 
                         ImageProcessing imageProcessing = new ImageProcessing();
                         string faceFakeUrl = facebookProcessing.GetLinkFaceImage(age, gender);
-                        string imgFaceFakePath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Face\\" + account.Id + ".jpg";
+                        string imgFaceFakePath = CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Face") +"\\" + account.Id + ".jpg";
                         imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                         account.ImgFacePath = imgFaceFakePath;
                         var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));

@@ -28,7 +28,7 @@ namespace XMDT
         public MainForm()
         {
             InitializeComponent();
-            RunMultiThread(TestThread);
+            //RunMultiThread(TestThread);
             commonFunction = new CommonFunction();
             configInput = new ConfigInput();
             configUserAgent_Proxy = new ConfigUserAgent_Proxy();
@@ -161,11 +161,12 @@ namespace XMDT
 
         private void LoadDataGridView()
         {
+            dgViewInput.Rows.Clear();
             var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
             foreach (var item in lstAccountInfo)
             {
-                this.dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
                                     item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
             }
         }
@@ -177,7 +178,6 @@ namespace XMDT
             {
                 dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
             }
-
             dgViewInput.ContextMenuStrip.Close();
         }
         private void cmsUnselectedAll_Click(object sender, EventArgs e)
@@ -368,5 +368,25 @@ namespace XMDT
             }
         }
         #endregion
+
+        private void btnRemoveAccount_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xoá danh sách tài khoản này?", "Xoá", buttons);
+            if (result == DialogResult.Yes)
+            {
+                List<string> lstUserId = new List<string>();
+                var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+                foreach (DataGridViewRow item in dgViewInput.Rows)
+                {
+                    if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                    {
+                        lstUserId.Add(item.Cells["colID"].Value.ToString());
+                    }
+                }
+                sqLiteProcessing.DeleteListAccount(lstUserId, itemSelected.Value);
+                LoadDataGridView();
+            }
+        }
     }
 }

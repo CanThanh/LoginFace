@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.IO;
 using static XMDT.Model.FaceInfo;
+using System.Security.Cryptography;
 
 namespace XMDT.Controller
 {
@@ -257,11 +258,42 @@ namespace XMDT.Controller
             try
             {
                 createConection();
-                string sql = "DELTE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
+                string sql = "DELETE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
                 SQLiteCommand command = new SQLiteCommand(sql, _con);
                 command.Parameters.AddWithValue("@uid", uid);
                 command.Parameters.AddWithValue("@idfile", idFile);
                 command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+        public bool DeleteListAccount(List<string> lstUserId, string idFile)
+        {
+            var result = true;
+            try
+            {
+                createConection();
+                using (var transaction = _con.BeginTransaction())
+                {
+                    SQLiteCommand command = new SQLiteCommand(_con);
+                    foreach (var item in lstUserId)
+                    {
+                        command.Parameters.Clear();
+                        command.CommandText =  "DELETE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
+                        command.Parameters.AddWithValue("@uid", item);
+                        command.Parameters.AddWithValue("@idfile", idFile);
+                        command.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }                   
             }
             catch (Exception ex)
             {
