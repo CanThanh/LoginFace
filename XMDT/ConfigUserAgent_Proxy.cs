@@ -23,10 +23,10 @@ namespace XMDT
 {
     public partial class ConfigUserAgent_Proxy : Form
     {
-        public int typeForm;
-        public ConfigUserAgentProxyModel configUserAgentProxyModel;
-        public ConfigUserAgent_Proxy()
+        private int typeForm;
+        public ConfigUserAgent_Proxy(int typeForm)
         {
+            this.typeForm = typeForm;
             InitializeComponent();            
         }     
 
@@ -53,7 +53,6 @@ namespace XMDT
         private void ConfigUserAgent_Proxy_Load(object sender, EventArgs e)
         {
             InitForm();
-            SetConfigUserAgentProxyModel();
         }
 
         //private void ConfigUserAgentProxyModel()
@@ -93,11 +92,13 @@ namespace XMDT
                     temp.RemoveAt(index);
                 }
             }
-            configUserAgentProxyModel = new ConfigUserAgentProxyModel
-            {
+            var configUserAgentProxyModel = new ConfigUserAgentProxyModel
+            {   
+                TypeForm = typeForm,
                 LstData = result,
                 CheckExistData = ckExistAccount.Checked
             };
+            MainForm.Self.SetUserAgentOrProxyForAccount(configUserAgentProxyModel);
         }
 
         private void btnConfirn_Click(object sender, EventArgs e)

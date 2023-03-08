@@ -36,22 +36,7 @@
             this.addProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.config = new System.Windows.Forms.ToolStripMenuItem();
             this.configXMDT = new System.Windows.Forms.ToolStripMenuItem();
-            this.configUserAgent = new System.Windows.Forms.ToolStripMenuItem();
-            this.configProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.dgViewInput = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
-            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbFile = new System.Windows.Forms.ComboBox();
-            this.btnRemoveAccount = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.colCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,6 +50,19 @@
             this.colUserAgent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSelected = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsSelectAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
+            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbFile = new System.Windows.Forms.ComboBox();
+            this.btnRemoveAccount = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.rbLoginCookie = new System.Windows.Forms.RadioButton();
             this.rbLoginUP = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
@@ -119,9 +117,7 @@
             // config
             // 
             this.config.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configXMDT,
-            this.configUserAgent,
-            this.configProxy});
+            this.configXMDT});
             this.config.Name = "config";
             this.config.Size = new System.Drawing.Size(67, 22);
             this.config.Text = "Cấu hình";
@@ -133,22 +129,9 @@
             this.configXMDT.Text = "Phôi xác minh danh tính";
             this.configXMDT.Click += new System.EventHandler(this.configXMDT_Click);
             // 
-            // configUserAgent
-            // 
-            this.configUserAgent.Name = "configUserAgent";
-            this.configUserAgent.Size = new System.Drawing.Size(204, 22);
-            this.configUserAgent.Text = "User Agent";
-            this.configUserAgent.Click += new System.EventHandler(this.configUserAgent_Click);
-            // 
-            // configProxy
-            // 
-            this.configProxy.Name = "configProxy";
-            this.configProxy.Size = new System.Drawing.Size(204, 22);
-            this.configProxy.Text = "Proxy";
-            this.configProxy.Click += new System.EventHandler(this.configProxy_Click);
-            // 
             // dgViewInput
             // 
+            this.dgViewInput.AllowUserToAddRows = false;
             this.dgViewInput.AllowUserToOrderColumns = true;
             this.dgViewInput.AllowUserToResizeRows = false;
             this.dgViewInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -180,6 +163,98 @@
             this.dgViewInput.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgViewInput.Size = new System.Drawing.Size(1058, 459);
             this.dgViewInput.TabIndex = 3;
+            // 
+            // colCheck
+            // 
+            this.colCheck.HeaderText = "Chọn";
+            this.colCheck.IndeterminateValue = "false";
+            this.colCheck.MinimumWidth = 8;
+            this.colCheck.Name = "colCheck";
+            this.colCheck.Width = 50;
+            // 
+            // colIndex
+            // 
+            this.colIndex.HeaderText = "STT";
+            this.colIndex.MinimumWidth = 8;
+            this.colIndex.Name = "colIndex";
+            this.colIndex.Width = 50;
+            // 
+            // colID
+            // 
+            this.colID.HeaderText = "UID";
+            this.colID.MinimumWidth = 8;
+            this.colID.Name = "colID";
+            this.colID.Width = 80;
+            // 
+            // colPass
+            // 
+            this.colPass.HeaderText = "Mật khẩu";
+            this.colPass.MinimumWidth = 8;
+            this.colPass.Name = "colPass";
+            this.colPass.Width = 80;
+            // 
+            // colTwoFA
+            // 
+            this.colTwoFA.HeaderText = "Mã 2 FA";
+            this.colTwoFA.MinimumWidth = 8;
+            this.colTwoFA.Name = "colTwoFA";
+            this.colTwoFA.Width = 80;
+            // 
+            // colCookie
+            // 
+            this.colCookie.HeaderText = "Cookie";
+            this.colCookie.MinimumWidth = 8;
+            this.colCookie.Name = "colCookie";
+            this.colCookie.Width = 150;
+            // 
+            // colEmailRecover
+            // 
+            this.colEmailRecover.HeaderText = "Email khôi phục";
+            this.colEmailRecover.MinimumWidth = 8;
+            this.colEmailRecover.Name = "colEmailRecover";
+            this.colEmailRecover.Width = 80;
+            // 
+            // colPassMail
+            // 
+            this.colPassMail.HeaderText = "Mật khẩu mail";
+            this.colPassMail.MinimumWidth = 8;
+            this.colPassMail.Name = "colPassMail";
+            this.colPassMail.Width = 80;
+            // 
+            // colAccountInfo
+            // 
+            this.colAccountInfo.HeaderText = "Thông tin tài khoản";
+            this.colAccountInfo.MinimumWidth = 8;
+            this.colAccountInfo.Name = "colAccountInfo";
+            this.colAccountInfo.Width = 150;
+            // 
+            // colProxy
+            // 
+            this.colProxy.HeaderText = "Proxy";
+            this.colProxy.MinimumWidth = 8;
+            this.colProxy.Name = "colProxy";
+            this.colProxy.Width = 80;
+            // 
+            // colUserAgent
+            // 
+            this.colUserAgent.HeaderText = "User Agent";
+            this.colUserAgent.MinimumWidth = 8;
+            this.colUserAgent.Name = "colUserAgent";
+            this.colUserAgent.Width = 150;
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Tình trạng";
+            this.colStatus.MinimumWidth = 8;
+            this.colStatus.Name = "colStatus";
+            this.colStatus.Width = 80;
+            // 
+            // colNote
+            // 
+            this.colNote.HeaderText = "Ghi chú";
+            this.colNote.MinimumWidth = 8;
+            this.colNote.Name = "colNote";
+            this.colNote.Width = 150;
             // 
             // contextMenuStrip
             // 
@@ -295,98 +370,6 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "Xoá tài khoản";
             // 
-            // colCheck
-            // 
-            this.colCheck.HeaderText = "Chọn";
-            this.colCheck.IndeterminateValue = "false";
-            this.colCheck.MinimumWidth = 8;
-            this.colCheck.Name = "colCheck";
-            this.colCheck.Width = 50;
-            // 
-            // colIndex
-            // 
-            this.colIndex.HeaderText = "STT";
-            this.colIndex.MinimumWidth = 8;
-            this.colIndex.Name = "colIndex";
-            this.colIndex.Width = 50;
-            // 
-            // colID
-            // 
-            this.colID.HeaderText = "UID";
-            this.colID.MinimumWidth = 8;
-            this.colID.Name = "colID";
-            this.colID.Width = 80;
-            // 
-            // colPass
-            // 
-            this.colPass.HeaderText = "Mật khẩu";
-            this.colPass.MinimumWidth = 8;
-            this.colPass.Name = "colPass";
-            this.colPass.Width = 80;
-            // 
-            // colTwoFA
-            // 
-            this.colTwoFA.HeaderText = "Mã 2 FA";
-            this.colTwoFA.MinimumWidth = 8;
-            this.colTwoFA.Name = "colTwoFA";
-            this.colTwoFA.Width = 80;
-            // 
-            // colCookie
-            // 
-            this.colCookie.HeaderText = "Cookie";
-            this.colCookie.MinimumWidth = 8;
-            this.colCookie.Name = "colCookie";
-            this.colCookie.Width = 150;
-            // 
-            // colEmailRecover
-            // 
-            this.colEmailRecover.HeaderText = "Email khôi phục";
-            this.colEmailRecover.MinimumWidth = 8;
-            this.colEmailRecover.Name = "colEmailRecover";
-            this.colEmailRecover.Width = 80;
-            // 
-            // colPassMail
-            // 
-            this.colPassMail.HeaderText = "Mật khẩu mail";
-            this.colPassMail.MinimumWidth = 8;
-            this.colPassMail.Name = "colPassMail";
-            this.colPassMail.Width = 80;
-            // 
-            // colAccountInfo
-            // 
-            this.colAccountInfo.HeaderText = "Thông tin tài khoản";
-            this.colAccountInfo.MinimumWidth = 8;
-            this.colAccountInfo.Name = "colAccountInfo";
-            this.colAccountInfo.Width = 150;
-            // 
-            // colProxy
-            // 
-            this.colProxy.HeaderText = "Proxy";
-            this.colProxy.MinimumWidth = 8;
-            this.colProxy.Name = "colProxy";
-            this.colProxy.Width = 80;
-            // 
-            // colUserAgent
-            // 
-            this.colUserAgent.HeaderText = "User Agent";
-            this.colUserAgent.MinimumWidth = 8;
-            this.colUserAgent.Name = "colUserAgent";
-            this.colUserAgent.Width = 150;
-            // 
-            // colStatus
-            // 
-            this.colStatus.HeaderText = "Tình trạng";
-            this.colStatus.MinimumWidth = 8;
-            this.colStatus.Name = "colStatus";
-            this.colStatus.Width = 80;
-            // 
-            // colNote
-            // 
-            this.colNote.HeaderText = "Ghi chú";
-            this.colNote.MinimumWidth = 8;
-            this.colNote.Name = "colNote";
-            this.colNote.Width = 150;
-            // 
             // rbLoginCookie
             // 
             this.rbLoginCookie.AutoSize = true;
@@ -442,8 +425,6 @@
         private System.Windows.Forms.ToolStripMenuItem configXMDT;
         private System.Windows.Forms.ToolStripMenuItem addAccount;
         private System.Windows.Forms.DataGridView dgViewInput;
-        private System.Windows.Forms.ToolStripMenuItem configUserAgent;
-        private System.Windows.Forms.ToolStripMenuItem configProxy;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFile;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;

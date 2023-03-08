@@ -56,6 +56,10 @@ namespace XMDT
             {
                 cbFile.Items.Add(item);
             }
+            if(cbFile.Items.Count > 0)
+            {
+                cbFile.SelectedIndex = 0;
+            }
         }
 
         private void InitComboBoxInput()
@@ -73,6 +77,10 @@ namespace XMDT
             {
                 var cbInputItem = string.Join(item.SplitCharacter, item.lstInput.Keys);
                 cbInput.Items.Add($"{cbInputItem}");
+            }
+            if (cbInput.Items.Count > 0)
+            {
+                cbInput.SelectedIndex = 0;
             }
         }
 
@@ -247,6 +255,8 @@ namespace XMDT
                 CommonFunction commonFunction = new CommonFunction();
                 var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, lstConfigInputModel[cbInput.SelectedIndex]);
                 sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo, itemSelected.Value);
+                MainForm.Self.LoadDataGridView();
+                this.Close();
             }
             else
             {

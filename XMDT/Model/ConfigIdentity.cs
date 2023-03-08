@@ -47,6 +47,7 @@ namespace XMDT.Model
 
     public class ConfigUserAgentProxyModel
     {
+        public int TypeForm { get; set; }
         public List<string> LstData { get; set; } = new List<string>();
         public bool CheckExistData { get; set; }
     }

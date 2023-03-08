@@ -18,9 +18,9 @@ namespace XMDT
 {
     public partial class MainForm : Form
     {
+        public static MainForm Self;
         CommonFunction commonFunction;
-        ConfigInput configInput;
-        ConfigUserAgent_Proxy configUserAgent_Proxy;
+        //ConfigUserAgent_Proxy configUserAgent_Proxy;
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
         string KeyResovelCatcha;
@@ -28,16 +28,16 @@ namespace XMDT
         public MainForm()
         {
             InitializeComponent();
+            Self = this;
             //RunMultiThread(TestThread);
             commonFunction = new CommonFunction();
-            configInput = new ConfigInput();
-            configUserAgent_Proxy = new ConfigUserAgent_Proxy();
+            //configUserAgent_Proxy = new ConfigUserAgent_Proxy();
             //SQLiteProcessing sQLiteProcessing = new SQLiteProcessing();
             //sQLiteProcessing.createTable();
             InitComboBoxFile();
             LoadDataGridView();
             KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
- 
+            
         }
 
         #region InitData when Form Load
@@ -136,30 +136,9 @@ namespace XMDT
         {
             ConfigImage configImage = new ConfigImage();
             configImage.Show();
-        }
+        }      
 
-        private void configUserAgent_Click(object sender, EventArgs e)
-        {
-
-            if (configUserAgent_Proxy.IsDisposed)
-            {
-                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
-            }
-            configUserAgent_Proxy.typeForm = (int)TypeForm.UserAgent;
-            configUserAgent_Proxy.Show();
-        }
-
-        private void configProxy_Click(object sender, EventArgs e)
-        {
-            if (configUserAgent_Proxy.IsDisposed)
-            {
-                configUserAgent_Proxy = new ConfigUserAgent_Proxy();
-            }
-            configUserAgent_Proxy.typeForm = (int)TypeForm.Proxy;
-            configUserAgent_Proxy.Show();
-        }        
-
-        private void LoadDataGridView()
+        public void LoadDataGridView()
         {
             dgViewInput.Rows.Clear();
             var itemSelected = (ComboboxItem)cbFile.SelectedItem;
@@ -253,79 +232,59 @@ namespace XMDT
         }
         #endregion
 
-        #region Data Input        
+        #region Data Input      
+        private void addAccount_Click(object sender, EventArgs e)
+        {
+            ConfigInput configInput = new ConfigInput();
+            configInput.Show();
+        }
         private void addUserAgent_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var countData = configUserAgent_Proxy.configUserAgentProxyModel.LstData.Count;
-                if (configUserAgent_Proxy.typeForm == (int)TypeForm.Proxy ||
-                    countData == 0)
-                {
-                    MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
-                }
-                else
-                {
-                    int count = 0;
-                    foreach (DataGridViewRow item in dgViewInput.Rows)
-                    {
-                        if (count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
-                        {
-                            if (!configUserAgent_Proxy.configUserAgentProxyModel.CheckExistData)
-                            {
-                                item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
-                                count++;
-                            }
-                            else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells["colUserAgent"].Value)))
-                            {
-                                item.Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
-                                count++;
-                            }
-
-                        }
-                    }
-                    //var maxSetIndex = Math.Min(countData, dgViewInput.Rows.Count);
-                    //for (int i = 0; i < maxSetIndex; i++)
-                    //{
-                    //    dgViewInput.Rows[i].Cells["colUserAgent"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[i % countData];
-                    //}
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
-            }
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.UserAgent);
+            configUserAgent_Proxy.Show();
         }
 
         private void addProxy_Click(object sender, EventArgs e)
         {
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.Proxy);
+            configUserAgent_Proxy.Show();
+        }        
+
+        public void SetUserAgentOrProxyForAccount(ConfigUserAgentProxyModel configUserAgentProxyModel)
+        {
             try
             {
-                var countData = configUserAgent_Proxy.configUserAgentProxyModel.LstData.Count;
-                if (configUserAgent_Proxy.typeForm == (int)TypeForm.UserAgent ||
-                    countData == 0)
+                string colName = configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy ? "colProxy" : "colUserAgent";
+                var countData = configUserAgentProxyModel.LstData.Count;
+                int count = 0;
+                foreach (DataGridViewRow item in dgViewInput.Rows)
                 {
-                    MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
-                }
-                else
-                {
-                    int count = 0;
-                    foreach (DataGridViewRow item in dgViewInput.Rows)
+                    if (count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
                     {
-                        if (count < countData && Convert.ToBoolean(item.Cells["colCheck"].Value))
+                        if (!configUserAgentProxyModel.CheckExistData)
                         {
-                            if (!configUserAgent_Proxy.configUserAgentProxyModel.CheckExistData)
+                            item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
+                            if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
                             {
-                                item.Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
-                                count++;
-                            }
-                            else if (string.IsNullOrEmpty(Convert.ToString(item.Cells["colProxy"].Value)))
+                                lstAccountInfo[count].Proxy = configUserAgentProxyModel.LstData[count];
+                            }else if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
                             {
-                                item.Cells["colProxy"].Value = configUserAgent_Proxy.configUserAgentProxyModel.LstData[count];
-                                count++;
+                                lstAccountInfo[count].UserAgent = configUserAgentProxyModel.LstData[count];
                             }
-
+                            count++;
+                        }
+                        else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells[colName].Value)))
+                        {
+                            item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
+                            if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
+                            {
+                                lstAccountInfo[count].Proxy = configUserAgentProxyModel.LstData[count];
+                            }
+                            else if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
+                            {
+                                lstAccountInfo[count].UserAgent = configUserAgentProxyModel.LstData[count];
+                            }
+                            count++;
                         }
                     }
                 }
@@ -335,14 +294,6 @@ namespace XMDT
                 Console.WriteLine(ex.Message);
                 MessageBox.Show("Dữ liệu cấu hình chưa đúng. Vui lòng kiểm tra lại");
             }
-        }
-        private void addAccount_Click(object sender, EventArgs e)
-        {
-            if (configInput.IsDisposed)
-            {
-                configInput = new ConfigInput();
-            }
-            configInput.Show();
         }
         #endregion
 
