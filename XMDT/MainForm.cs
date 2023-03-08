@@ -264,26 +264,13 @@ namespace XMDT
                         if (!configUserAgentProxyModel.CheckExistData)
                         {
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
-                            if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
-                            {
-                                lstAccountInfo[count].Proxy = configUserAgentProxyModel.LstData[count];
-                            }else if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
-                            {
-                                lstAccountInfo[count].UserAgent = configUserAgentProxyModel.LstData[count];
-                            }
+ 
                             count++;
                         }
                         else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells[colName].Value)))
                         {
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
-                            if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
-                            {
-                                lstAccountInfo[count].Proxy = configUserAgentProxyModel.LstData[count];
-                            }
-                            else if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
-                            {
-                                lstAccountInfo[count].UserAgent = configUserAgentProxyModel.LstData[count];
-                            }
+ 
                             count++;
                         }
                     }
