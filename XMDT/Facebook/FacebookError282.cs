@@ -43,7 +43,7 @@ namespace XMDT.Facebook
         }
 
         #region Process facebook
-        public bool ProcessFacbook(AccountInfo account, string resolveCaptchaKey)
+        public bool ProcessFacbook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false)
         {
             bool result = false;
             try
@@ -93,14 +93,24 @@ namespace XMDT.Facebook
                 string url = "https://m.facebook.com/";
                 FacebookProcessing facebookProcessing = new FacebookProcessing();
                 var driver = facebookProcessing.InitChromeDriver(account);
-                facebookProcessing.LoginFace(driver, url, account.Id, account.Pass);
-                driver.Navigate().GoToUrl(url);
-                Thread.Sleep(1000);
-                SendKeyByXPath(driver, "//input[@name='email']", account.Id);
-                SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
-                Thread.Sleep(1000);
-                driver.FindElement(By.XPath("//button[@name='login']")).Click();
-                Thread.Sleep(3000);
+                if (loginCookie)
+                {
+                    facebookProcessing.LoginCookie(driver, url, account.Cookie);
+                    driver.Navigate().GoToUrl(url);
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    facebookProcessing.LoginFace(driver, url, account.Id, account.Pass);
+                    driver.Navigate().GoToUrl(url);
+                    Thread.Sleep(1000);
+                    SendKeyByXPath(driver, "//input[@name='email']", account.Id);
+                    SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
+                    Thread.Sleep(1000);
+                    driver.FindElement(By.XPath("//button[@name='login']")).Click();
+                    Thread.Sleep(2000);
+                }
+
                 //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                 //var divGoogleKey = driver.FindElement(By.XPath("//div[@class='g-recaptcha']"));
                 //string googleKey = "";
@@ -170,7 +180,7 @@ namespace XMDT.Facebook
         #endregion Process facebook
 
         #region Process MbasicFacebook
-        public bool ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, int age = 0, string gender = "male")
+        public bool ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
         {
             bool result = false;
             try
@@ -179,9 +189,24 @@ namespace XMDT.Facebook
                 var driver = facebookProcessing.InitChromeDriver(account);
                 //Login by cookie
                 string url = "https://mbasic.facebook.com/";
-                facebookProcessing.LoginCookie(driver, url, account.Cookie);
-                driver.Navigate().GoToUrl(url);
-                Thread.Sleep(2000);
+                if (loginCookie)
+                {
+                    facebookProcessing.LoginCookie(driver, url, account.Cookie);
+                    driver.Navigate().GoToUrl(url);
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    facebookProcessing.LoginFace(driver, url, account.Id, account.Pass);
+                    driver.Navigate().GoToUrl(url);
+                    Thread.Sleep(1000);
+                    SendKeyByXPath(driver, "//input[@name='email']", account.Id);
+                    SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
+                    Thread.Sleep(1000);
+                    driver.FindElement(By.XPath("//input[@name='login']")).Click();
+                    Thread.Sleep(2000);
+                }
+
                 if (driver.Url.Contains("282")) //1501092823525282
                 {
                     InitHttpRequest(account);

@@ -244,13 +244,22 @@ namespace XMDT
                 if (Convert.ToBoolean(item.Cells["colCheck"].Value))
                 {
                     var index = dgViewInput.Rows.IndexOf(item);
-                    facebookError282.ProcessFacbook(lstAccountInfo[index], KeyResovelCatcha);
+                    facebookError282.ProcessFacbook(lstAccountInfo[index], KeyResovelCatcha, rbLoginCookie.Checked);
                 }
             }
         }
         private void checkpoint282mface_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
+            FacebookError282 facebookError282 = new FacebookError282();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    var index = dgViewInput.Rows.IndexOf(item);
+                    facebookError282.ProcessMBasicFacebook(lstAccountInfo[index], KeyResovelCatcha, rbLoginCookie.Checked);
+                }
+            }
         }
         #endregion
 

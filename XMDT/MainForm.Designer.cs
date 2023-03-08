@@ -303,10 +303,12 @@
             // 
             // colCheck
             // 
+            this.colCheck.FalseValue = "false";
             this.colCheck.HeaderText = "Chọn";
             this.colCheck.IndeterminateValue = "false";
             this.colCheck.MinimumWidth = 8;
             this.colCheck.Name = "colCheck";
+            this.colCheck.TrueValue = "true";
             this.colCheck.Width = 50;
             // 
             // colIndex
