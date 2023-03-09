@@ -248,12 +248,20 @@ namespace XMDT
         }
 
         private void btnAddAccount_Click(object sender, EventArgs e)
-        {
+        {       
             var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             if (itemSelected != null)
             {
+                if (ckOtherFormat.Checked)
+                {
+                    SetConfigInputModel();
+                }
+                else
+                {
+                    configInputModel = lstConfigInputModel[cbInput.SelectedIndex];
+                }
                 CommonFunction commonFunction = new CommonFunction();
-                var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, lstConfigInputModel[cbInput.SelectedIndex]);
+                var lstAccountInfo = commonFunction.GetAccountInfos(rtbAccount.Text, configInputModel);
                 sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo, itemSelected.Value);
                 MainForm.Self.LoadDataGridView();
                 this.Close();
