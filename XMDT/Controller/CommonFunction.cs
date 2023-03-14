@@ -116,7 +116,7 @@ namespace XMDT.Controller
                 foreach (var item in key)
                 {
                     driver.FindElement(By.XPath(xPath)).SendKeys(item.ToString());
-                    Thread.Sleep(50);
+                    Thread.Sleep(random.Next(100));
                 }
             }
             else
@@ -125,19 +125,19 @@ namespace XMDT.Controller
                 for (int i = 0; i < randomIndex; i++)
                 {
                     driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
-                    Thread.Sleep(50);
+                    Thread.Sleep(random.Next(random.Next(200)));
                 }
                 //Ghi 1 chữ cái sai rồi xóa bỏ
                 var character = 65 + random.Next(26);
                 driver.FindElement(By.XPath(xPath)).SendKeys(Convert.ToChar(character).ToString());
-                Thread.Sleep(100);
+                Thread.Sleep(random.Next(200));
                 driver.FindElement(By.XPath(xPath)).SendKeys(Convert.ToChar(8).ToString());
-                Thread.Sleep(100);
+                Thread.Sleep(random.Next(200));
                 driver.FindElement(By.XPath(xPath)).SendKeys(key[randomIndex].ToString());
                 //
                 for (int i = randomIndex + 1; i < key.Length; i++)
                 {
-                    Thread.Sleep(50);
+                    Thread.Sleep(random.Next(200));
                     driver.FindElement(By.XPath(xPath)).SendKeys(key[i].ToString());
                 }
             }
@@ -188,14 +188,20 @@ namespace XMDT.Controller
             {
                 httpRequest = new HttpRequest();
             }
-            httpRequest.UserAgent = account.UserAgent;
-            if(account.TypeProxy == (int) CommonConstant.TypeProxy.HttpProxy)
+            if (!string.IsNullOrEmpty(account.UserAgent))
             {
-                httpRequest.Proxy = HttpProxyClient.Parse(account.Proxy);
+                httpRequest.UserAgent = account.UserAgent;
             }
-            else if(account.TypeProxy == (int)CommonConstant.TypeProxy.Socks5Proxy)
+            if (!string.IsNullOrEmpty(account.Proxy))
             {
-                httpRequest.Proxy = Socks5ProxyClient.Parse(account.Proxy);
+                if (account.TypeProxy == (int)CommonConstant.TypeProxy.HttpProxy)
+                {
+                    httpRequest.Proxy = HttpProxyClient.Parse(account.Proxy);
+                }
+                else if (account.TypeProxy == (int)CommonConstant.TypeProxy.Socks5Proxy)
+                {
+                    httpRequest.Proxy = Socks5ProxyClient.Parse(account.Proxy);
+                }
             }
         }
 

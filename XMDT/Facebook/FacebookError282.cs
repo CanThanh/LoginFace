@@ -9,6 +9,8 @@ using XMDT.Model;
 using xNet;
 using System.Drawing;
 using System.IO;
+using OtpNet;
+using XMDT.Otp;
 
 namespace XMDT.Facebook
 {
@@ -183,6 +185,8 @@ namespace XMDT.Facebook
         public bool ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
         {
             bool result = false;
+            Random random = new Random();
+            string source = "";
             try
             {
                 FacebookProcessing facebookProcessing = new FacebookProcessing();
@@ -193,28 +197,87 @@ namespace XMDT.Facebook
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
                     driver.Navigate().GoToUrl(url);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(random.Next(500,1000));
                 }
                 else
                 {
-                    facebookProcessing.LoginFace(driver, url, account.Id, account.Pass);
+                    //facebookProcessing.LoginFace(driver, url, account.Id, account.Pass, account.TwoFA);
                     driver.Navigate().GoToUrl(url);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(random.Next(500, 1000));
                     SendKeyByXPath(driver, "//input[@name='email']", account.Id);
                     SendKeyByXPath(driver, "//input[@name='pass']", account.Pass);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(random.Next(500, 1000));
                     driver.FindElement(By.XPath("//input[@name='login']")).Click();
-                    Thread.Sleep(2000);
-                }
+                    Thread.Sleep(random.Next(1000, 2000));
+                    string faCode = new Totp(Base32Encoding.ToBytes(account.TwoFA)).ComputeTotp();
+                    SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
+                    driver.FindElement(By.XPath("//input[@type='submit']")).Click();
+                    Thread.Sleep(random.Next(500, 1000));
+                    var radioBtn = driver.FindElements(By.Name("name_action_selected"));
+                    for (int i = 0; i < radioBtn.Count; i++)
+                    {
+                        string val = radioBtn[i].GetAttribute("value");
+                        if (val.ToLower() == "dont_save")
+                        {
+                            radioBtn[i].Click();
+                            driver.FindElement(By.XPath("//input[@type='submit']")).Click();
+                            Thread.Sleep(random.Next(500, 1000));
+                        }
+                    }
+                    source = driver.PageSource;
+                    if(source.Contains("checkpointSubmitButton-actual-button"))
+                    {
+                        driver.FindElement(By.XPath("//input[@id='checkpointSubmitButton-actual-button']")).Click();
+                        Thread.Sleep(random.Next(500, 1000));
+                        source = driver.PageSource;
+                    }
+   
+                    if (source.Contains("checkpointSubmitButton-actual-button"))
+                    {
+                        driver.FindElement(By.XPath("//input[@id='checkpointSubmitButton-actual-button']")).Click();
+                        Thread.Sleep(random.Next(500, 1000));
+                        source = driver.PageSource;
+                    }
+                    if (source.Contains("name_action_selected"))
+                    {
+                        radioBtn = driver.FindElements(By.Name("name_action_selected"));
+                        for (int i = 0; i < radioBtn.Count; i++)
+                        {
+                            string val = radioBtn[i].GetAttribute("value");
+                            if (val.ToLower() == "dont_save")
+                            {
+                                radioBtn[i].Click();
+                                driver.FindElement(By.XPath("//input[@id='checkpointSubmitButton-actual-button']")).Click();
+                                Thread.Sleep(random.Next(500, 1000));
+                                source = driver.PageSource;
+                            }
+                        }
+                    }
 
+                    if (source.Contains("action_proceed"))
+                    {
+                        driver.FindElement(By.XPath("//input[@name='action_proceed']")).Click();
+                        Thread.Sleep(random.Next(500, 1000));
+                    }
+                }
+                Thread.Sleep(random.Next(1000, 2000));
                 if (driver.Url.Contains("282")) //1501092823525282
                 {
-                    InitHttpRequest(account);
-                    AddCookie(httpRequest, account.Cookie);
+                    //InitHttpRequest(account);
+                    //if (loginCookie)
+                    //{
+                    //    AddCookie(httpRequest, account.Cookie);
+                    //}
+                    //else
+                    //{
+                    //    var cookie = driver.GetCookie();
+                    //    AddCookie(httpRequest, account.Cookie);
+                    //}
+
                     var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
                     account.DTSG = dtsg;
                     ////Get base64 captcha
-                    string source = driver.PageSource;
+                    source = driver.PageSource;
                     if (source.Contains("captcha_persist_data"))
                     {
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
@@ -244,14 +307,58 @@ namespace XMDT.Facebook
                         driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
                         driver.Navigate().GoToUrl(url);
                         Thread.Sleep(2000);
+                        source = driver.PageSource;
                     }
 
-                    source = driver.PageSource;
+                    if (source.Contains("action_set_contact_point"))
+                    {
+                        OtpProcessing otpProcessing = new OtpSell();
+                        //string apiKey = "90e2b1f8fa419d46", appName = "Facebook";
+                        string apiKey = "172c280613d44fc194b2143054690b7e", appName = "Facebook";
+                        string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
+                        string number =  "", idNumber = "", code = "";
+                        int count = 0;
+                        while(count < 5 && string.IsNullOrEmpty(number))
+                        {
+                            number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
+                            SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                            driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                            Thread.Sleep(random.Next(1000));
+                            source = driver.PageSource;
+                            if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                            {
+                                number = "";
+                                otpProcessing.CancelByAppId(apiKey, idNumber);
+                            }
+                            count++;
+                        }
+                        count = 0;
+                        if (!string.IsNullOrEmpty(number))
+                        {
+                            while (count < 5 && string.IsNullOrEmpty(code))
+                            {
+                                Thread.Sleep(60000);
+                                code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
+                                count++;
+                            }
+                        }
+                        if (string.IsNullOrEmpty(code))
+                        {
+                            otpProcessing.CancelByAppId(apiKey, idNumber);
+                        }
+                        else
+                        {
+                            SendKeyByXPath(driver, "//input[@name='code']", code);                           
+                            driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
+                            Thread.Sleep(random.Next(500, 1000));
+                            source = driver.PageSource;
+                        }
+                    }
+
                     if (source.Contains("mobile_image_data"))
                     {
                         if (age == 0)
                         {
-                            Random random = new Random();
                             age = random.Next(18, 60);
                             var randomGender = random.NextDouble();
                             gender = randomGender > 0.5 ? "male" : "female";
@@ -269,6 +376,7 @@ namespace XMDT.Facebook
                         driver.Navigate().GoToUrl(url);
                     }
                 }
+                //driver.Close();
                 result = true;
             }
             catch (Exception ex)

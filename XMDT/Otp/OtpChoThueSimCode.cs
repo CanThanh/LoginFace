@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XMDT.Otp;
 using xNet;
 
 namespace XMDT.Controller
 {
-    internal class OtpProcessing
+    internal class OtpChoThueSimCode : OtpProcessing
     {
-        #region Chothuesimcode
         public int GetBalanceAccount(string apiKey)
         {  
             string url = "https://chothuesimcode.com/api?act=account&apik=" + apiKey;
@@ -36,26 +36,28 @@ namespace XMDT.Controller
                     }
                 }
             }
-            return "abcd";
+            return "";
         }
 
-        public string GetNumberByAppId(string apiKey, string appId)
+        public string GetNumberByAppId(string apiKey, string appId, out string idNumber)
         {
             string url = "https://chothuesimcode.com/api?act=number&apik="+ apiKey +"&appId=" + appId;
+            idNumber = "";
             HttpRequest httpRequest = new HttpRequest();
             var response = httpRequest.Get(url).ToString();
             JObject obj = JObject.Parse(response);
             var responseCode = (int)obj["ResponseCode"];
             if (responseCode == 0)
             {
+                idNumber = (string)obj["Result"]["Id"];
                 return (string)obj["Result"]["Number"];
             }
             return "";
         }
 
-        public string GetCodeNumberByNumber(string apiKey, string number)
+        public string GetCodeByIdService(string apiKey, string idNumber)
         {
-            string url = "https://chothuesimcode.com/api?act=code&apik=" + apiKey+ "&id=" + number;
+            string url = "https://chothuesimcode.com/api?act=code&apik=" + apiKey+ "&id=" + idNumber;
             HttpRequest httpRequest = new HttpRequest();
             var response = httpRequest.Get(url).ToString();
             JObject obj = JObject.Parse(response);
@@ -67,9 +69,9 @@ namespace XMDT.Controller
             return "";
         }
 
-        public bool CancelByAppId(string apiKey, string appId)
+        public bool CancelByAppId(string apiKey, string idNumber)
         {
-            string url = "https://chothuesimcode.com/api?act=expired&apik="+ apiKey + "&id=" + appId;
+            string url = "https://chothuesimcode.com/api?act=expired&apik="+ apiKey + "&id=" + idNumber;
             HttpRequest httpRequest = new HttpRequest();
             var response = httpRequest.Get(url).ToString();
             JObject obj = JObject.Parse(response);
@@ -80,21 +82,5 @@ namespace XMDT.Controller
             }
             return false;
         }
-
-        //OtpProcessing otpProcessing = new OtpProcessing();
-        //string apiKey = "90e2b1f8fa419d46";
-        //string appId = otpProcessing.GetIdApplicationByName(apiKey, "Facebook");
-        //otpProcessing.CancelByAppId(apiKey, appId);
-        //    var number = otpProcessing.GetNumberByAppId(apiKey, appId);
-        //int count = 0;
-        //var code = "";
-        //    while (string.IsNullOrEmpty(code) && count< 10)
-        //    {
-        //        Thread.Sleep(5000);
-        //        code = otpProcessing.GetCodeNumberByNumber(apiKey, number);
-        //        count ++;
-        //    }
-        //MessageBox.Show(code + " ,count:" + count);
-        #endregion Chothuesimcode
     }
 }
