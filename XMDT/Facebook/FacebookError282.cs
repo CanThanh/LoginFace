@@ -376,7 +376,7 @@ namespace XMDT.Facebook
                         driver.Navigate().GoToUrl(url);
                     }
                 }
-                //driver.Close();
+                driver.Close();
                 result = true;
             }
             catch (Exception ex)

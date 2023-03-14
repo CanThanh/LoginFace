@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.PerformanceData;
 using System.IO;
+using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,8 @@ namespace XMDT
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
         string KeyResovelCatcha;
-        int countThread = 3;
+        int countThread = 2;
+        List<int> lstRowDataRun = new List<int>();
         public MainForm()
         {
             InitializeComponent();
@@ -251,15 +253,16 @@ namespace XMDT
         private void checkpoint282mface_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
-            FacebookError282 facebookError282 = new FacebookError282();
+            //FacebookError282 facebookError282 = new FacebookError282();
+            lstRowDataRun.Clear();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
                 if (Convert.ToBoolean(item.Cells["colCheck"].Value))
                 {
-                    var index = dgViewInput.Rows.IndexOf(item);
-                    facebookError282.ProcessMBasicFacebook(lstAccountInfo[index], KeyResovelCatcha, rbLoginCookie.Checked);
+                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
+            RunMultiThread(CheckPointMBasic282);
         }
         #endregion
 
@@ -325,13 +328,14 @@ namespace XMDT
                 t.Start();
             }
         }
-        private void TestThread(int currentIndex)
-        {
-            for (int i = currentIndex; i < 10; i+=countThread)
+        private void CheckPointMBasic282(int currentIndex)
+        {   
+            for (int i = currentIndex; i < lstRowDataRun.Count; i+=countThread)
             {
-                //Thay bằng hàm cần chạy ở đây
-                MessageBox.Show("currentIndex:" + currentIndex + " Hello:" + i);
-                //Console.WriteLine("currentIndex:"+ currentIndex + " Hello:" + i);
+                FacebookError282 facebookError282 = new FacebookError282();
+                var rowIndex = lstRowDataRun[currentIndex];
+                var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+                dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
             }
         }
         #endregion
