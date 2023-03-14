@@ -155,37 +155,37 @@ namespace XMDT
         #region Context Menu GridView
         private void SetCheckColUIdGridView()
         {
+            dgViewInput.ContextMenuStrip.Close();
             if (dgViewInput.SelectedRows.Count > 0)
             {
                 dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
             }
-            dgViewInput.ContextMenuStrip.Close();
         }
         private void cmsUnselectedAll_Click(object sender, EventArgs e)
         {
+            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
-                item.Cells["colCheck"].Value = false;
+                item.Cells["colCheck"].Value = 0;
             }
-            SetCheckColUIdGridView();
         }
 
         private void cmsSelectAll_Click(object sender, EventArgs e)
         {
+            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
                 item.Cells["colCheck"].Value = true;
-            }
-            SetCheckColUIdGridView();
+            }            
         }
 
         private void cmsSelectHightlight_Click(object sender, EventArgs e)
         {
+            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.SelectedRows)
             {
                 item.Cells["colCheck"].Value = true;
             }
-            SetCheckColUIdGridView();
         }
         #endregion
 
@@ -262,7 +262,8 @@ namespace XMDT
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            RunMultiThread(CheckPointMBasic282);
+            //RunMultiThread(CheckPointMBasic282);
+            RunMultiThread();
         }
         #endregion
 
@@ -317,27 +318,49 @@ namespace XMDT
         #endregion
 
         #region MultiThread
-        private void RunMultiThread(Action<int> functionCall)
+        private void RunMultiThread()
         {
-            for (int i = 0; i < countThread; i++)
+            //ThreadPool.SetMaxThreads(countThread, countThread);
+            ParallelOptions parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = countThread;
+            Parallel.ForEach(lstRowDataRun, parallelOptions, itemRow =>
             {
-                int temp = i;
-                Thread t = new Thread(() => {
-                    functionCall(temp);
-                });
-                t.Start();
-            }
+                CheckPointMBasic282(itemRow);
+            });
+            //for (int i = 0; i < lstRowDataRun.Count; i ++)
+            //{
+            //    ThreadPool.QueueUserWorkItem(new WaitCallback(CheckPointMBasic282), i);                
+            //}
         }
-        private void CheckPointMBasic282(int currentIndex)
-        {   
-            for (int i = currentIndex; i < lstRowDataRun.Count; i+=countThread)
-            {
-                FacebookError282 facebookError282 = new FacebookError282();
-                var rowIndex = lstRowDataRun[currentIndex];
-                var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-                dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
-            }
+        private void CheckPointMBasic282(int rowIndex)
+        {
+            FacebookError282 facebookError282 = new FacebookError282();
+            //var rowIndex = lstRowDataRun[(int)currentIndex];
+            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
         }
+
+        //private void RunMultiThread(Action<int> functionCall)
+        //{
+        //    for (int i = 0; i < countThread; i++)
+        //    {
+        //        int temp = i;
+        //        Thread t = new Thread(() => {
+        //            functionCall(temp);
+        //        });
+        //        t.Start();
+        //    }
+        //}
+        //private void CheckPointMBasic282(int currentIndex)
+        //{   
+        //    for (int i = currentIndex; i < lstRowDataRun.Count; i+=countThread)
+        //    {
+        //        FacebookError282 facebookError282 = new FacebookError282();
+        //        var rowIndex = lstRowDataRun[currentIndex];
+        //        var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+        //        dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
+        //    }
+        //}
         #endregion
 
         private void btnRemoveAccount_Click(object sender, EventArgs e)

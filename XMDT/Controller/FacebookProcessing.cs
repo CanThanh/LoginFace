@@ -17,6 +17,7 @@ namespace XMDT.Controller
         {
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArgument("no-sandbox");
+            chromeOptions.AddArgument("--window-size=945,1024");
             //chromeOptions.AddArgument("--auto-open-devtools-for-tabs");
             //chromeOptions.AddArguments("incognito");
             //chromeOptions.AddArgument("--start-maximized");

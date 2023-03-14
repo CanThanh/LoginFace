@@ -288,7 +288,7 @@ namespace XMDT.Facebook
                         var img = Image.FromFile(imgPath);
                         //Diffrence crop mobile/win
                         int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
-                        Rectangle cropArea = new Rectangle(xLocation, 136, 288, 69);
+                        Rectangle cropArea = new Rectangle(180, 130, 280, 77);
                         var imgCaptcha = cropImage(img, cropArea);
                         string imgCaptchaPath = CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
                         imgCaptcha.Save(imgCaptchaPath);
@@ -376,8 +376,8 @@ namespace XMDT.Facebook
                         driver.Navigate().GoToUrl(url);
                     }
                 }
-                driver.Close();
                 result = true;
+                //driver.Close();
             }
             catch (Exception ex)
             {
