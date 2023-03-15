@@ -187,9 +187,9 @@ namespace XMDT.Facebook
         #endregion Process facebook
 
         #region Process MbasicFacebook
-        public string ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
+        public bool ProcessMBasicFacebook(AccountInfo account, int rowIndex, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
         {
-            string result = "Hoàn thành";
+            var result = true;
             Random random = new Random();
             string source = "";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
@@ -198,6 +198,7 @@ namespace XMDT.Facebook
             try
             {
                 //Login by cookie
+                MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Đăng nhập");
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -265,8 +266,7 @@ namespace XMDT.Facebook
                         Thread.Sleep(random.Next(500, 1000));
                     }
                 }
-                Thread.Sleep(random.Next(1000, 2000));
-
+                Thread.Sleep(random.Next(1000, 2000));               
                 if (driver.Url.Contains("282")) //1501092823525282
                 {
                     //InitHttpRequest(account);
@@ -286,6 +286,7 @@ namespace XMDT.Facebook
                     source = driver.PageSource;
                     if (source.Contains("captcha_persist_data"))
                     {
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Captcha");
                         var containName = source.Contains("you're now interacting as");
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
                         ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
@@ -312,7 +313,7 @@ namespace XMDT.Facebook
 
                         if(string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
                         {
-                            result = "Lỗi giả mã captcha";
+                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
                         }
                         else
                         {
@@ -327,6 +328,7 @@ namespace XMDT.Facebook
 
                     if (source.Contains("action_set_contact_point"))
                     {
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
                         OtpProcessing otpProcessing = new OtpSell();
                         //string apiKey = "90e2b1f8fa419d46", appName = "Facebook";
                         string apiKey = "172c280613d44fc194b2143054690b7e", appName = "Facebook";
@@ -360,7 +362,7 @@ namespace XMDT.Facebook
                         if (string.IsNullOrEmpty(code))
                         {
                             otpProcessing.CancelByAppId(apiKey, idNumber);
-                            result = "Lỗi nhận OTP";
+                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
                         }
                         else
                         {
@@ -373,6 +375,7 @@ namespace XMDT.Facebook
 
                     if (source.Contains("mobile_image_data"))
                     {
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
                         if (age == 0)
                         {
                             age = random.Next(18, 60);
@@ -392,16 +395,22 @@ namespace XMDT.Facebook
                         driver.Navigate().GoToUrl(url);
                     }
                 }
-                
+                else if (source.Contains("Your account has been disabled"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Tài khoản bị khoá");
+                    result = false;
+                }
+                result = true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                result = "Exception";
+                MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Exception: " + ex.Message);
+                result = false;
             }
             finally
             {
-                //driver.Close();
+                driver.Close();
             }
             return result;
         }

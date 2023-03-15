@@ -334,8 +334,13 @@ namespace XMDT
         {
             FacebookError282 facebookError282 = new FacebookError282();
             //var rowIndex = lstRowDataRun[(int)currentIndex];
-            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result;
+            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
+        }
+
+        public void SetColNoteGridViewByRow(int rowIndex, string value)
+        {
+            dgViewInput.Rows[rowIndex].Cells["colNote"].Value = value;
         }
 
         //private void RunMultiThread(Action<int> functionCall)
