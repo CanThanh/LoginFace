@@ -400,7 +400,6 @@ namespace XMDT.Facebook
                     MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Tài khoản bị khoá");
                     result = false;
                 }
-                result = true;
             }
             catch (Exception ex)
             {
