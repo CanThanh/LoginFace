@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using OtpNet;
 using XMDT.Otp;
+using System.Windows.Forms;
 
 namespace XMDT.Facebook
 {
@@ -48,6 +49,9 @@ namespace XMDT.Facebook
         public bool ProcessFacbook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false)
         {
             bool result = false;
+            string url = "https://m.facebook.com/";
+            FacebookProcessing facebookProcessing = new FacebookProcessing();
+            var driver = facebookProcessing.InitChromeDriver(account);
             try
             {
                 ////InitRestClientOption(account);
@@ -92,9 +96,6 @@ namespace XMDT.Facebook
 
                 //result = true;
 
-                string url = "https://m.facebook.com/";
-                FacebookProcessing facebookProcessing = new FacebookProcessing();
-                var driver = facebookProcessing.InitChromeDriver(account);
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -125,6 +126,10 @@ namespace XMDT.Facebook
             {
                 Console.WriteLine(ex.Message);
                 result = false;
+            }
+            finally
+            {
+                driver.Close();
             }
 
             return result;
@@ -182,17 +187,17 @@ namespace XMDT.Facebook
         #endregion Process facebook
 
         #region Process MbasicFacebook
-        public bool ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
+        public string ProcessMBasicFacebook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
         {
-            bool result = false;
+            string result = "Hoàn thành";
             Random random = new Random();
             string source = "";
+            FacebookProcessing facebookProcessing = new FacebookProcessing();
+            var driver = facebookProcessing.InitChromeDriver(account);
+            string url = "https://mbasic.facebook.com/";
             try
             {
-                FacebookProcessing facebookProcessing = new FacebookProcessing();
-                var driver = facebookProcessing.InitChromeDriver(account);
                 //Login by cookie
-                string url = "https://mbasic.facebook.com/";
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -261,6 +266,7 @@ namespace XMDT.Facebook
                     }
                 }
                 Thread.Sleep(random.Next(1000, 2000));
+
                 if (driver.Url.Contains("282")) //1501092823525282
                 {
                     //InitHttpRequest(account);
@@ -280,6 +286,7 @@ namespace XMDT.Facebook
                     source = driver.PageSource;
                     if (source.Contains("captcha_persist_data"))
                     {
+                        var containName = source.Contains("you're now interacting as");
                         var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
                         ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
                         Screenshot screenshot = screenshotDriver.GetScreenshot();
@@ -288,7 +295,7 @@ namespace XMDT.Facebook
                         var img = Image.FromFile(imgPath);
                         //Diffrence crop mobile/win
                         int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
-                        Rectangle cropArea = new Rectangle(180, 130, 280, 77);
+                        Rectangle cropArea = new Rectangle(180, containName ? 135: 105, 250, 66);
                         var imgCaptcha = cropImage(img, cropArea);
                         string imgCaptchaPath = CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
                         imgCaptcha.Save(imgCaptchaPath);
@@ -302,12 +309,20 @@ namespace XMDT.Facebook
                         //var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
                         //var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
                         //Load page to up img
-                        facebookProcessing.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
-                        Thread.Sleep(300);
-                        driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
-                        driver.Navigate().GoToUrl(url);
-                        Thread.Sleep(2000);
-                        source = driver.PageSource;
+
+                        if(string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
+                        {
+                            result = "Lỗi giả mã captcha";
+                        }
+                        else
+                        {
+                            facebookProcessing.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
+                            Thread.Sleep(300);
+                            driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
+                            driver.Navigate().GoToUrl(url);
+                            Thread.Sleep(2000);
+                            source = driver.PageSource;
+                        }
                     }
 
                     if (source.Contains("action_set_contact_point"))
@@ -345,6 +360,7 @@ namespace XMDT.Facebook
                         if (string.IsNullOrEmpty(code))
                         {
                             otpProcessing.CancelByAppId(apiKey, idNumber);
+                            result = "Lỗi nhận OTP";
                         }
                         else
                         {
@@ -376,13 +392,16 @@ namespace XMDT.Facebook
                         driver.Navigate().GoToUrl(url);
                     }
                 }
-                result = true;
-                //driver.Close();
+                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                result = false;
+                result = "Exception";
+            }
+            finally
+            {
+                //driver.Close();
             }
             return result;
         }

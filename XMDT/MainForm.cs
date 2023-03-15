@@ -25,13 +25,12 @@ namespace XMDT
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
         string KeyResovelCatcha;
-        int countThread = 2;
+        int countThread = 3;
         List<int> lstRowDataRun = new List<int>();
         public MainForm()
         {
             InitializeComponent();
             Self = this;
-            //RunMultiThread(TestThread);
             commonFunction = new CommonFunction();
             //configUserAgent_Proxy = new ConfigUserAgent_Proxy();
             //SQLiteProcessing sQLiteProcessing = new SQLiteProcessing();
@@ -39,7 +38,6 @@ namespace XMDT
             InitComboBoxFile();
             LoadDataGridView();
             KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
-            
         }
 
         #region InitData when Form Load
@@ -325,7 +323,7 @@ namespace XMDT
             parallelOptions.MaxDegreeOfParallelism = countThread;
             Parallel.ForEach(lstRowDataRun, parallelOptions, itemRow =>
             {
-                CheckPointMBasic282(itemRow);
+                lock((object)itemRow) { CheckPointMBasic282(itemRow); }
             });
             //for (int i = 0; i < lstRowDataRun.Count; i ++)
             //{
@@ -337,7 +335,7 @@ namespace XMDT
             FacebookError282 facebookError282 = new FacebookError282();
             //var rowIndex = lstRowDataRun[(int)currentIndex];
             var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result;
         }
 
         //private void RunMultiThread(Action<int> functionCall)
