@@ -65,6 +65,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rbLoginCookie = new System.Windows.Forms.RadioButton();
             this.rbLoginUP = new System.Windows.Forms.RadioButton();
+            this.checkStatusAccount = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -263,12 +264,13 @@
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsSelected,
             this.cmsUnselectedAll,
-            this.cmsFacebook});
+            this.cmsFacebook,
+            this.checkStatusAccount});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip.ShowCheckMargin = true;
             this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(161, 73);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 117);
             // 
             // cmsSelected
             // 
@@ -276,7 +278,7 @@
             this.cmsSelectAll,
             this.cmsSelectHightlight});
             this.cmsSelected.Name = "cmsSelected";
-            this.cmsSelected.Size = new System.Drawing.Size(160, 22);
+            this.cmsSelected.Size = new System.Drawing.Size(180, 22);
             this.cmsSelected.Text = "Chọn";
             // 
             // cmsSelectAll
@@ -310,7 +312,7 @@
             this.checkpoint282mface,
             this.cmsCheckpoint956});
             this.cmsFacebook.Name = "cmsFacebook";
-            this.cmsFacebook.Size = new System.Drawing.Size(160, 22);
+            this.cmsFacebook.Size = new System.Drawing.Size(180, 22);
             this.cmsFacebook.Text = "Giải check point";
             // 
             // cmsCheckpoint282mabsic
@@ -395,6 +397,13 @@
             this.rbLoginUP.Text = "Đăng nhập U/P";
             this.rbLoginUP.UseVisualStyleBackColor = true;
             // 
+            // checkStatusAccount
+            // 
+            this.checkStatusAccount.Name = "checkStatusAccount";
+            this.checkStatusAccount.Size = new System.Drawing.Size(180, 22);
+            this.checkStatusAccount.Text = "Check tài khoản";
+            this.checkStatusAccount.Click += new System.EventHandler(this.checkStatusAccount_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -458,6 +467,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
+        private System.Windows.Forms.ToolStripMenuItem checkStatusAccount;
     }
 }
 

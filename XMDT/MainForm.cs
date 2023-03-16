@@ -261,7 +261,7 @@ namespace XMDT
                 }
             }
             //RunMultiThread(CheckPointMBasic282);
-            RunMultiThread();
+            RunMultiThread(CheckPointMBasic282);
         }
         #endregion
 
@@ -316,14 +316,14 @@ namespace XMDT
         #endregion
 
         #region MultiThread
-        private void RunMultiThread()
+        private void RunMultiThread(Action<int> actionName)
         {
             //ThreadPool.SetMaxThreads(countThread, countThread);
             ParallelOptions parallelOptions = new ParallelOptions();
             parallelOptions.MaxDegreeOfParallelism = countThread;
             Parallel.ForEach(lstRowDataRun, parallelOptions, itemRow =>
             {
-                lock((object)itemRow) { CheckPointMBasic282(itemRow); }
+                lock((object)itemRow) { actionName(itemRow); }
             });
             //for (int i = 0; i < lstRowDataRun.Count; i ++)
             //{
@@ -384,6 +384,27 @@ namespace XMDT
                 sqLiteProcessing.DeleteListAccount(lstUserId, itemSelected.Value);
                 LoadDataGridView();
             }
+        }
+
+        private void checkStatusAccount_Click(object sender, EventArgs e)
+        {
+            dgViewInput.ContextMenuStrip.Close();
+            lstRowDataRun.Clear();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
+                }
+            }
+            RunMultiThread(CheckStatusAccount);
+        }
+        private void CheckStatusAccount(int rowIndex)
+        {
+            FacebookProcessing facebookProcessing = new FacebookProcessing();
+            string url = "https://mbasic.facebook.com/";
+            var result = facebookProcessing.CheckStatusAccount(lstAccountInfo[rowIndex], url, rowIndex, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Sống" : "Checkpoint";
         }
     }
 }

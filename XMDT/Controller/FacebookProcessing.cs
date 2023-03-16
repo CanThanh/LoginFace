@@ -10,6 +10,7 @@ using XMDT.Model;
 using static XMDT.Model.CommonConstant;
 using System.IO;
 using System.Drawing;
+using System.Security.Principal;
 
 namespace XMDT.Controller
 {
@@ -178,36 +179,59 @@ namespace XMDT.Controller
         #region Login
         public void LoginFace(ChromeDriver driver, string url, string user, string pass, string twoFA)
         {
-            driver.Url = url;
+            Random random = new Random();
+            string source = "";
             driver.Navigate().GoToUrl(url);
-            Thread.Sleep(1000);
+            Thread.Sleep(random.Next(500, 1000));
             SendKeyByXPath(driver, "//input[@name='email']", user);
             SendKeyByXPath(driver, "//input[@name='pass']", pass);
-            Thread.Sleep(1000);
-            driver.FindElement(By.XPath("//button[@name='login']")).Click();
-            Thread.Sleep(3000);
-            var html = driver.FindElement(By.XPath("html")).GetInnerHTML();
-            var nodeCode = driver.FindElement(By.XPath("//input[@name='approvals_code']"));
-            //https://m.facebook.com/checkpoint/?__req=4
-            if (nodeCode != null)
+            string elementXpath = url.Contains("mbasic") ? "//input" : "//button";
+            Thread.Sleep(random.Next(500, 1000));
+            driver.FindElement(By.XPath(elementXpath + "[@name='login']")).Click();
+            Thread.Sleep(random.Next(1000, 2000));
+            string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
+            SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
+            driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
+            Thread.Sleep(random.Next(500, 1000));
+            var radioBtn = driver.FindElements(By.Name("name_action_selected"));
+            for (int i = 0; i < radioBtn.Count; i++)
             {
-                string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
-                SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
-                Thread.Sleep(1000);
-                driver.FindElement(By.XPath("//button[@type='submit']")).Click();
-                Thread.Sleep(2000);
-                var radioBtn = driver.FindElements(By.Name("name_action_selected"));
+                string val = radioBtn[i].GetAttribute("value");
+                if (val.ToLower() == "dont_save")
+                {
+                    radioBtn[i].Click();
+                    driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
+                    Thread.Sleep(random.Next(500, 1000));
+                }
+            }
+            source = driver.PageSource;
+            if (source.Contains("checkpointSubmitButton-actual-button"))
+            {
+                driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                Thread.Sleep(random.Next(500, 1000));
+                source = driver.PageSource;
+            }
+
+            if (source.Contains("checkpointSubmitButton-actual-button"))
+            {
+                driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                Thread.Sleep(random.Next(500, 1000));
+                source = driver.PageSource;
+            }
+            if (source.Contains("name_action_selected"))
+            {
+                radioBtn = driver.FindElements(By.Name("name_action_selected"));
                 for (int i = 0; i < radioBtn.Count; i++)
                 {
                     string val = radioBtn[i].GetAttribute("value");
                     if (val.ToLower() == "dont_save")
                     {
                         radioBtn[i].Click();
+                        driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                        Thread.Sleep(random.Next(500, 1000));
                     }
                 }
-                Thread.Sleep(1000);
-                driver.FindElement(By.XPath("//button[@type='submit']")).Click();
-            }
+            }           
         }
 
         public void LoginFace(ChromeDriver driver, string url, string user, string pass)
@@ -346,5 +370,45 @@ namespace XMDT.Controller
             return response;
         }
         #endregion
+        
+        public bool CheckStatusAccount(AccountInfo accountInfo, string url, int rowIndex, bool isLoginCookie)
+        {
+            var result = true;
+            var driver = InitChromeDriver(accountInfo);
+            try
+            {
+                if (isLoginCookie)
+                {
+                    LoginCookie(driver, url, accountInfo.Cookie);
+                }
+                else
+                {
+                    if(string.IsNullOrEmpty(accountInfo.TwoFA))
+                    {
+                        LoginFace(driver, url, accountInfo.Id, accountInfo.Pass);
+                    }
+                    else
+                    {
+                        LoginFace(driver, url, accountInfo.Id, accountInfo.Pass, accountInfo.TwoFA);
+                    }
+                }
+                string source = driver.PageSource;
+                if (source.Contains("Your account has been disabled"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Tài khoản bị khoá");
+                    result = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Exception: " + ex.Message);
+                result = false;
+            }
+            finally
+            {
+                driver.Close();
+            }
+            return result;
+        }
     }
 }

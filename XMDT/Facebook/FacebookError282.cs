@@ -394,12 +394,7 @@ namespace XMDT.Facebook
                         driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
                         driver.Navigate().GoToUrl(url);
                     }
-                }
-                else if (source.Contains("Your account has been disabled"))
-                {
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Tài khoản bị khoá");
-                    result = false;
-                }
+                }                
             }
             catch (Exception ex)
             {
