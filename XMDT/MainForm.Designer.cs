@@ -56,16 +56,18 @@
             this.cmsSelectHightlight = new System.Windows.Forms.ToolStripTextBox();
             this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
             this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint282mabsic = new System.Windows.Forms.ToolStripTextBox();
-            this.checkpoint282mface = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsCheckpoint956 = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCheckPoint282 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCheckPoint956 = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCheckStatusAccount = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFile = new System.Windows.Forms.ComboBox();
             this.btnRemoveAccount = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.rbLoginCookie = new System.Windows.Forms.RadioButton();
             this.rbLoginUP = new System.Windows.Forms.RadioButton();
-            this.checkStatusAccount = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCP282MBasic = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCP282M = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCP282 = new System.Windows.Forms.ToolStripTextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -265,7 +267,7 @@
             this.cmsSelected,
             this.cmsUnselectedAll,
             this.cmsFacebook,
-            this.checkStatusAccount});
+            this.cmsCheckStatusAccount});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip.ShowCheckMargin = true;
@@ -308,34 +310,35 @@
             // cmsFacebook
             // 
             this.cmsFacebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmsCheckpoint282mabsic,
-            this.checkpoint282mface,
-            this.cmsCheckpoint956});
+            this.cmsCheckPoint282,
+            this.cmsCheckPoint956});
             this.cmsFacebook.Name = "cmsFacebook";
             this.cmsFacebook.Size = new System.Drawing.Size(180, 22);
             this.cmsFacebook.Text = "Giải check point";
             // 
-            // cmsCheckpoint282mabsic
+            // cmsCheckPoint282
             // 
-            this.cmsCheckpoint282mabsic.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCheckpoint282mabsic.Name = "cmsCheckpoint282mabsic";
-            this.cmsCheckpoint282mabsic.Size = new System.Drawing.Size(100, 23);
-            this.cmsCheckpoint282mabsic.Text = "Checkpoint 282 (mbasic)";
-            this.cmsCheckpoint282mabsic.Click += new System.EventHandler(this.cmsCheckpoint282mbasic_Click);
+            this.cmsCheckPoint282.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsCP282MBasic,
+            this.cmsCP282M,
+            this.cmsCP282});
+            this.cmsCheckPoint282.Name = "cmsCheckPoint282";
+            this.cmsCheckPoint282.Size = new System.Drawing.Size(180, 22);
+            this.cmsCheckPoint282.Text = "Checkpoint 282";
             // 
-            // checkpoint282mface
+            // cmsCheckPoint956
             // 
-            this.checkpoint282mface.Name = "checkpoint282mface";
-            this.checkpoint282mface.Size = new System.Drawing.Size(200, 22);
-            this.checkpoint282mface.Text = "Checkpoint 282 (mface)";
-            this.checkpoint282mface.Click += new System.EventHandler(this.checkpoint282mface_Click);
+            this.cmsCheckPoint956.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCheckPoint956.Name = "cmsCheckPoint956";
+            this.cmsCheckPoint956.Size = new System.Drawing.Size(100, 23);
+            this.cmsCheckPoint956.Text = "Check point 956";
             // 
-            // cmsCheckpoint956
+            // cmsCheckStatusAccount
             // 
-            this.cmsCheckpoint956.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCheckpoint956.Name = "cmsCheckpoint956";
-            this.cmsCheckpoint956.Size = new System.Drawing.Size(100, 23);
-            this.cmsCheckpoint956.Text = "Check point 956";
+            this.cmsCheckStatusAccount.Name = "cmsCheckStatusAccount";
+            this.cmsCheckStatusAccount.Size = new System.Drawing.Size(180, 22);
+            this.cmsCheckStatusAccount.Text = "Check tài khoản";
+            this.cmsCheckStatusAccount.Click += new System.EventHandler(this.checkStatusAccount_Click);
             // 
             // label1
             // 
@@ -397,12 +400,29 @@
             this.rbLoginUP.Text = "Đăng nhập U/P";
             this.rbLoginUP.UseVisualStyleBackColor = true;
             // 
-            // checkStatusAccount
+            // cmsCP282MBasic
             // 
-            this.checkStatusAccount.Name = "checkStatusAccount";
-            this.checkStatusAccount.Size = new System.Drawing.Size(180, 22);
-            this.checkStatusAccount.Text = "Check tài khoản";
-            this.checkStatusAccount.Click += new System.EventHandler(this.checkStatusAccount_Click);
+            this.cmsCP282MBasic.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282MBasic.Name = "cmsCP282MBasic";
+            this.cmsCP282MBasic.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282MBasic.Text = "MBasic Facebook";
+            this.cmsCP282MBasic.Click += new System.EventHandler(this.cmsCP282MBasic_Click);
+            // 
+            // cmsCP282M
+            // 
+            this.cmsCP282M.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282M.Name = "cmsCP282M";
+            this.cmsCP282M.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282M.Text = "M Facebook";
+            this.cmsCP282M.Click += new System.EventHandler(this.cmsCP282M_Click);
+            // 
+            // cmsCP282
+            // 
+            this.cmsCP282.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282.Name = "cmsCP282";
+            this.cmsCP282.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282.Text = "Facebook";
+            this.cmsCP282.Click += new System.EventHandler(this.cmsCP282_Click);
             // 
             // MainForm
             // 
@@ -444,12 +464,11 @@
         private System.Windows.Forms.ToolStripTextBox cmsSelectHightlight;
         private System.Windows.Forms.ToolStripTextBox cmsUnselectedAll;
         private System.Windows.Forms.ToolStripMenuItem cmsFacebook;
-        private System.Windows.Forms.ToolStripTextBox cmsCheckpoint282mabsic;
-        private System.Windows.Forms.ToolStripTextBox cmsCheckpoint956;
+        private System.Windows.Forms.ToolStripTextBox cmsCheckPoint956;
         private System.Windows.Forms.ToolStripMenuItem dataInput;
         private System.Windows.Forms.ToolStripMenuItem addUserAgent;
         private System.Windows.Forms.ToolStripMenuItem addProxy;
-        private System.Windows.Forms.ToolStripMenuItem checkpoint282mface;
+        private System.Windows.Forms.ToolStripMenuItem cmsCheckPoint282;
         private System.Windows.Forms.Button btnRemoveAccount;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton rbLoginCookie;
@@ -467,7 +486,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colUserAgent;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
-        private System.Windows.Forms.ToolStripMenuItem checkStatusAccount;
+        private System.Windows.Forms.ToolStripMenuItem cmsCheckStatusAccount;
+        private System.Windows.Forms.ToolStripTextBox cmsCP282MBasic;
+        private System.Windows.Forms.ToolStripTextBox cmsCP282M;
+        private System.Windows.Forms.ToolStripTextBox cmsCP282;
     }
 }
 

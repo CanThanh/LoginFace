@@ -187,7 +187,7 @@ namespace XMDT
         }
         #endregion
 
-        #region Process Error Facebook in contextmenu DatagridView
+        #region Process 282 Facebook in contextmenu DatagridView
         private AccountInfo ConvertRowGridViewToAccountInfo(int rowIndex)
         {
             var accountInfo = new AccountInfo();
@@ -210,48 +210,10 @@ namespace XMDT
             }
             return accountInfo;
         }
-        private void cmsCheckpoint282_Click(object sender, EventArgs e)
-        {
-            ////Đa luồng cần proxy đa luồng
-            //for (int i = 0; i < nUDThread.Value; i++)
-            //{
-            //    var account = lstAccount[i];
-            //    account.UserAgent = txtUserAgent.Text;
-            //    account.TypeProxy = (int)CommonConstant.TypeProxy.HttpProxy;
-            //    account.Proxy = txtProxy.Text;
-            //    Task t = new Task(() =>
-            //    {
-            //        facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
-            //    });
-            //    t.Start();
-            //}
 
-            //var account = lstAccount[9];
-            ////account.UserAgent = "Mozilla/5.0 (Linux; Android 10; SCV47 Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/84.0.4147.111 Mobile Safari/537.36";
-            //account.UserAgent = "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36";
-            //account.TypeProxy = (int) CommonConstant.TypeProxy.HttpProxy;
-            ////account.Proxy = "95.85.24.83:8118";
-            //account.Proxy = "154.236.189.5:8080";
-            //facebookError282.ProcessMBasicFacebook(account, "90b9de403cd4c42f45a4f9048760dec0");
-        }
-
-        private void cmsCheckpoint282mbasic_Click(object sender, EventArgs e)
+        private void cmsCP282MBasic_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
-            FacebookError282 facebookError282 = new FacebookError282();
-            foreach (DataGridViewRow item in dgViewInput.Rows)
-            {
-                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
-                {
-                    var index = dgViewInput.Rows.IndexOf(item);
-                    facebookError282.ProcessFacbook(lstAccountInfo[index], KeyResovelCatcha, rbLoginCookie.Checked);
-                }
-            }
-        }
-        private void checkpoint282mface_Click(object sender, EventArgs e)
-        {
-            dgViewInput.ContextMenuStrip.Close();
-            //FacebookError282 facebookError282 = new FacebookError282();
             lstRowDataRun.Clear();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
@@ -260,8 +222,35 @@ namespace XMDT
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            //RunMultiThread(CheckPointMBasic282);
             RunMultiThread(CheckPointMBasic282);
+        }
+
+        private void cmsCP282M_Click(object sender, EventArgs e)
+        {
+            dgViewInput.ContextMenuStrip.Close();
+            lstRowDataRun.Clear();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
+                }
+            }
+            RunMultiThread(CheckPointMFacebook282);
+        }
+
+        private void cmsCP282_Click(object sender, EventArgs e)
+        {
+            dgViewInput.ContextMenuStrip.Close();
+            lstRowDataRun.Clear();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
+                }
+            }
+            RunMultiThread(CheckPointFacebook282);
         }
         #endregion
 
@@ -325,45 +314,31 @@ namespace XMDT
             {
                 lock((object)itemRow) { actionName(itemRow); }
             });
-            //for (int i = 0; i < lstRowDataRun.Count; i ++)
-            //{
-            //    ThreadPool.QueueUserWorkItem(new WaitCallback(CheckPointMBasic282), i);                
-            //}
         }
         private void CheckPointMBasic282(int rowIndex)
         {
             FacebookError282 facebookError282 = new FacebookError282();
-            //var rowIndex = lstRowDataRun[(int)currentIndex];
             var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
 
+        private void CheckPointMFacebook282(int rowIndex)
+        {
+            FacebookError282 facebookError282 = new FacebookError282();
+            var result = facebookError282.ProcessFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
+        }
+
+        private void CheckPointFacebook282(int rowIndex)
+        {
+            FacebookError282 facebookError282 = new FacebookError282();
+            var result = facebookError282.ProcessFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
+        }
         public void SetColNoteGridViewByRow(int rowIndex, string value)
         {
             dgViewInput.Rows[rowIndex].Cells["colNote"].Value = value;
         }
-
-        //private void RunMultiThread(Action<int> functionCall)
-        //{
-        //    for (int i = 0; i < countThread; i++)
-        //    {
-        //        int temp = i;
-        //        Thread t = new Thread(() => {
-        //            functionCall(temp);
-        //        });
-        //        t.Start();
-        //    }
-        //}
-        //private void CheckPointMBasic282(int currentIndex)
-        //{   
-        //    for (int i = currentIndex; i < lstRowDataRun.Count; i+=countThread)
-        //    {
-        //        FacebookError282 facebookError282 = new FacebookError282();
-        //        var rowIndex = lstRowDataRun[currentIndex];
-        //        var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-        //        dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Lỗi";
-        //    }
-        //}
         #endregion
 
         private void btnRemoveAccount_Click(object sender, EventArgs e)

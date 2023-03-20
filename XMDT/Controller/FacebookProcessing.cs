@@ -190,7 +190,7 @@ namespace XMDT.Controller
             driver.FindElement(By.XPath(elementXpath + "[@name='login']")).Click();
             Thread.Sleep(random.Next(1000, 2000));
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
-            SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
+            SendKeyByXPath(driver, elementXpath + "[@name='approvals_code']", faCode);
             driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
             Thread.Sleep(random.Next(500, 1000));
             var radioBtn = driver.FindElements(By.Name("name_action_selected"));
@@ -231,7 +231,8 @@ namespace XMDT.Controller
                         Thread.Sleep(random.Next(500, 1000));
                     }
                 }
-            }           
+            }
+            Thread.Sleep(random.Next(500, 1000));
         }
 
         public void LoginFace(ChromeDriver driver, string url, string user, string pass)
@@ -373,7 +374,7 @@ namespace XMDT.Controller
         
         public bool CheckStatusAccount(AccountInfo accountInfo, string url, int rowIndex, bool isLoginCookie)
         {
-            var result = true;
+            var result = false;
             var driver = InitChromeDriver(accountInfo);
             try
             {
@@ -392,11 +393,14 @@ namespace XMDT.Controller
                         LoginFace(driver, url, accountInfo.Id, accountInfo.Pass, accountInfo.TwoFA);
                     }
                 }
-                string source = driver.PageSource;
-                if (source.Contains("Your account has been disabled"))
+                
+                if (!driver.Url.Contains("checkpoint"))
                 {
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Tài khoản bị khoá");
-                    result = false;
+                    result = true;
+                }
+                else
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, driver.Url);
                 }
             }
             catch (Exception ex)
@@ -406,7 +410,7 @@ namespace XMDT.Controller
             }
             finally
             {
-                driver.Close();
+                //driver.Close();
             }
             return result;
         }
