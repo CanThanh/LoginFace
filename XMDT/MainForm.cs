@@ -325,7 +325,7 @@ namespace XMDT
         private void CheckPointMFacebook282(int rowIndex)
         {
             FacebookError282 facebookError282 = new FacebookError282();
-            var result = facebookError282.ProcessFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
+            var result = facebookError282.ProcessMFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
 

@@ -181,6 +181,7 @@ namespace XMDT.Controller
         {
             Random random = new Random();
             string source = "";
+            string idButtonSubmit = (url.Contains("mbasic") || url.Contains("m.facebook.com")) ? "checkpointSubmitButton-actual-button" : "checkpointSubmitButton";
             driver.Navigate().GoToUrl(url);
             Thread.Sleep(random.Next(500, 1000));
             SendKeyByXPath(driver, "//input[@name='email']", user);
@@ -190,7 +191,7 @@ namespace XMDT.Controller
             driver.FindElement(By.XPath(elementXpath + "[@name='login']")).Click();
             Thread.Sleep(random.Next(1000, 2000));
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
-            SendKeyByXPath(driver, elementXpath + "[@name='approvals_code']", faCode);
+            SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
             driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
             Thread.Sleep(random.Next(500, 1000));
             var radioBtn = driver.FindElements(By.Name("name_action_selected"));
@@ -204,17 +205,17 @@ namespace XMDT.Controller
                     Thread.Sleep(random.Next(500, 1000));
                 }
             }
-            source = driver.PageSource;
-            if (source.Contains("checkpointSubmitButton-actual-button"))
+
+            source = driver.PageSource;           
+            if (source.Contains(idButtonSubmit))
             {
-                driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                driver.FindElement(By.XPath(elementXpath + "[@id='" + idButtonSubmit + "']")).Click();
                 Thread.Sleep(random.Next(500, 1000));
                 source = driver.PageSource;
             }
-
-            if (source.Contains("checkpointSubmitButton-actual-button"))
+            if (source.Contains(idButtonSubmit))
             {
-                driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                driver.FindElement(By.XPath(elementXpath + "[@id='" + idButtonSubmit + "']")).Click();
                 Thread.Sleep(random.Next(500, 1000));
                 source = driver.PageSource;
             }
@@ -227,10 +228,16 @@ namespace XMDT.Controller
                     if (val.ToLower() == "dont_save")
                     {
                         radioBtn[i].Click();
-                        driver.FindElement(By.XPath(elementXpath + "[@id='checkpointSubmitButton-actual-button']")).Click();
+                        driver.FindElement(By.XPath(elementXpath + "[@id='" + idButtonSubmit + "']")).Click();
                         Thread.Sleep(random.Next(500, 1000));
+                        source = driver.PageSource;
                     }
                 }
+            }
+            if (source.Contains("action_proceed"))
+            {
+                driver.FindElement(By.XPath(elementXpath + "[@name='action_proceed']")).Click();
+                Thread.Sleep(random.Next(500, 1000));
             }
             Thread.Sleep(random.Next(500, 1000));
         }
