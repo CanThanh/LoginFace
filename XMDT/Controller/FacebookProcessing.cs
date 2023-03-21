@@ -189,7 +189,7 @@ namespace XMDT.Controller
             string elementXpath = url.Contains("mbasic") ? "//input" : "//button";
             Thread.Sleep(random.Next(500, 1000));
             driver.FindElement(By.XPath(elementXpath + "[@name='login']")).Click();
-            Thread.Sleep(random.Next(1000, 2000));
+            Thread.Sleep(random.Next(2000, 3000));
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
             SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
             driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();

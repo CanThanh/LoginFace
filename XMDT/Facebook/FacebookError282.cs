@@ -147,6 +147,7 @@ namespace XMDT.Facebook
             string source = "";
             string url = "https://m.facebook.com/";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
+            account.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
             var driver = facebookProcessing.InitChromeDriver(account);
             try
             {
@@ -191,10 +192,12 @@ namespace XMDT.Facebook
                 //var temp = ApiSubmit(restClient, url, account.Id, dtsg, variablesResolveCaptcha);
 
                 //result = true;
-
+                account.Cookie = "m_page_voice=100017654444654;xs=45%3AfCCAQNKoOMQ7mQ%3A2%3A1679361937%3A-1%3A14806;c_user=100017654444654;locale=en_GB;wd=912x891;m_pixel_ratio=1;fr=0APtK9R0LApAZZO8z.AWXP0pBdqT4SCTHfBvexnDc83yc.BkGQeF.Qj.AAA.0.0.BkGQeQ.AWVRhCTgdAk;sb=hQcZZMh5fO1F-A5KVJRiJg13;datr=hQcZZDPgMwcQfrW-a9ycF0IF";
+                loginCookie = true;
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
+                    driver.Navigate().GoToUrl(url);
                 }
                 else
                 {
@@ -205,17 +208,20 @@ namespace XMDT.Facebook
                 url = "https://fbsbx.com/captcha/recaptcha/iframe/?referer=https%3A%2F%2Fm.facebook.com&compact=1&__cci=" + consent_param;
                 var html = facebookProcessing.GetData(url);
                 var googleKey = html.Split(new[] { "data-sitekey=\"" }, StringSplitOptions.None)[1].Split('"')[0];
-                if (source.Contains("g-recaptcha"))
-                {
-                    var divGoogleKey = driver.FindElement(By.XPath("//div[@class='g-recaptcha']"));
-                    googleKey = divGoogleKey.GetAttribute("g-recaptcha");
-                }
+                //if (source.Contains("g-recaptcha"))
+                //{
+                //    var divGoogleKey = driver.FindElement(By.XPath("//div[@class='g-recaptcha']"));
+                //    googleKey = divGoogleKey.GetAttribute("g-recaptcha");
+                //}
+
+                var cookie = GetCookie(driver);
                     
                 Thread.Sleep(random.Next(1000, 2000));
-                string outputCapcha = Reslove2CaptchaCaptcha(resolveCaptchaKey, googleKey, driver.Url);
+                //string outputCapchaTinhTe = Reslove2CaptchaCaptcha(resolveCaptchaKey, "6Lcu4xETAAAAAL0G3MupA6JlFWCoLxyo2__C6OyB", "https://tinhte.vn/register/", "");
+                string outputCapcha = Reslove2CaptchaCaptcha(resolveCaptchaKey, googleKey, driver.Url, cookie);
                 if (!string.IsNullOrEmpty(outputCapcha))
                 {
-                    driver.FindElement(By.XPath("//div[@name='action_submit_bot_captcha_response']")).Click();
+                //    driver.FindElement(By.XPath("//div[@name='action_submit_bot_captcha_response']")).Click();
                 }
             }
             catch (Exception ex)
@@ -413,7 +419,7 @@ namespace XMDT.Facebook
         }
         #endregion Process MbasicFacebook
 
-        string Reslove2CaptchaCaptcha(string captchaKey, string ggKey, string url)
+        string Reslove2CaptchaCaptcha(string captchaKey, string ggKey, string url, string cookie = "")
         {
             string capt = "";
             ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
