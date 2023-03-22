@@ -9,23 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Form\ConfigImage.cs" />
-    <Compile Remove="Form\ConfigImage.Designer.cs" />
-    <Compile Remove="Form\ConfigInput.cs" />
-    <Compile Remove="Form\ConfigInput.Designer.cs" />
-    <Compile Remove="Form\ConfigUserAgent_Proxy.cs" />
-    <Compile Remove="Form\ConfigUserAgent_Proxy.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Form\ConfigImage.resx" />
-    <EmbeddedResource Remove="Form\ConfigInput.resx" />
-    <EmbeddedResource Remove="Form\ConfigUserAgent_Proxy.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="2Captcha" Version="2.2.0" />
     <PackageReference Include="MailKit" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.4" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="108.0.3" />
@@ -43,6 +29,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Form\ConfigImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Form\ConfigInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Form\ConfigUserAgent_Proxy.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Form\FormCore.cs">
       <SubType>Form</SubType>
     </Compile>

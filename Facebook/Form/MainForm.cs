@@ -122,8 +122,8 @@ namespace Facebook
 
         private void configXMDT_Click(object sender, EventArgs e)
         {
-            //ConfigImage configImage = new ConfigImage();
-            //configImage.Show();
+            ConfigImage configImage = new ConfigImage();
+            configImage.Show();
         }
 
         public void LoadDataGridView()
@@ -245,19 +245,19 @@ namespace Facebook
         #region Data Input      
         private void addAccount_Click(object sender, EventArgs e)
         {
-            //ConfigInput configInput = new ConfigInput();
-            //configInput.Show();
+            ConfigInput configInput = new ConfigInput();
+            configInput.Show();
         }
         private void addUserAgent_Click(object sender, EventArgs e)
         {
-            //ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.UserAgent);
-            //configUserAgent_Proxy.Show();
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.UserAgent);
+            configUserAgent_Proxy.Show();
         }
 
         private void addProxy_Click(object sender, EventArgs e)
         {
-            //ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.Proxy);
-            //configUserAgent_Proxy.Show();
+            ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.Proxy);
+            configUserAgent_Proxy.Show();
         }
 
         public void SetUserAgentOrProxyForAccount(ConfigUserAgentProxyModel configUserAgentProxyModel)

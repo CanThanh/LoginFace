@@ -7,7 +7,7 @@ namespace Facebook.Core
 {
     internal class SQLiteProcessing
     {
-        string absolutePath = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + @"\File\db\facebook.sqlite";
+        string absolutePath = Environment.CurrentDirectory + @"\File\db\facebook.sqlite";
         SqliteConnection _con = new SqliteConnection();
         public void createConection()
         {
@@ -24,7 +24,7 @@ namespace Facebook.Core
         {
             createConection();
             string sql = "CREATE TABLE IF NOT EXISTS FILES (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                " Name TEXT, CreatedDate TEXT, Active INTEGER)"; 
+                " Name TEXT, CreatedDate TEXT, Active INTEGER)";
             SqliteCommand command = new SqliteCommand(sql, _con);
             command.ExecuteNonQuery();
             sql = "CREATE TABLE IF NOT EXISTS ACCOUNTS (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, UId TEXT," +
@@ -83,7 +83,7 @@ namespace Facebook.Core
                 SqliteCommand command = new SqliteCommand(sql, _con);
                 command.Parameters.AddWithValue("@name", name);
                 var count = Convert.ToInt32(command.ExecuteScalar());
-                if(count == 0)
+                if (count == 0)
                 {
                     command.CommandText = "INSERT INTO FILES (Name, CreatedDate, Active) VALUES (@name, @createdate, @active)";
                     command.Parameters.AddWithValue("@createdate", DateTime.Now.ToString());
@@ -206,7 +206,7 @@ namespace Facebook.Core
             }
             return result;
         }
-            public bool InsertOrUpdateAccount(AccountInfo accountInfo, string idFile)
+        public bool InsertOrUpdateAccount(AccountInfo accountInfo, string idFile)
         {
             var result = true;
             try
@@ -232,7 +232,7 @@ namespace Facebook.Core
                     command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid AND IdFile = @idfile";
                     command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                     command.ExecuteNonQuery();
-                }                   
+                }
             }
             catch (Exception ex)
             {
@@ -280,13 +280,13 @@ namespace Facebook.Core
                     foreach (var item in lstUserId)
                     {
                         command.Parameters.Clear();
-                        command.CommandText =  "DELETE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
+                        command.CommandText = "DELETE FROM ACCOUNTS WHERE Uid = @uid AND IdFile = @idfile";
                         command.Parameters.AddWithValue("@uid", item);
                         command.Parameters.AddWithValue("@idfile", idFile);
                         command.ExecuteNonQuery();
                     }
                     transaction.Commit();
-                }                   
+                }
             }
             catch (Exception ex)
             {
