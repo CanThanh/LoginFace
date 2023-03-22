@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Form\ConfigImage.cs" />
+    <Compile Remove="Form\ConfigImage.Designer.cs" />
+    <Compile Remove="Form\ConfigInput.cs" />
+    <Compile Remove="Form\ConfigInput.Designer.cs" />
+    <Compile Remove="Form\ConfigUserAgent_Proxy.cs" />
+    <Compile Remove="Form\ConfigUserAgent_Proxy.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Form\ConfigImage.resx" />
+    <EmbeddedResource Remove="Form\ConfigInput.resx" />
+    <EmbeddedResource Remove="Form\ConfigUserAgent_Proxy.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="2Captcha" Version="2.2.0" />
+    <PackageReference Include="MailKit" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RestSharp" Version="108.0.3" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.8.1" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="110.0.5481.7700" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Otp.NET">
+      <HintPath>..\Library\Otp.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="xNet">
+      <HintPath>..\Library\xNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Form\FormCore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
