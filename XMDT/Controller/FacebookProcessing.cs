@@ -244,7 +244,7 @@ namespace XMDT.Controller
 
         public void LoginFace(ChromeDriver driver, string url, string user, string pass)
         {
-            driver.Url = url;
+            //driver.Url = url;
             driver.Navigate().GoToUrl(url);
             Thread.Sleep(1000);
             SendKeyByXPath(driver, "//input[@name='email']", user);

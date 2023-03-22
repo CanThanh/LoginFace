@@ -57,6 +57,9 @@
             this.cmsUnselectedAll = new System.Windows.Forms.ToolStripTextBox();
             this.cmsFacebook = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsCheckPoint282 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCP282MBasic = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCP282M = new System.Windows.Forms.ToolStripTextBox();
+            this.cmsCP282 = new System.Windows.Forms.ToolStripTextBox();
             this.cmsCheckPoint956 = new System.Windows.Forms.ToolStripTextBox();
             this.cmsCheckStatusAccount = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,9 +68,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rbLoginCookie = new System.Windows.Forms.RadioButton();
             this.rbLoginUP = new System.Windows.Forms.RadioButton();
-            this.cmsCP282MBasic = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsCP282M = new System.Windows.Forms.ToolStripTextBox();
-            this.cmsCP282 = new System.Windows.Forms.ToolStripTextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgViewInput)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -272,7 +272,7 @@
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip.ShowCheckMargin = true;
             this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 117);
+            this.contextMenuStrip.Size = new System.Drawing.Size(161, 95);
             // 
             // cmsSelected
             // 
@@ -280,7 +280,7 @@
             this.cmsSelectAll,
             this.cmsSelectHightlight});
             this.cmsSelected.Name = "cmsSelected";
-            this.cmsSelected.Size = new System.Drawing.Size(180, 22);
+            this.cmsSelected.Size = new System.Drawing.Size(160, 22);
             this.cmsSelected.Text = "Chọn";
             // 
             // cmsSelectAll
@@ -313,7 +313,7 @@
             this.cmsCheckPoint282,
             this.cmsCheckPoint956});
             this.cmsFacebook.Name = "cmsFacebook";
-            this.cmsFacebook.Size = new System.Drawing.Size(180, 22);
+            this.cmsFacebook.Size = new System.Drawing.Size(160, 22);
             this.cmsFacebook.Text = "Giải check point";
             // 
             // cmsCheckPoint282
@@ -323,8 +323,32 @@
             this.cmsCP282M,
             this.cmsCP282});
             this.cmsCheckPoint282.Name = "cmsCheckPoint282";
-            this.cmsCheckPoint282.Size = new System.Drawing.Size(180, 22);
+            this.cmsCheckPoint282.Size = new System.Drawing.Size(160, 22);
             this.cmsCheckPoint282.Text = "Checkpoint 282";
+            // 
+            // cmsCP282MBasic
+            // 
+            this.cmsCP282MBasic.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282MBasic.Name = "cmsCP282MBasic";
+            this.cmsCP282MBasic.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282MBasic.Text = "MBasic Facebook";
+            this.cmsCP282MBasic.Click += new System.EventHandler(this.cmsCP282MBasic_Click);
+            // 
+            // cmsCP282M
+            // 
+            this.cmsCP282M.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282M.Name = "cmsCP282M";
+            this.cmsCP282M.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282M.Text = "M Facebook";
+            this.cmsCP282M.Click += new System.EventHandler(this.cmsCP282M_Click);
+            // 
+            // cmsCP282
+            // 
+            this.cmsCP282.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmsCP282.Name = "cmsCP282";
+            this.cmsCP282.Size = new System.Drawing.Size(100, 23);
+            this.cmsCP282.Text = "Facebook";
+            this.cmsCP282.Click += new System.EventHandler(this.cmsCP282_Click);
             // 
             // cmsCheckPoint956
             // 
@@ -336,7 +360,7 @@
             // cmsCheckStatusAccount
             // 
             this.cmsCheckStatusAccount.Name = "cmsCheckStatusAccount";
-            this.cmsCheckStatusAccount.Size = new System.Drawing.Size(180, 22);
+            this.cmsCheckStatusAccount.Size = new System.Drawing.Size(160, 22);
             this.cmsCheckStatusAccount.Text = "Check tài khoản";
             this.cmsCheckStatusAccount.Click += new System.EventHandler(this.checkStatusAccount_Click);
             // 
@@ -399,30 +423,6 @@
             this.rbLoginUP.TabStop = true;
             this.rbLoginUP.Text = "Đăng nhập U/P";
             this.rbLoginUP.UseVisualStyleBackColor = true;
-            // 
-            // cmsCP282MBasic
-            // 
-            this.cmsCP282MBasic.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCP282MBasic.Name = "cmsCP282MBasic";
-            this.cmsCP282MBasic.Size = new System.Drawing.Size(100, 23);
-            this.cmsCP282MBasic.Text = "MBasic Facebook";
-            this.cmsCP282MBasic.Click += new System.EventHandler(this.cmsCP282MBasic_Click);
-            // 
-            // cmsCP282M
-            // 
-            this.cmsCP282M.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCP282M.Name = "cmsCP282M";
-            this.cmsCP282M.Size = new System.Drawing.Size(100, 23);
-            this.cmsCP282M.Text = "M Facebook";
-            this.cmsCP282M.Click += new System.EventHandler(this.cmsCP282M_Click);
-            // 
-            // cmsCP282
-            // 
-            this.cmsCP282.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmsCP282.Name = "cmsCP282";
-            this.cmsCP282.Size = new System.Drawing.Size(100, 23);
-            this.cmsCP282.Text = "Facebook";
-            this.cmsCP282.Click += new System.EventHandler(this.cmsCP282_Click);
             // 
             // MainForm
             // 

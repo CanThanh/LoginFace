@@ -380,6 +380,6 @@ namespace XMDT
             string url = "https://mbasic.facebook.com/";
             var result = facebookProcessing.CheckStatusAccount(lstAccountInfo[rowIndex], url, rowIndex, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Sống" : "Checkpoint";
-        }
+        }        
     }
 }

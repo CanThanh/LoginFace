@@ -9,9 +9,8 @@ using XMDT.Model;
 using xNet;
 using System.Drawing;
 using System.IO;
-using OtpNet;
 using XMDT.Otp;
-using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace XMDT.Facebook
 {
@@ -143,57 +142,14 @@ namespace XMDT.Facebook
         public bool ProcessMFacbook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false)
         {
             bool result = false;
-            Random random = new Random();
-            string source = "";
-            string url = "https://m.facebook.com/";
+            //Random random = new Random();
+            //string source = "";
+            //string url = "https://m.facebook.com/";
+            string url = "https://mbasic.facebook.com/";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
-            account.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
             var driver = facebookProcessing.InitChromeDriver(account);
             try
-            {
-                ////InitRestClientOption(account);
-                //string url = "https://m.facebook.com/";
-                ////restClient.Options.BaseUrl = new Uri(url);
-                //FacebookProcessing facebookProcessing = new FacebookProcessing();
-                //var driver = facebookProcessing.InitChromeDriver(account);
-                //facebookProcessing.LoginFace(driver, url, account.Id, account.Pass, account.TwoFA);
-                //driver.Navigate().GoToUrl("https://m.facebook.com/");
-                //Thread.Sleep(5000);
-                //var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-                //account.DTSG = dtsg;
-
-                //////https://facebook.com/
-                //var variables = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + account.Id + "\",\"action\":\"PROCEED\",\"enrollment_id\":null},\"scale\":1}";
-                //var captcha_persist_data1 = "";
-                //var response = ApiSubmit(restClient, url, account.Id, dtsg, variables);
-                //if (response.Contains("captcha_persist_data"))
-                //{
-                //    captcha_persist_data1 = response.Split(new[] { "\"captcha_persist_data\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
-                //}
-                //driver.Navigate().GoToUrl(url);
-                //var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
-
-                //var request = new RestRequest("/captcha/recaptcha/iframe/", Method.Get);
-                //restClient.Options.BaseUrl = new Uri("https://www.fbsbx.com");
-                //request.AddHeader("referer", url);
-                //RestResponse responseResolveCaptcha = restClient.Execute(request);
-                //string googleKey = "";
-                //if (responseResolveCaptcha.Content.Contains("data-sitekey=\""))
-                //{
-                //    googleKey = responseResolveCaptcha.Content.Split(new[] { "data-sitekey=\"" }, StringSplitOptions.None)[1].Split('"')[0];
-                //}
-
-                //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-                //resolveCaptcha.APIKey = resolveCaptchaKey;
-                //string outputCapcha = "";
-                //resolveCaptcha.SolveRecaptchaV2(googleKey, "https://m.facebook.com/checkpoint/1501092823525282/", out outputCapcha);
-
-                //var variablesResolveCaptcha = "{\"input\":{\"client_mutation_id\":\"1\",\"actor_id\":\"" + account.Id + "\",\"action\":\"SUBMIT_BOT_CAPTCHA_RESPONSE\",\"bot_captcha_persist_data\":\"" + captcha_persist_data + "\",\"bot_captcha_response\":\"" + outputCapcha + "\",\"enrollment_id\":null},\"scale\":1}";
-                //var temp = ApiSubmit(restClient, url, account.Id, dtsg, variablesResolveCaptcha);
-
-                //result = true;
-                account.Cookie = "m_page_voice=100017654444654;xs=45%3AfCCAQNKoOMQ7mQ%3A2%3A1679361937%3A-1%3A14806;c_user=100017654444654;locale=en_GB;wd=912x891;m_pixel_ratio=1;fr=0APtK9R0LApAZZO8z.AWXP0pBdqT4SCTHfBvexnDc83yc.BkGQeF.Qj.AAA.0.0.BkGQeQ.AWVRhCTgdAk;sb=hQcZZMh5fO1F-A5KVJRiJg13;datr=hQcZZDPgMwcQfrW-a9ycF0IF";
-                loginCookie = true;
+            {              
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -203,26 +159,13 @@ namespace XMDT.Facebook
                 {
                     facebookProcessing.LoginFace(driver, url, account.Id, account.Pass, account.TwoFA);
                 }
-                source = driver.PageSource;
-                var consent_param = source.Split(new[] { "\"consent_param\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
-                url = "https://fbsbx.com/captcha/recaptcha/iframe/?referer=https%3A%2F%2Fm.facebook.com&compact=1&__cci=" + consent_param;
-                var html = facebookProcessing.GetData(url);
-                var googleKey = html.Split(new[] { "data-sitekey=\"" }, StringSplitOptions.None)[1].Split('"')[0];
-                //if (source.Contains("g-recaptcha"))
-                //{
-                //    var divGoogleKey = driver.FindElement(By.XPath("//div[@class='g-recaptcha']"));
-                //    googleKey = divGoogleKey.GetAttribute("g-recaptcha");
-                //}
-
-                var cookie = GetCookie(driver);
-                    
-                Thread.Sleep(random.Next(1000, 2000));
-                //string outputCapchaTinhTe = Reslove2CaptchaCaptcha(resolveCaptchaKey, "6Lcu4xETAAAAAL0G3MupA6JlFWCoLxyo2__C6OyB", "https://tinhte.vn/register/", "");
-                string outputCapcha = Reslove2CaptchaCaptcha(resolveCaptchaKey, googleKey, driver.Url, cookie);
-                if (!string.IsNullOrEmpty(outputCapcha))
-                {
-                //    driver.FindElement(By.XPath("//div[@name='action_submit_bot_captcha_response']")).Click();
-                }
+                var elementImage = driver.FindElement(By.XPath("//div[@id='captcha']//img"));
+                ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
+                byte[] byteArray = screenshotDriver.GetScreenshot().AsByteArray;
+                Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
+                Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
+                screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
+                screenShot.Save("D:\\Code\\XMDT\\Image\\Captcha\\"+ account.Id + "_captcha.png", ImageFormat.Png);
             }
             catch (Exception ex)
             {
