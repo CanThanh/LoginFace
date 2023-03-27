@@ -18,6 +18,7 @@
         public string ImgFacePath { get; set; }
         public int TypeProxy { get; set; }
         public string Status { get; set; }
+        public string Info { get; set; }
     }
     public class SecondaryEmail
     {

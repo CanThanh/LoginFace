@@ -45,7 +45,7 @@ namespace Facebook.Core.FacebookError
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var driver = facebookProcessing.InitChromeDriver(account);
             try
-            {               
+            {
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -130,17 +130,16 @@ namespace Facebook.Core.FacebookError
         #endregion Process facebook
 
         #region Process Mfacebook
-        public bool ProcessMFacbook(AccountInfo account, string resolveCaptchaKey, bool loginCookie = false)
+        public bool ProcessMFacbook(AccountInfo account, int rowIndex, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
         {
             bool result = false;
-            //Random random = new Random();
-            //string source = "";
-            //string url = "https://m.facebook.com/";
-            string url = "https://mbasic.facebook.com/";
+            Random random = new Random();
+            string source = "";
+            string url = "https://m.facebook.com/";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var driver = facebookProcessing.InitChromeDriver(account);
             try
-            {              
+            {
                 if (loginCookie)
                 {
                     facebookProcessing.LoginCookie(driver, url, account.Cookie);
@@ -156,7 +155,94 @@ namespace Facebook.Core.FacebookError
                 Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
                 Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
                 screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
-                screenShot.Save("D:\\Code\\XMDT\\Image\\Captcha\\"+ account.Id + "_captcha.png", ImageFormat.Png);
+                string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                screenShot.Save(imgPath, ImageFormat.Png);
+                ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                resolveCaptcha.APIKey = resolveCaptchaKey;
+                string outputCapcha = "";
+                resolveCaptcha.SolveNormalCapcha(ConvertImageToBase64String(imgPath), out outputCapcha);
+
+                if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
+                }
+                else
+                {
+                    CommonFunction.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
+                    Thread.Sleep(300);
+                    driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
+                    driver.Navigate().GoToUrl(url);
+                    Thread.Sleep(2000);
+                    source = driver.PageSource;
+                }
+                if (source.Contains("action_set_contact_point"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
+                    IOtp otpProcessing = new OtpSell();
+                    //string apiKey = "90e2b1f8fa419d46", appName = "Facebook";
+                    string apiKey = "172c280613d44fc194b2143054690b7e", appName = "Facebook";
+                    string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
+                    string number = "", idNumber = "", code = "";
+                    int count = 0;
+                    while (count < 5 && string.IsNullOrEmpty(number))
+                    {
+                        number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                        driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                        Thread.Sleep(random.Next(1000));
+                        source = driver.PageSource;
+                        if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                        {
+                            number = "";
+                            otpProcessing.CancelByAppId(apiKey, idNumber);
+                        }
+                        count++;
+                    }
+                    count = 0;
+                    if (!string.IsNullOrEmpty(number))
+                    {
+                        while (count < 5 && string.IsNullOrEmpty(code))
+                        {
+                            Thread.Sleep(60000);
+                            code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
+                            count++;
+                        }
+                    }
+                    if (string.IsNullOrEmpty(code))
+                    {
+                        otpProcessing.CancelByAppId(apiKey, idNumber);
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
+                    }
+                    else
+                    {
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
+                        driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
+                        Thread.Sleep(random.Next(500, 1000));
+                        source = driver.PageSource;
+                    }
+                }
+
+                if (source.Contains("mobile_image_data"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
+                    if (age == 0)
+                    {
+                        age = random.Next(18, 60);
+                        var randomGender = random.NextDouble();
+                        gender = randomGender > 0.5 ? "male" : "female";
+                    }
+
+                    ImageProcessing imageProcessing = new ImageProcessing();
+                    string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, gender);
+                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
+                    imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+                    account.ImgFacePath = imgFaceFakePath;
+                    var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                    mobile_image_data.SendKeys(imgFaceFakePath);
+                    Thread.Sleep(200);
+                    driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                    driver.Navigate().GoToUrl(url);
+                }
             }
             catch (Exception ex)
             {
@@ -192,23 +278,12 @@ namespace Facebook.Core.FacebookError
                 }
                 else
                 {
-                    facebookProcessing.LoginFace(driver, url, account.Id, account.Pass, account.TwoFA);                    
+                    facebookProcessing.LoginFace(driver, url, account.Id, account.Pass, account.TwoFA);
                 }
 
                 Thread.Sleep(random.Next(1000, 2000));
                 if (driver.Url.Contains("282")) //1501092823525282
                 {
-                    //InitHttpRequest(account);
-                    //if (loginCookie)
-                    //{
-                    //    AddCookie(httpRequest, account.Cookie);
-                    //}
-                    //else
-                    //{
-                    //    var cookie = driver.GetCookie();
-                    //    AddCookie(httpRequest, account.Cookie);
-                    //}
-
                     var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
                     account.DTSG = dtsg;
                     ////Get base64 captcha
@@ -216,43 +291,51 @@ namespace Facebook.Core.FacebookError
                     if (source.Contains("captcha_persist_data"))
                     {
                         MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Captcha");
-                        var containName = source.Contains("you're now interacting as");
-                        var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+                        var elementImage = driver.FindElement(By.XPath("//div[@id='captcha']//img"));
                         ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
-                        Screenshot screenshot = screenshotDriver.GetScreenshot();
-                        string imgPath = CommonFunction.CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Screenshot") + "\\" + account.Id + "SS.png";
-                        screenshot.SaveAsFile(imgPath);
-                        var img = Image.FromFile(imgPath);
-                        //Diffrence crop mobile/win
-                        int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
-                        Rectangle cropArea = new Rectangle(180, containName ? 135: 105, 250, 66);
-                        var imgCaptcha = cropImage(img, cropArea);
-                        string imgCaptchaPath = CommonFunction.CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
-                        imgCaptcha.Save(imgCaptchaPath);
-                        string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
-                        //Resolve captcha
+                        byte[] byteArray = screenshotDriver.GetScreenshot().AsByteArray;
+                        Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
+                        Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
+                        screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
+                        string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                        screenShot.Save(imgPath, ImageFormat.Png);
+                        ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                        resolveCaptcha.APIKey = resolveCaptchaKey;
+                        string outputCapcha = "";
+                        resolveCaptcha.SolveNormalCapcha(ConvertImageToBase64String(imgPath), out outputCapcha);
+                        //var containName = source.Contains("you're now interacting as");
+                        //var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
+                        //ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
+                        //Screenshot screenshot = screenshotDriver.GetScreenshot();
+                        //string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Screenshot") + "\\" + account.Id + "SS.png";
+                        //screenshot.SaveAsFile(imgPath);
+                        //var img = Image.FromFile(imgPath);
+                        ////Diffrence crop mobile/win
+                        //int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
+                        //Rectangle cropArea = new Rectangle(180, containName ? 135 : 105, 250, 66);
+                        //var imgCaptcha = cropImage(img, cropArea);
+                        //string imgCaptchaPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                        //imgCaptcha.Save(imgCaptchaPath);
+                        //string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
+                        ////Resolve captcha
                         //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                         //resolveCaptcha.APIKey = resolveCaptchaKey;
                         //string outputCapcha = "";
                         //resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
-                        ////Get data pass captcha and upload img
-                        ////var data = "fb_dtsg=" + dtsg + "&jazoest=25200&captcha_persist_data=" + captcha_persist_data + "&captcha_response=" + outputCapcha + "&action_submit_bot_captcha_response=Ti%E1%BA%BFp+t%E1%BB%A5c";
-                        ////var response = httpRequest.Post("https://mbasic.facebook.com/checkpoint/1501092823525282/submit/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
-                        ////Load page to up img
 
-                        //if(string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
-                        //{
-                        //    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
-                        //}
-                        //else
-                        //{
-                        //    CommonFunction.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
-                        //    Thread.Sleep(300);
-                        //    driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
-                        //    driver.Navigate().GoToUrl(url);
-                        //    Thread.Sleep(2000);
-                        //    source = driver.PageSource;
-                        //}
+                        if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
+                        {
+                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
+                        }
+                        else
+                        {
+                            CommonFunction.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
+                            Thread.Sleep(300);
+                            driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
+                            driver.Navigate().GoToUrl(url);
+                            Thread.Sleep(2000);
+                            source = driver.PageSource;
+                        }
                     }
 
                     if (source.Contains("action_set_contact_point"))
@@ -262,9 +345,9 @@ namespace Facebook.Core.FacebookError
                         //string apiKey = "90e2b1f8fa419d46", appName = "Facebook";
                         string apiKey = "172c280613d44fc194b2143054690b7e", appName = "Facebook";
                         string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
-                        string number =  "", idNumber = "", code = "";
+                        string number = "", idNumber = "", code = "";
                         int count = 0;
-                        while(count < 5 && string.IsNullOrEmpty(number))
+                        while (count < 5 && string.IsNullOrEmpty(number))
                         {
                             number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
                             CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
@@ -295,7 +378,7 @@ namespace Facebook.Core.FacebookError
                         }
                         else
                         {
-                            CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);                           
+                            CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
                             driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
                             Thread.Sleep(random.Next(500, 1000));
                             source = driver.PageSource;
@@ -309,12 +392,11 @@ namespace Facebook.Core.FacebookError
                         {
                             age = random.Next(18, 60);
                             var randomGender = random.NextDouble();
-                            gender = randomGender > 0.5 ? "male" : "female";
                         }
 
                         ImageProcessing imageProcessing = new ImageProcessing();
                         string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, gender);
-                        string imgFaceFakePath = CommonFunction.CreatDirectory(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)) + "\\Image\\Face") +"\\" + account.Id + ".jpg";
+                        string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
                         imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                         account.ImgFacePath = imgFaceFakePath;
                         var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
@@ -323,7 +405,7 @@ namespace Facebook.Core.FacebookError
                         driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
                         driver.Navigate().GoToUrl(url);
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -351,23 +433,28 @@ namespace Facebook.Core.FacebookError
                 return Convert.ToBase64String(ms.ToArray());
             }
         }
+        private string ConvertImageToBase64String(string filePath)
+        {
+            byte[] bytes = File.ReadAllBytes(filePath);
+            return Convert.ToBase64String(bytes);
+        }
         #endregion Process MbasicFacebook
 
-        //string Reslove2CaptchaCaptcha(string captchaKey, string ggKey, string url, string cookie = "")
-        //{
-        //    string capt = "";
-        //    ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-        //    resolveCaptcha.APIKey = captchaKey;
+        string Reslove2CaptchaCaptcha(string captchaKey, string ggKey, string url, string cookie = "")
+        {
+            string capt = "";
+            ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+            resolveCaptcha.APIKey = captchaKey;
 
-        //    bool isSuccess = resolveCaptcha.SolveRecaptchaV2(ggKey, url, out capt);
-        //    int count = 0;
-        //    while (!isSuccess && count < 5)
-        //    {
-        //        count++;
-        //        isSuccess = resolveCaptcha.SolveRecaptchaV2(ggKey, url, out capt);
-        //        Thread.Sleep(TimeSpan.FromSeconds(2));
-        //    }
-        //    return capt;
-        //}
+            bool isSuccess = resolveCaptcha.SolveRecaptchaV2(ggKey, url, out capt);
+            int count = 0;
+            while (!isSuccess && count < 5)
+            {
+                count++;
+                isSuccess = resolveCaptcha.SolveRecaptchaV2(ggKey, url, out capt);
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+            }
+            return capt;
+        }
     }
 }

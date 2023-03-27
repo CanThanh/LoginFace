@@ -55,12 +55,9 @@
             cmsSelectAll = new ToolStripTextBox();
             cmsSelectHightlight = new ToolStripTextBox();
             cmsUnselectedAll = new ToolStripTextBox();
-            cmsFacebook = new ToolStripMenuItem();
-            cmsCheckPoint282 = new ToolStripMenuItem();
-            cmsCP282MBasic = new ToolStripTextBox();
-            cmsCP282M = new ToolStripTextBox();
-            cmsCP282 = new ToolStripTextBox();
+            cmsCheckpointFacebook = new ToolStripMenuItem();
             cmsCheckPoint956 = new ToolStripTextBox();
+            cmsCheckPoint282 = new ToolStripTextBox();
             cmsCheckStatusAccount = new ToolStripMenuItem();
             label1 = new Label();
             cbFile = new ComboBox();
@@ -68,6 +65,7 @@
             label2 = new Label();
             rbLoginCookie = new RadioButton();
             rbLoginUP = new RadioButton();
+            cmsAccountQuality = new ToolStripTextBox();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgViewInput).BeginInit();
             contextMenuStrip.SuspendLayout();
@@ -243,23 +241,24 @@
             // 
             // contextMenuStrip
             // 
-            contextMenuStrip.Items.AddRange(new ToolStripItem[] { cmsSelected, cmsUnselectedAll, cmsFacebook, cmsCheckStatusAccount });
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { cmsSelected, cmsUnselectedAll, cmsCheckpointFacebook, cmsCheckStatusAccount, cmsAccountQuality });
             contextMenuStrip.Name = "contextMenuStrip";
             contextMenuStrip.RenderMode = ToolStripRenderMode.Professional;
             contextMenuStrip.ShowCheckMargin = true;
             contextMenuStrip.ShowImageMargin = false;
-            contextMenuStrip.Size = new Size(161, 95);
+            contextMenuStrip.Size = new Size(181, 142);
             // 
             // cmsSelected
             // 
             cmsSelected.DropDownItems.AddRange(new ToolStripItem[] { cmsSelectAll, cmsSelectHightlight });
             cmsSelected.Name = "cmsSelected";
-            cmsSelected.Size = new Size(160, 22);
+            cmsSelected.Size = new Size(180, 22);
             cmsSelected.Text = "Chọn";
             // 
             // cmsSelectAll
             // 
             cmsSelectAll.Name = "cmsSelectAll";
+            cmsSelectAll.ReadOnly = true;
             cmsSelectAll.Size = new Size(100, 23);
             cmsSelectAll.Text = "Tất cả";
             cmsSelectAll.Click += cmsSelectAll_Click;
@@ -267,6 +266,7 @@
             // cmsSelectHightlight
             // 
             cmsSelectHightlight.Name = "cmsSelectHightlight";
+            cmsSelectHightlight.ReadOnly = true;
             cmsSelectHightlight.Size = new Size(100, 23);
             cmsSelectHightlight.Text = "Bôi đen";
             cmsSelectHightlight.Click += cmsSelectHightlight_Click;
@@ -274,55 +274,37 @@
             // cmsUnselectedAll
             // 
             cmsUnselectedAll.Name = "cmsUnselectedAll";
+            cmsUnselectedAll.ReadOnly = true;
             cmsUnselectedAll.Size = new Size(100, 23);
             cmsUnselectedAll.Text = "Bỏ chọn tất cả";
             cmsUnselectedAll.Click += cmsUnselectedAll_Click;
             // 
-            // cmsFacebook
+            // cmsCheckpointFacebook
             // 
-            cmsFacebook.DropDownItems.AddRange(new ToolStripItem[] { cmsCheckPoint282, cmsCheckPoint956 });
-            cmsFacebook.Name = "cmsFacebook";
-            cmsFacebook.Size = new Size(160, 22);
-            cmsFacebook.Text = "Giải check point";
-            // 
-            // cmsCheckPoint282
-            // 
-            cmsCheckPoint282.DropDownItems.AddRange(new ToolStripItem[] { cmsCP282MBasic, cmsCP282M, cmsCP282 });
-            cmsCheckPoint282.Name = "cmsCheckPoint282";
-            cmsCheckPoint282.Size = new Size(160, 22);
-            cmsCheckPoint282.Text = "Checkpoint 282";
-            // 
-            // cmsCP282MBasic
-            // 
-            cmsCP282MBasic.Name = "cmsCP282MBasic";
-            cmsCP282MBasic.Size = new Size(100, 23);
-            cmsCP282MBasic.Text = "MBasic Facebook";
-            cmsCP282MBasic.Click += cmsCP282MBasic_Click;
-            // 
-            // cmsCP282M
-            // 
-            cmsCP282M.Name = "cmsCP282M";
-            cmsCP282M.Size = new Size(100, 23);
-            cmsCP282M.Text = "M Facebook";
-            cmsCP282M.Click += cmsCP282M_Click;
-            // 
-            // cmsCP282
-            // 
-            cmsCP282.Name = "cmsCP282";
-            cmsCP282.Size = new Size(100, 23);
-            cmsCP282.Text = "Facebook";
-            cmsCP282.Click += cmsCP282_Click;
+            cmsCheckpointFacebook.DropDownItems.AddRange(new ToolStripItem[] { cmsCheckPoint956, cmsCheckPoint282 });
+            cmsCheckpointFacebook.Name = "cmsCheckpointFacebook";
+            cmsCheckpointFacebook.Size = new Size(180, 22);
+            cmsCheckpointFacebook.Text = "Giải check point";
             // 
             // cmsCheckPoint956
             // 
             cmsCheckPoint956.Name = "cmsCheckPoint956";
+            cmsCheckPoint956.ReadOnly = true;
             cmsCheckPoint956.Size = new Size(100, 23);
             cmsCheckPoint956.Text = "Check point 956";
+            // 
+            // cmsCheckPoint282
+            // 
+            cmsCheckPoint282.Name = "cmsCheckPoint282";
+            cmsCheckPoint282.ReadOnly = true;
+            cmsCheckPoint282.Size = new Size(100, 23);
+            cmsCheckPoint282.Text = "Check point 282";
+            cmsCheckPoint282.Click += cmsCheckPoint282_Click;
             // 
             // cmsCheckStatusAccount
             // 
             cmsCheckStatusAccount.Name = "cmsCheckStatusAccount";
-            cmsCheckStatusAccount.Size = new Size(160, 22);
+            cmsCheckStatusAccount.Size = new Size(180, 22);
             cmsCheckStatusAccount.Text = "Check tài khoản";
             cmsCheckStatusAccount.Click += checkStatusAccount_Click;
             // 
@@ -392,6 +374,14 @@
             rbLoginUP.Text = "Đăng nhập U/P";
             rbLoginUP.UseVisualStyleBackColor = true;
             // 
+            // cmsAccountQuality
+            // 
+            cmsAccountQuality.Name = "cmsAccountQuality";
+            cmsAccountQuality.ReadOnly = true;
+            cmsAccountQuality.Size = new Size(100, 23);
+            cmsAccountQuality.Text = "Xác minh danh tính";
+            cmsAccountQuality.Click += cmsAccountQuality_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -431,12 +421,11 @@
         private System.Windows.Forms.ToolStripTextBox cmsSelectAll;
         private System.Windows.Forms.ToolStripTextBox cmsSelectHightlight;
         private System.Windows.Forms.ToolStripTextBox cmsUnselectedAll;
-        private System.Windows.Forms.ToolStripMenuItem cmsFacebook;
+        private System.Windows.Forms.ToolStripMenuItem cmsCheckpointFacebook;
         private System.Windows.Forms.ToolStripTextBox cmsCheckPoint956;
         private System.Windows.Forms.ToolStripMenuItem dataInput;
         private System.Windows.Forms.ToolStripMenuItem addUserAgent;
         private System.Windows.Forms.ToolStripMenuItem addProxy;
-        private System.Windows.Forms.ToolStripMenuItem cmsCheckPoint282;
         private System.Windows.Forms.Button btnRemoveAccount;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton rbLoginCookie;
@@ -455,8 +444,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
         private System.Windows.Forms.ToolStripMenuItem cmsCheckStatusAccount;
-        private System.Windows.Forms.ToolStripTextBox cmsCP282MBasic;
-        private System.Windows.Forms.ToolStripTextBox cmsCP282M;
-        private System.Windows.Forms.ToolStripTextBox cmsCP282;
+        private ToolStripTextBox cmsCheckPoint282;
+        private ToolStripTextBox cmsAccountQuality;
     }
 }

@@ -110,7 +110,7 @@ namespace Facebook.Core
             {
                 createConection();
                 //string sql = "DELTE FROM FILES WHERE name = @name";
-                string sql = "UPDATE FROM FILES Set Active = 0 WHERE Id = @idFile";
+                string sql = "UPDATE FILES Set Active = 0 WHERE Id = @idFile";
                 SqliteCommand command = new SqliteCommand(sql, _con);
                 command.Parameters.AddWithValue("@idFile", idFile);
                 command.ExecuteNonQuery();
@@ -166,12 +166,13 @@ namespace Facebook.Core
             try
             {
                 createConection();
-                SqliteCommand command = new SqliteCommand("", _con);
                 //command.CommandText = "SELECT Id FROM FILES WHERE Name = @fileName";
                 //command.Parameters.AddWithValue("@fileName", fileName);
                 //var idFile = Convert.ToInt32(command.ExecuteScalar());
                 using (var transaction = _con.BeginTransaction())
                 {
+                    SqliteCommand command = new SqliteCommand("", _con);
+                    command.Transaction = transaction;
                     foreach (var accountInfo in lstAccountInfo)
                     {
                         command.Parameters.Clear();
@@ -277,6 +278,7 @@ namespace Facebook.Core
                 using (var transaction = _con.BeginTransaction())
                 {
                     SqliteCommand command = new SqliteCommand("", _con);
+                    command.Transaction = transaction;
                     foreach (var item in lstUserId)
                     {
                         command.Parameters.Clear();

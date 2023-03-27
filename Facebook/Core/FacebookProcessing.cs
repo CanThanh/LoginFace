@@ -5,6 +5,8 @@ using Facebook.Model;
 using static Facebook.Model.CommonConstant;
 using Facebook.Core;
 using OtpNet;
+using OpenQA.Selenium.Chromium;
+using OpenQA.Selenium.Chrome.ChromeDriverExtensions;
 
 namespace Facebook.Core
 {
@@ -26,7 +28,15 @@ namespace Facebook.Core
             {
                 if (account.TypeProxy == (int)TypeProxy.HttpProxy)
                 {
-                    chromeOptions.AddArgument("--proxy-server=http://" + account.Proxy);
+                    if (account.Proxy.Contains("@"))
+                    {
+                        var proxysplit = account.Proxy.Split('@');
+                        chromeOptions.AddHttpProxy(proxysplit[1].Split(':')[0], Convert.ToInt32(proxysplit[1].Split(':')[1]), proxysplit[0].Split(':')[0], proxysplit[0].Split(':')[0]);
+                    }
+                    else
+                    {
+                        chromeOptions.AddArgument("--proxy-server=http://" + account.Proxy);
+                    }
                 }
                 else
                 {

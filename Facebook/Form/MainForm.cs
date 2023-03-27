@@ -1,4 +1,5 @@
 ﻿using Facebook.Core;
+using Facebook.Core.AccountQuality;
 using Facebook.Core.FacebookError;
 using Facebook.Model;
 using xNet;
@@ -199,7 +200,7 @@ namespace Facebook
             return accountInfo;
         }
 
-        private void cmsCP282MBasic_Click(object sender, EventArgs e)
+        private void cmsCheckPoint282_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
             lstRowDataRun.Clear();
@@ -213,32 +214,11 @@ namespace Facebook
             RunMultiThread(CheckPointMBasic282);
         }
 
-        private void cmsCP282M_Click(object sender, EventArgs e)
+        private void CheckPointMBasic282(int rowIndex)
         {
-            dgViewInput.ContextMenuStrip.Close();
-            lstRowDataRun.Clear();
-            foreach (DataGridViewRow item in dgViewInput.Rows)
-            {
-                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
-                {
-                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
-                }
-            }
-            RunMultiThread(CheckPointMFacebook282);
-        }
-
-        private void cmsCP282_Click(object sender, EventArgs e)
-        {
-            dgViewInput.ContextMenuStrip.Close();
-            lstRowDataRun.Clear();
-            foreach (DataGridViewRow item in dgViewInput.Rows)
-            {
-                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
-                {
-                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
-                }
-            }
-            RunMultiThread(CheckPointFacebook282);
+            FacebookError282 facebookError282 = new FacebookError282();
+            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
         #endregion
 
@@ -303,26 +283,7 @@ namespace Facebook
                 lock ((object)itemRow) { actionName(itemRow); }
             });
         }
-        private void CheckPointMBasic282(int rowIndex)
-        {
-            FacebookError282 facebookError282 = new FacebookError282();
-            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
-        }
 
-        private void CheckPointMFacebook282(int rowIndex)
-        {
-            FacebookError282 facebookError282 = new FacebookError282();
-            var result = facebookError282.ProcessMFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
-        }
-
-        private void CheckPointFacebook282(int rowIndex)
-        {
-            FacebookError282 facebookError282 = new FacebookError282();
-            var result = facebookError282.ProcessFacbook(lstAccountInfo[rowIndex], KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
-        }
         public void SetColNoteGridViewByRow(int rowIndex, string value)
         {
             dgViewInput.Rows[rowIndex].Cells["colNote"].Value = value;
@@ -368,6 +329,15 @@ namespace Facebook
             string url = "https://mbasic.facebook.com/";
             var result = facebookProcessing.CheckStatusAccount(lstAccountInfo[rowIndex], url, rowIndex, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Sống" : "Checkpoint";
+        }
+
+        private void cmsAccountQuality_Click(object sender, EventArgs e)
+        {
+            dgViewInput.ContextMenuStrip.Close();
+            FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
+            int rowIndex = 2;
+            var result = facebookAccountQuality.Proccess(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Facebook
 {
     public partial class ConfigInput : Form
     {
-        string currentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory));
+        string currentDirectory = Environment.CurrentDirectory;
         string pathFile =  "\\File\\setting\\inputformat.json";
         private bool lvInput_mDown, lvConfig_mDown;
         public ConfigInputModel configInputModel;
@@ -281,7 +281,7 @@ namespace Facebook
                 var itemSelected = (ComboboxItem)cbFile.SelectedItem;
                 if (itemSelected != null && cbInput.Items.Count > 0)
                 {
-                    cbFile.Items.RemoveAt(Convert.ToInt32(itemSelected.Value));
+                    cbFile.Items.RemoveAt(cbFile.SelectedIndex);
                     sqLiteProcessing.DeleteFile(itemSelected.Value);
                 }
             }
