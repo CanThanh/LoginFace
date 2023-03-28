@@ -292,5 +292,21 @@ namespace Facebook.Core
             return path;
         }
         #endregion
+
+        #region Convert
+        public static string ConvertImageToBase64String(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+        public static string ConvertImageToBase64String(string filePath)
+        {
+            byte[] bytes = File.ReadAllBytes(filePath);
+            return Convert.ToBase64String(bytes);
+        }
+        #endregion
     }
 }

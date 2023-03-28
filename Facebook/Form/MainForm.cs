@@ -2,9 +2,16 @@
 using Facebook.Core.AccountQuality;
 using Facebook.Core.FacebookError;
 using Facebook.Model;
+using Newtonsoft.Json;
+using OpenQA.Selenium;
+using RestSharp;
+using System.Security.Policy;
+using System;
+using System.Security.Principal;
+using System.Text;
 using xNet;
 using static Facebook.Model.CommonConstant;
-using static Facebook.Model.FaceInfo;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Facebook
 {
@@ -26,8 +33,24 @@ namespace Facebook
             //sQLiteProcessing.createTable();
             InitComboBoxFile();
             LoadDataGridView();
-            KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
+            KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";            
         }
+
+        //private async Task<string> TestApi()
+        //{
+        //    string url = "https://www.google.com/recaptcha/api2/payload?p=06AKH6MRF4E5skjweT2payPoq_AV8W1ykmcxqOpWU32iuqSH1RKYOyVn6Lt__N-j3cNa2o3VmL8fs8kC2Yay9_Wr1MNY4zAqE-uP5qvRE9nDeflD0Z2ETXKCXvF9gtXlItM0U4TARIOe06T1oYzx_NbmImjgfTCO4pQZWTho9GUCUHQtl1M9celXW3MyO7U21j2HDZrjaAUvu2zpePRueBCxFaKUyRhDK29mGp0uNYMPPQKJMPqoegaIc&k=6Lc9qjcUAAAAADTnJq5kJMjN9aD1lxpRLMnCS2TR";
+        //    var options = new RestClientOptions("")
+        //    {
+        //        MaxTimeout = -1,
+        //    };
+        //    var client = new RestClient(options);
+        //    var request = new RestRequest("http://8b22-35-204-124-172.ngrok.io/transcribe", Method.Post);
+        //    request.AlwaysMultipartFormData = true;
+        //    request.AddFile("file", url);
+        //    RestResponse response = await client.ExecuteAsync(request);
+        //    MessageBox.Show(response.Content);
+        //    return response.Content;
+        //}
 
         #region InitData when Form Load
         private void InitComboBoxFile()
@@ -123,7 +146,7 @@ namespace Facebook
 
         private void configXMDT_Click(object sender, EventArgs e)
         {
-            ConfigImage configImage = new ConfigImage();
+            ConfigImage configImage = new ConfigImage("1");
             configImage.Show();
         }
 
@@ -217,7 +240,29 @@ namespace Facebook
         private void CheckPointMBasic282(int rowIndex)
         {
             FacebookError282 facebookError282 = new FacebookError282();
-            var result = facebookError282.ProcessMBasicFacebook(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
+            ImageProcessing imageProcessing = new ImageProcessing();
+            var account = lstAccountInfo[rowIndex];
+            string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
+            
+            if (string.IsNullOrEmpty(account.Info))
+            {
+                Random random = new Random();
+                var age = random.Next(18, 60);
+                //fix gender or random o day male or female
+                string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, "male");
+                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+                account.ImgFacePath = imgFaceFakePath;
+            }
+            else 
+            {
+                var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
+                var birthdaySplit = faceInfo.birthday.Split("/");
+                string yearOfBirthday = birthdaySplit[2];
+                var faceFakeUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
+                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+            } 
+
+            var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, imgFaceFakePath, KeyResovelCatcha, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
         #endregion
@@ -331,13 +376,29 @@ namespace Facebook
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Sống" : "Checkpoint";
         }
 
+        #region AccountQuality
         private void cmsAccountQuality_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
-            FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
-            int rowIndex = 9;
-            var result = facebookAccountQuality.Proccess(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
+            lstRowDataRun.Clear();
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
+                }
+            }
+            RunMultiThread(FacebookAccountQuality);
         }
+        private void FacebookAccountQuality(int rowIndex) 
+        {
+            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
+            var account = lstAccountInfo[rowIndex];
+            //Set mau phoi o dau so 1
+            var result = facebookAccountQuality.Proccess(account, rowIndex, itemSelected.Value, "1", KeyResovelCatcha, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";           
+        }
+        #endregion
     }
 }

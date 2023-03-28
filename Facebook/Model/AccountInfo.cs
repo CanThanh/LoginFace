@@ -28,43 +28,50 @@
 
     public class FaceInfo
     {
-        public string Id { get; set; }
-        public string Email { get; set; }
-        public string FirtName { get; set; }
-        public string LastName { get; set; }
-        public string DateOfBirth { get; set; }
-        public string Gender { get; set; }
-        public string Address { get; set; }
-        public string About { get; set; }
-        public string ImageUrl { get; set; }
-        public List<string> Works { get; set; }
-        public List<string> Educations { get; set; }
-        public List<string> Places { get; set; }
-        public List<string> OtherNames { get; set; }
-        public string RelationShip { get; set; }
-        public string Favourite { get; set; }
-        public List<string> FamilyMember { get; set; }
-        public List<string> Friends { get; set; }
+        public string id { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string name { get; set; }
+        public string birthday { get; set; }
+        public string gender { get; set; }
+        public string address { get; set; }
+
+        //public string Email { get; set; }
+        //public string FirtName { get; set; }
+        //public string LastName { get; set; }
+        //public string DateOfBirth { get; set; }
+        //public string Gender { get; set; }
+        //public string Address { get; set; }
+        //public string About { get; set; }
+        //public string ImageUrl { get; set; }
+        //public List<string> Works { get; set; }
+        //public List<string> Educations { get; set; }
+        //public List<string> Places { get; set; }
+        //public List<string> OtherNames { get; set; }
+        //public string RelationShip { get; set; }
+        //public string Favourite { get; set; }
+        //public List<string> FamilyMember { get; set; }
+        //public List<string> Friends { get; set; }
 
         public FaceInfo()
         {
-            Works = new List<string>();
-            Educations = new List<string>();
-            Places = new List<string>();
-            OtherNames = new List<string>();
-            FamilyMember = new List<string>();
-            Friends = new List<string>();
+            //Works = new List<string>();
+            //Educations = new List<string>();
+            //Places = new List<string>();
+            //OtherNames = new List<string>();
+            //FamilyMember = new List<string>();
+            //Friends = new List<string>();
         }
+    }
 
-        public class ComboboxItem
+    public class ComboboxItem
+    {
+        public string Text { get; set; }
+        public string Value { get; set; }
+
+        public override string ToString()
         {
-            public string Text { get; set; }
-            public string Value { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
+            return Text;
         }
     }
 }

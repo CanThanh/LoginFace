@@ -1,7 +1,6 @@
 ﻿using Facebook.Model;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
-using static Facebook.Model.FaceInfo;
 
 namespace Facebook.Core
 {
@@ -360,6 +359,13 @@ namespace Facebook.Core
                     command.Parameters.AddWithValue("@active", 1);
                     command.ExecuteNonQuery();
                 }
+                else
+                {
+                    command.CommandText = "UPDATE CONFIGIDENTITY SET Infor = @infor, ImageUrl = @imageUrl WHERE Name = @name";
+                    command.Parameters.AddWithValue("@infor", JsonConvert.SerializeObject(configIdentityModel));
+                    command.Parameters.AddWithValue("@imageUrl", imageUrl);
+                    command.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
@@ -389,6 +395,36 @@ namespace Facebook.Core
             {
                 Console.WriteLine(ex.Message);
                 result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+
+        public ConfigIdentityDbModel GetConfigIndentityById(string idConfigIndentity)
+        {
+            var result = new ConfigIdentityDbModel();
+            try
+            {
+                createConection();
+                string sql = "SELECT NAME, INFOR, IMAGEURL FROM CONFIGIDENTITY WHERE Id = @idConfigIndentity";
+                SqliteCommand command = new SqliteCommand(sql, _con);
+                command.Parameters.AddWithValue("@idConfigIndentity", idConfigIndentity);
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    result.name = reader.GetString(0);
+                    result.configIdentityModel = JsonConvert.DeserializeObject<ConfigIdentityModel>(reader.GetString(1));
+                    result.imageUrl = reader.GetString(2);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = new ConfigIdentityDbModel();
             }
             finally
             {

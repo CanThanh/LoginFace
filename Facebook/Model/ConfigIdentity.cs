@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Facebook.Model
 {
-    internal class ConfigIdentityModel
+    public class ConfigIdentityModel
     {
         public int nUDFirstNameRotate {get; set;}
         public int nUDFirstNameY {get; set;}
@@ -38,6 +38,12 @@ namespace Facebook.Model
         public int cbFontStyle {get; set;}
         public string cbFont { get; set;}
         public bool ckFullName { get; set; }
+    }
+    public class ConfigIdentityDbModel
+    {
+        public ConfigIdentityModel configIdentityModel { get; set;}
+        public string imageUrl { get; set; }
+        public string name { get; set; }
     }
 
     public class ConfigInputModel

@@ -160,7 +160,7 @@ namespace Facebook.Core.FacebookError
                 ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                 resolveCaptcha.APIKey = resolveCaptchaKey;
                 string outputCapcha = "";
-                resolveCaptcha.SolveNormalCapcha(ConvertImageToBase64String(imgPath), out outputCapcha);
+                resolveCaptcha.SolveNormalCapcha(CommonFunction.ConvertImageToBase64String(imgPath), out outputCapcha);
 
                 if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
                 {
@@ -259,7 +259,7 @@ namespace Facebook.Core.FacebookError
         #endregion Process Mfacebook
 
         #region Process MbasicFacebook
-        public bool ProcessMBasicFacebook(AccountInfo account, int rowIndex, string resolveCaptchaKey, bool loginCookie = false, int age = 0, string gender = "male")
+        public bool ProcessMBasicFacebook(AccountInfo account, int rowIndex, string imgFacePath, string resolveCaptchaKey, bool loginCookie = false)
         {
             var result = true;
             Random random = new Random();
@@ -282,7 +282,7 @@ namespace Facebook.Core.FacebookError
                 }
 
                 Thread.Sleep(random.Next(1000, 2000));
-                if (driver.Url.Contains("282")) //1501092823525282
+                if (driver.Url.Contains("1501092823525282")) //1501092823525282
                 {
                     var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
                     account.DTSG = dtsg;
@@ -302,26 +302,7 @@ namespace Facebook.Core.FacebookError
                         ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                         resolveCaptcha.APIKey = resolveCaptchaKey;
                         string outputCapcha = "";
-                        resolveCaptcha.SolveNormalCapcha(ConvertImageToBase64String(imgPath), out outputCapcha);
-                        //var containName = source.Contains("you're now interacting as");
-                        //var captcha_persist_data = driver.FindElement(By.XPath("//input[@name='captcha_persist_data']")).GetValue();
-                        //ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
-                        //Screenshot screenshot = screenshotDriver.GetScreenshot();
-                        //string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Screenshot") + "\\" + account.Id + "SS.png";
-                        //screenshot.SaveAsFile(imgPath);
-                        //var img = Image.FromFile(imgPath);
-                        ////Diffrence crop mobile/win
-                        //int xLocation = (!string.IsNullOrEmpty(account.UserAgent) && account.UserAgent.Contains("Android")) ? 10 : 136;
-                        //Rectangle cropArea = new Rectangle(180, containName ? 135 : 105, 250, 66);
-                        //var imgCaptcha = cropImage(img, cropArea);
-                        //string imgCaptchaPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
-                        //imgCaptcha.Save(imgCaptchaPath);
-                        //string base64Img = ConvertImageToBase64String(Image.FromFile(imgCaptchaPath));
-                        ////Resolve captcha
-                        //ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-                        //resolveCaptcha.APIKey = resolveCaptchaKey;
-                        //string outputCapcha = "";
-                        //resolveCaptcha.SolveNormalCapcha(base64Img, out outputCapcha);
+                        resolveCaptcha.SolveNormalCapcha(CommonFunction.ConvertImageToBase64String(imgPath), out outputCapcha);
 
                         if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
                         {
@@ -388,22 +369,10 @@ namespace Facebook.Core.FacebookError
                     if (source.Contains("mobile_image_data"))
                     {
                         MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
-                        if (age == 0)
-                        {
-                            age = random.Next(18, 60);
-                            var randomGender = random.NextDouble();
-                        }
-
-                        ImageProcessing imageProcessing = new ImageProcessing();
-                        string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, gender);
-                        string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
-                        imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
-                        account.ImgFacePath = imgFaceFakePath;
                         var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
-                        mobile_image_data.SendKeys(imgFaceFakePath);
+                        mobile_image_data.SendKeys(imgFacePath);
                         Thread.Sleep(200);
                         driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
-                        driver.Navigate().GoToUrl(url);
                     }
                 }
             }
@@ -425,19 +394,7 @@ namespace Facebook.Core.FacebookError
             Bitmap bmpImage = new Bitmap(img);
             return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
         }
-        private string ConvertImageToBase64String(Image image)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                image.Save(ms, image.RawFormat);
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
-        private string ConvertImageToBase64String(string filePath)
-        {
-            byte[] bytes = File.ReadAllBytes(filePath);
-            return Convert.ToBase64String(bytes);
-        }
+        
         #endregion Process MbasicFacebook
 
         string Reslove2CaptchaCaptcha(string captchaKey, string ggKey, string url, string cookie = "")

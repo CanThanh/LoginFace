@@ -103,36 +103,49 @@ namespace Facebook.Core
 
                 using (Graphics graphics = Graphics.FromImage(bitmap))
                 {
-                    graphics.RotateTransform(configIdentity.nUDFirstNameRotate, MatrixOrder.Append);
-                    if (configIdentity.nUDFirstNameX > 0 && configIdentity.nUDFirstNameY > 0)
+                    if (configIdentity.ckFullName)
                     {
-                        graphics.DrawString(faceInfo.FirtName, font, brush, pName);
+                        graphics.RotateTransform(configIdentity.nUDFirstNameRotate, MatrixOrder.Append);
+                        if (configIdentity.nUDFirstNameX > 0 && configIdentity.nUDFirstNameY > 0)
+                        {
+                            graphics.DrawString(faceInfo.name, font, brush, pName);
+                        }
+                    }
+                    else
+                    {
+                        graphics.RotateTransform(configIdentity.nUDFirstNameRotate, MatrixOrder.Append);
+                        if (configIdentity.nUDFirstNameX > 0 && configIdentity.nUDFirstNameY > 0)
+                        {
+                            graphics.DrawString(faceInfo.first_name, font, brush, pName);
+                        }
+
+                        graphics.RotateTransform(configIdentity.nUDLastNameRotate, MatrixOrder.Append);
+                        if (configIdentity.nUDLastNameX > 0 && configIdentity.nUDLastNameY > 0)
+                        {
+                            graphics.DrawString(faceInfo.last_name, font, brush, pNameDiff);
+                        }
                     }
 
-                    if (configIdentity.nUDLastNameX > 0 && configIdentity.nUDLastNameY > 0)
-                    {
-                        graphics.DrawString(faceInfo.LastName, font, brush, pNameDiff);
-                    }
 
                     if(configIdentity.nUDBirthdayX > 0 && configIdentity.nUDBirthdayY >0)
                     {
                         graphics.ResetTransform();
                         graphics.RotateTransform(configIdentity.nUDBirthdayRotate, MatrixOrder.Append);
-                        graphics.DrawString(faceInfo.DateOfBirth, font, brush, pBirthday);
+                        graphics.DrawString(faceInfo.birthday, font, brush, pBirthday);
                     }
 
                     if (configIdentity.nUDGenderX > 0 && configIdentity.nUDGenderY > 0)
                     {
                         graphics.ResetTransform();
                         graphics.RotateTransform(configIdentity.nUDGenderRotate, MatrixOrder.Append);
-                        graphics.DrawString(faceInfo.Gender, font, brush, pGender);
+                        graphics.DrawString(faceInfo.gender, font, brush, pGender);
                     }
 
                     if (configIdentity.nUDAddressX > 0 && configIdentity.nUDAddressY > 0)
                     {
                         graphics.ResetTransform();
                         graphics.RotateTransform(configIdentity.nUDAddressRotate, MatrixOrder.Append);
-                        graphics.DrawString(faceInfo.Address, font, brush, pAddress);
+                        graphics.DrawString(faceInfo.address, font, brush, pAddress);
                     }
 
 

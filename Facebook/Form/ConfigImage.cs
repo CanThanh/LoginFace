@@ -1,6 +1,7 @@
 ﻿using Facebook.Core;
 using Facebook.Model;
 using System.Drawing.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace Facebook
 {
@@ -8,34 +9,82 @@ namespace Facebook
     {
         string imgPath = "";
         Bitmap bitmap = null;
+        string idConfigIdentity;
 
         public ConfigImage()
         {
             InitializeComponent();
             InitComboBox();
-            InitConfigPoint();
+            InitConfigPoint("");
         }
 
-        private void InitConfigPoint()
+        public ConfigImage(string idConfigIdentity)
         {
-            nUDFirstNameX.Value = 580;
-            nUDFirstNameY.Value = 276;
-            nUDLastNameX.Value = 575;
-            nUDLastNameY.Value = 346;
-            nUDBirthdayX.Value = 620;
-            nUDBirthdayY.Value = 420;
-            nUDImgFirstLocationX.Value = 100;
-            nUDImgFirstLocationY.Value = 282;
-            nUDGenderX.Value = 470;
-            nUDGenderY.Value = 458;
-            nUDAddressX.Value = 485;
-            nUDAddressY.Value = 495;
-            nUDImgFirstWidth.Value = 200;
-            nUDImgFirstHeight.Value = 250;
-            nUDFontSize.Value = 16;
-            //PointF pEthnic = new PointF(750f, 455f); //Dân tộc
-            //PointF pDomicile = new PointF(530f, 567f); //Tôn giáo
-            //PointF pExpires = new PointF(230f, 610f); //Ngày hết hạn
+            InitializeComponent();
+            InitComboBox();
+            InitConfigPoint(idConfigIdentity);
+        }
+
+        private void InitConfigPoint(string idConfigIdentity)
+        {
+            if (string.IsNullOrEmpty(idConfigIdentity))
+            {
+                nUDFirstNameX.Value = 580;
+                nUDFirstNameY.Value = 276;
+                nUDLastNameX.Value = 575;
+                nUDLastNameY.Value = 346;
+                nUDBirthdayX.Value = 620;
+                nUDBirthdayY.Value = 420;
+                nUDImgFirstLocationX.Value = 100;
+                nUDImgFirstLocationY.Value = 282;
+                nUDGenderX.Value = 470;
+                nUDGenderY.Value = 458;
+                nUDAddressX.Value = 485;
+                nUDAddressY.Value = 495;
+                nUDImgFirstWidth.Value = 200;
+                nUDImgFirstHeight.Value = 250;
+                nUDFontSize.Value = 16;
+            }
+            else
+            {
+                SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
+                var configIdentityDbModel = sqLiteProcessing.GetConfigIndentityById(idConfigIdentity);
+                nUDFirstNameX.Value = configIdentityDbModel.configIdentityModel.nUDFirstNameX;
+                nUDFirstNameY.Value = configIdentityDbModel.configIdentityModel.nUDFirstNameY;
+                nUDFirstNameRotate.Value = configIdentityDbModel.configIdentityModel.nUDFirstNameRotate;
+                nUDLastNameX.Value = configIdentityDbModel.configIdentityModel.nUDLastNameX;
+                nUDLastNameY.Value = configIdentityDbModel.configIdentityModel.nUDLastNameY;
+                nUDLastNameRotate.Value = configIdentityDbModel.configIdentityModel.nUDLastNameRotate;
+                nUDBirthdayX.Value = configIdentityDbModel.configIdentityModel.nUDBirthdayX;
+                nUDBirthdayY.Value = configIdentityDbModel.configIdentityModel.nUDBirthdayY;
+                nUDBirthdayRotate.Value = configIdentityDbModel.configIdentityModel.nUDBirthdayRotate;
+                nUDImgFirstLocationX.Value = configIdentityDbModel.configIdentityModel.nUDImgFirstLocationX;
+                nUDImgFirstLocationY.Value = configIdentityDbModel.configIdentityModel.nUDImgFirstLocationY;
+                nUDImgFirstWidth.Value = configIdentityDbModel.configIdentityModel.nUDImgFirstWidth;
+                nUDImgFirstHeight.Value = configIdentityDbModel.configIdentityModel.nUDImgFirstHeight;
+                nUDImgFirstLocationRotate.Value = configIdentityDbModel.configIdentityModel.nUDImgFirstLocationRotate;
+                nUDGenderX.Value = configIdentityDbModel.configIdentityModel.nUDGenderX;
+                nUDGenderY.Value = configIdentityDbModel.configIdentityModel.nUDGenderY;
+                nUDGenderRotate.Value = configIdentityDbModel.configIdentityModel.nUDGenderRotate;
+                nUDAddressX.Value = configIdentityDbModel.configIdentityModel.nUDAddressX;
+                nUDAddressY.Value = configIdentityDbModel.configIdentityModel.nUDAddressY;
+                nUDAddressRotate.Value = configIdentityDbModel.configIdentityModel.nUDAddressRotate;
+                nUDImgSecondLocationX.Value = configIdentityDbModel.configIdentityModel.nUDImgSecondLocationX;
+                nUDImgSecondLocationY.Value = configIdentityDbModel.configIdentityModel.nUDImgSecondLocationY;
+                nUDImgSecondWidth.Value = configIdentityDbModel.configIdentityModel.nUDImgSecondWidth;
+                nUDImgSecondHeight.Value = configIdentityDbModel.configIdentityModel.nUDImgSecondHeight;
+                nUDImgSecondLocationRotate.Value = configIdentityDbModel.configIdentityModel.nUDImgSecondLocationRotate;
+
+                nUDFontSize.Value = configIdentityDbModel.configIdentityModel.nUDFontSize;
+                txtName.ReadOnly = true;
+                txtName.Text = configIdentityDbModel.name;
+                if (File.Exists(configIdentityDbModel.imageUrl))
+                {
+                    imgPath = configIdentityDbModel.imageUrl;
+                    ptBoxEdit.Image = Image.FromFile(configIdentityDbModel.imageUrl);
+                    ptBoxOriginal.Image = Image.FromFile(configIdentityDbModel.imageUrl);
+                }
+            }
         }
 
         private void InitComboBox()
@@ -91,15 +140,15 @@ namespace Facebook
 
                 FaceInfo faceInfo = new FaceInfo
                 {
-                    FirtName = "Nguyen Tien",
-                    LastName = "Long",
-                    DateOfBirth = "19.05.81",
-                    Gender = "Male",
-                    Address = "Thien Hien, My Dinh, Tu Liem, Ha Noi",
-                    ImageUrl = "https://content.fakeface.rest/female_32_0d3d9bedb2171ff4b3a0f111d6dd756a681fe395.jpg",
+                    first_name = "Nguyen Tien",
+                    last_name = "Long",
+                    birthday = "19.05.81",
+                    gender = "Male",
+                    address = "Thien Hien, My Dinh, Tu Liem, Ha Noi",
                 };
                 ImageProcessing imageProcessing = new ImageProcessing();
-                var img = imageProcessing.getImageFromUrl(faceInfo.ImageUrl.Substring(30), faceInfo.ImageUrl);
+                var imageUrl = "https://content.fakeface.rest/female_32_0d3d9bedb2171ff4b3a0f111d6dd756a681fe395.jpg";
+                var img = imageProcessing.getImageFromUrl(imageUrl.Substring(30), imageUrl);
                 imageProcessing.ProcessImage(faceInfo, bitmap, GetConfigIdentityForm(), img);
                 ptBoxEdit.Image = (Image)bitmap;
             }
@@ -156,6 +205,7 @@ namespace Facebook
             {
                 SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
                 sqLiteProcessing.InsertOrUpdateConfigIndentity(txtName.Text, GetConfigIdentityForm(), imgPath);
+                this.Close();
             }
         }
 

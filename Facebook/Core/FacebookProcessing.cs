@@ -197,7 +197,7 @@ namespace Facebook.Core
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
             CommonFunction.SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
             driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
-            Thread.Sleep(random.Next(500, 1000));
+            Thread.Sleep(random.Next(1000, 1500));
             var radioBtn = driver.FindElements(By.Name("name_action_selected"));
             for (int i = 0; i < radioBtn.Count; i++)
             {
