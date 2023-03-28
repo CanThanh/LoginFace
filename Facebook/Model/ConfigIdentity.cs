@@ -37,6 +37,7 @@ namespace Facebook.Model
         public string cbFontColor {get; set;}
         public int cbFontStyle {get; set;}
         public string cbFont { get; set;}
+        public bool ckFullName { get; set; }
     }
 
     public class ConfigInputModel

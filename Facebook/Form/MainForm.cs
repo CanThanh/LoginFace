@@ -335,7 +335,7 @@ namespace Facebook
         {
             dgViewInput.ContextMenuStrip.Close();
             FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
-            int rowIndex = 2;
+            int rowIndex = 9;
             var result = facebookAccountQuality.Proccess(lstAccountInfo[rowIndex], rowIndex, KeyResovelCatcha, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }

@@ -35,6 +35,10 @@ namespace Facebook.Core
                 " UId TEXT, TimeInteract TEXT, Action TEXT, Config TEXT)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
+            sql = "CREATE TABLE IF NOT EXISTS CONFIGIDENTITY (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                " Name TEXT, Infor TEXT, ImageUrl TEXT, Active INTEGER)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
             closeConnection();
         }
 
@@ -289,6 +293,97 @@ namespace Facebook.Core
                     }
                     transaction.Commit();
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+        #endregion
+
+        #region ConfigIndentity
+        public List<ComboboxItem> getAllConfigIndentity()
+        {
+            var result = new List<ComboboxItem>();
+            try
+            {
+                createConection();
+                string sql = "SELECT Id, Name FROM CONFIGIDENTITY WHERE Active = 1";
+                SqliteCommand command = new SqliteCommand(sql, _con);
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var value = reader.GetInt32(0).ToString();
+                    var text = reader.GetString(1);
+                    ComboboxItem item = new ComboboxItem()
+                    {
+                        Value = value,
+                        Text = text,
+                    };
+                    result.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = new List<ComboboxItem>();
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+
+        public bool InsertOrUpdateConfigIndentity(string name, ConfigIdentityModel configIdentityModel, string imageUrl)
+        {
+            var result = true;
+            try
+            {
+                createConection();
+                string sql = "SELECT COUNT(*) FROM CONFIGIDENTITY WHERE Name = @name";
+                SqliteCommand command = new SqliteCommand(sql, _con);
+                command.Parameters.AddWithValue("@name", name);
+                var count = Convert.ToInt32(command.ExecuteScalar());
+                if (count == 0)
+                {
+                    command.CommandText = "INSERT INTO CONFIGIDENTITY (Name, Infor, ImageUrl, Active) VALUES (@name, @infor, @imageUrl, @active)";
+                    command.Parameters.AddWithValue("@infor", JsonConvert.SerializeObject(configIdentityModel));
+                    command.Parameters.AddWithValue("@imageUrl", imageUrl);
+                    command.Parameters.AddWithValue("@active", 1);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+
+        public bool DeleteConfigIndentity(string idConfigIndentity)
+        {
+            var result = true;
+            try
+            {
+                createConection();
+                //string sql = "DELTE FROM FILES WHERE name = @name";
+                string sql = "UPDATE CONFIGIDENTITY Set Active = 0 WHERE Id = @idConfigIndentity";
+                SqliteCommand command = new SqliteCommand(sql, _con);
+                command.Parameters.AddWithValue("@idConfigIndentity", idConfigIndentity);
+                command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

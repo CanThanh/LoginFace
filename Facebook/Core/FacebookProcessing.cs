@@ -289,11 +289,14 @@ namespace Facebook.Core
             var lstCookie = cookie.Split(';');
             for (int i = 0; i < lstCookie.Length; i++)
             {
-                string key = lstCookie[i].Split('=')[0].Trim();
-                string value = lstCookie[i].Split('=')[1].Trim();
-                //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,".facebook.com","/", DateTime.Now.AddDays(10));
-                OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
-                driver.Manage().Cookies.AddCookie(osCookie);
+                if (!string.IsNullOrEmpty(lstCookie[i]))
+                {
+                    string key = lstCookie[i].Split('=')[0].Trim();
+                    string value = lstCookie[i].Split('=')[1].Trim();
+                    //OpenQA.Selenium.Cookie osCookie = new Cookie(key,value,".facebook.com","/", DateTime.Now.AddDays(10));
+                    OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
+                    driver.Manage().Cookies.AddCookie(osCookie);
+                }
             }
         }
         #endregion Login
@@ -301,19 +304,24 @@ namespace Facebook.Core
         #region GetToken
         public string GetEAAGToken(ChromeDriver driver, string user, string twoFA, string dtsg, string cookie)
         {
+            string token = "EAAG";
             //Vào trang business lấy token
-            driver.Url = "https://business.facebook.com/content_management/";
+            driver.Url = "https://business.facebook.com/business_locations/";
             Thread.Sleep(3000);
             var respone = CallAuthenTwoFa(user, twoFA, dtsg, cookie);
             Thread.Sleep(5000);
-            driver.Url = "https://business.facebook.com/content_management/";
-            Thread.Sleep(10000);
-            string source = driver.PageSource;
-            string token = "EAAG";
-            if (source.Contains("EAAG"))
+            if (respone.Contains("codeConfirmed\":true"))
             {
-                token += source.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+                //driver.Url = "https://business.facebook.com/business_locations/";
+                //Thread.Sleep(10000);
+                string source = driver.PageSource;
+
+                if (source.Contains("EAAG"))
+                {
+                    token += source.Split(new[] { "EAAG" }, StringSplitOptions.None)[1].Split('"')[0];
+                }
             }
+            var kq = GetEAAGTokenApi(user, cookie);
             return token;
         }
 
@@ -321,8 +329,12 @@ namespace Facebook.Core
         {
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
             HttpRequest httprequest = new HttpRequest();
+            //httprequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
+            //httprequest.AddHeader("origin", "https://business.facebook.com");
+            //httprequest.AddHeader("referer", "https://business.facebook.com/security/twofactor/reauth/?twofac_next=https%3A%2F%2Fbusiness.facebook.com%2Fbusiness_locations%2F&type=avoid_bypass&app_id=0&save_device=0");
             CommonFunction.AddCookie(httprequest, cookie);
-            var data = "approvals_code=" + faCode + "&save_device=false&__user=" + user + "&__a=1&__dyn=7xeUmF3EfXpUS2q3mbwyyVuC2-m2q3Kq2i5Uf9E6C7UW3q5UgDxW4E8U6ydwJwCwmUO0BoiyEqx68w9q15wfO1YCwjHwuk9wgovyolwuEsxe687C2m3K2y1nUS0jG12KdwnU5W0IU9kbxR12ewi85W1bxq1uG3G48W2a5Ey19zUcE28wdq1iwKwHxa1XwnFU2DxiaBw4kxa4UCfwSyES2e0UE2ZwiU8U6C0yEco5C&__csr=&__req=8&__hs=19395.BP%3ADEFAULT.2.0.0.0.0&dpr=1.5&__ccg=GOOD&__rev=1006920906&__s=6hjwrm%3A3vhtq1%3Aspfsji&__hsi=7197324973317924624&__comet_req=0&fb_dtsg=" + dtsg + "&jazoest=25525&lsd=Q7Feqpz-TcfK27ydcQVNhN&__aaid=191881262750333&__spin_r=1006920906&__spin_b=trunk&__spin_t=1675757806&__jssesw=1";
+            var data = "approvals_code=" + faCode + "&save_device=false&__user=" + user + "&__a=1&__dyn=7xeUmF3EfXpUS2q3mbwyyVuC2-m2q3Kq2i5U4e1Fx-ewSxu68uxa2e1Ezobo9E5KcwayaxG4o2vwho3Ywv9E4WUc417mu11x-9xm1WxO4Uowuo9oeUa85vzo1eE4aUS1vwnE2PwBgK7k48W18wnE4K5E5WEeEgzE8Emy84CfwOw8y0RE5a2W2K4E7K1uDwau58Gm0hi4Ejyo-3qazo8U3ywbS1bwzwqo2awNwmo&__csr=&__req=6&__hs=19443.BP%3ADEFAULT.2.0..0.0&dpr=1&__ccg=GOOD&__rev=1007183526&__s=jj5qaf%3A46u6l7%3Aamtubg&__hsi=7215233148342221029&__comet_req=0&fb_dtsg=" + dtsg + "&jazoest=25390&lsd=x122Doj0kkTQe8TdeLWoDJ&__aaid=158820340401185&__spin_r=1007183526&__spin_b=trunk&__spin_t=1679927378&__jssesw=1";
+            //var data = "approvals_code=" + faCode + "&save_device=false&__user=" + user + "&__a=1&__dyn=7xeUmF3EfXpUS2q3mbwyyVuC2-m2q3Kq2i5Uf9E6C7UW3q5UgDxW4E8U6ydwJwCwmUO0BoiyEqx68w9q15wfO1YCwjHwuk9wgovyolwuEsxe687C2m3K2y1nUS0jG12KdwnU5W0IU9kbxR12ewi85W1bxq1uG3G48W2a5Ey19zUcE28wdq1iwKwHxa1XwnFU2DxiaBw4kxa4UCfwSyES2e0UE2ZwiU8U6C0yEco5C&__csr=&__req=8&__hs=19395.BP%3ADEFAULT.2.0.0.0.0&dpr=1.5&__ccg=GOOD&__rev=1006920906&__s=6hjwrm%3A3vhtq1%3Aspfsji&__hsi=7197324973317924624&__comet_req=0&fb_dtsg=" + dtsg + "&jazoest=25525&lsd=Q7Feqpz-TcfK27ydcQVNhN&__aaid=191881262750333&__spin_r=1006920906&__spin_b=trunk&__spin_t=1675757806&__jssesw=1";
             var response = httprequest.Post("https://business.facebook.com/security/twofactor/reauth/enter/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
             return response;
         }
@@ -331,7 +343,8 @@ namespace Facebook.Core
         {
             HttpRequest request = new HttpRequest();
             CommonFunction.AddCookie(request, cookie);
-            var respone = request.Get("https://business.facebook.com/content_management/").ToString();
+            var respone = request.Get("https://business.facebook.com/business_locations/").ToString();
+            //var respone = request.Get("https://business.facebook.com/content_management/").ToString();
             string token = "EAAG";
             if (respone.Contains("EAAG"))
             {
@@ -356,7 +369,7 @@ namespace Facebook.Core
         public string GetDTSGToken(ChromeDriver driver)
         {
             string source = driver.PageSource;
-            string token = source.Split(new[] { "\"token\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
+            string token = source.Split(new[] { "dtsg\":{\"token\":\"" }, StringSplitOptions.None)[1].Split('"')[0];
             return token;
         }
         #endregion
@@ -374,15 +387,23 @@ namespace Facebook.Core
 
         public string GetUserInfoSecond(string eaag, string cookie)
         {
-            //var url = "https://graph.facebook.com/v15.0/me?access_token=" + eaag + "&fields=id%2Cname%2Cfirst_name%2Cgender%2Chometown%2Crelationship_status%2Creligion%2Cfriends%2Cbirthday%2Clast_name";
             var url = "https://graph.facebook.com/me?fields=first_name,last_name,middle_name,name,birthday,gender&access_token=" + eaag;
             HttpRequest httprequest = new HttpRequest();
             CommonFunction.AddCookie(httprequest, cookie);
             var response = httprequest.Get(url).ToString();
             return response;
         }
+
+        public string GetFullUserInfoSecond(string eaag, string cookie)
+        {
+            var url = "https://graph.facebook.com/v14.0/me/adaccounts?summary=1&limit=50&fields=account_id,name,adtrust_dsl,account_status,users{id,+role},currency,+funding_source,all_payment_methods{pm_credit_card{display_string,exp_month,exp_year,is_verified},payment_method_direct_debits{address,can_verify,display_string,is_awaiting,is_pending,status},payment_method_paypal{email_address},payment_method_tokens{current_balance,original_balance,time_expire,type}}&locale=en_US&access_token=" + eaag;
+            HttpRequest httprequest = new HttpRequest();
+            CommonFunction.AddCookie(httprequest, cookie);
+            var response = httprequest.Get(url).ToString();
+            return response;
+        }
         #endregion
-        
+
         public bool CheckStatusAccount(AccountInfo accountInfo, string url, int rowIndex, bool isLoginCookie)
         {
             var result = false;

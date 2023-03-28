@@ -89,7 +89,7 @@ namespace Facebook.Core
             try
             {
                 PointF pName = new PointF(configIdentity.nUDFirstNameX, configIdentity.nUDFirstNameY);
-                PointF pNameDiff = new PointF(configIdentity.nUDFirstNameX, configIdentity.nUDFirstNameY);
+                PointF pNameDiff = new PointF(configIdentity.nUDLastNameX, configIdentity.nUDLastNameY);
                 PointF pBirthday = new PointF(configIdentity.nUDBirthdayX, configIdentity.nUDBirthdayY);
                 PointF pImage = new PointF(configIdentity.nUDImgFirstLocationX, configIdentity.nUDImgFirstLocationY);
                 PointF pGender = new PointF(configIdentity.nUDGenderX, configIdentity.nUDGenderY);
@@ -104,36 +104,56 @@ namespace Facebook.Core
                 using (Graphics graphics = Graphics.FromImage(bitmap))
                 {
                     graphics.RotateTransform(configIdentity.nUDFirstNameRotate, MatrixOrder.Append);
-                    graphics.DrawString(faceInfo.LastName + " " + faceInfo.FirtName, font, brush, pName);
-                    graphics.DrawString(faceInfo.LastName + " " + faceInfo.FirtName, font, brush, pNameDiff);
+                    if (configIdentity.nUDFirstNameX > 0 && configIdentity.nUDFirstNameY > 0)
+                    {
+                        graphics.DrawString(faceInfo.FirtName, font, brush, pName);
+                    }
 
-                    graphics.ResetTransform();
-                    graphics.RotateTransform(configIdentity.nUDBirthdayRotate, MatrixOrder.Append);
-                    graphics.DrawString(faceInfo.DateOfBirth, font, brush, pBirthday);
-                    //graphics.DrawString("KINH", font, Brushes.Black, pEthnic);
-                    if (!(faceInfo.Gender == "Male"))
+                    if (configIdentity.nUDLastNameX > 0 && configIdentity.nUDLastNameY > 0)
+                    {
+                        graphics.DrawString(faceInfo.LastName, font, brush, pNameDiff);
+                    }
+
+                    if(configIdentity.nUDBirthdayX > 0 && configIdentity.nUDBirthdayY >0)
+                    {
+                        graphics.ResetTransform();
+                        graphics.RotateTransform(configIdentity.nUDBirthdayRotate, MatrixOrder.Append);
+                        graphics.DrawString(faceInfo.DateOfBirth, font, brush, pBirthday);
+                    }
+
+                    if (configIdentity.nUDGenderX > 0 && configIdentity.nUDGenderY > 0)
                     {
                         graphics.ResetTransform();
                         graphics.RotateTransform(configIdentity.nUDGenderRotate, MatrixOrder.Append);
-                        graphics.DrawString("Nam", font, brush, pGender);
-                    }
-                    else
-                    {
-                        graphics.ResetTransform();
-                        graphics.RotateTransform(configIdentity.nUDGenderRotate, MatrixOrder.Append);
-                        graphics.DrawString("Nữ", font, brush, pGender);
+                        graphics.DrawString(faceInfo.Gender, font, brush, pGender);
                     }
 
-                    graphics.ResetTransform();
-                    graphics.RotateTransform(configIdentity.nUDAddressRotate, MatrixOrder.Append);
-                    graphics.DrawString(faceInfo.Address, font, brush, pAddress);
+                    if (configIdentity.nUDAddressX > 0 && configIdentity.nUDAddressY > 0)
+                    {
+                        graphics.ResetTransform();
+                        graphics.RotateTransform(configIdentity.nUDAddressRotate, MatrixOrder.Append);
+                        graphics.DrawString(faceInfo.Address, font, brush, pAddress);
+                    }
+
 
                     //graphics.DrawString(faceInfo.Address, font, brush, pDomicile);
                     //graphics.DrawString(string.Format("0{0}/0{1}/{2}", Rand.Next(1, 9), Rand.Next(2, 9), Rand.Next(2025, 2029)), font, brush, pExpires);
 
-                    graphics.ResetTransform();
-                    graphics.RotateTransform(configIdentity.nUDImgFirstLocationRotate, MatrixOrder.Append);
-                    graphics.DrawImage(new Bitmap(img, new Size(configIdentity.nUDImgFirstWidth, configIdentity.nUDImgFirstHeight)), pImage);
+                    if (configIdentity.nUDImgFirstWidth > 0 && configIdentity.nUDImgFirstHeight > 0)
+                    {
+                        graphics.ResetTransform();
+                        graphics.RotateTransform(configIdentity.nUDImgFirstLocationRotate, MatrixOrder.Append);
+                        graphics.DrawImage(new Bitmap(img, new Size(configIdentity.nUDImgFirstWidth, configIdentity.nUDImgFirstHeight)), pImage);
+                    }
+
+
+                    if (configIdentity.nUDImgSecondWidth > 0 && configIdentity.nUDImgSecondHeight > 0)
+                    {
+                        graphics.ResetTransform();
+                        graphics.RotateTransform(configIdentity.nUDImgSecondLocationRotate, MatrixOrder.Append);
+                        PointF pImageSecond = new PointF(configIdentity.nUDImgSecondLocationX, configIdentity.nUDImgSecondLocationY);
+                        graphics.DrawImage(new Bitmap(img, new Size(configIdentity.nUDImgSecondWidth, configIdentity.nUDImgSecondHeight)), pImageSecond);
+                    }
                 }
             }
             catch (Exception ex)

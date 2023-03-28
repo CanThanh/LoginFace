@@ -28,732 +28,647 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ptBoxOriginal = new System.Windows.Forms.PictureBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ptBoxEdit = new System.Windows.Forms.PictureBox();
-            this.btnLoadImg = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbFontColor = new System.Windows.Forms.ComboBox();
-            this.cbFontStyle = new System.Windows.Forms.ComboBox();
-            this.cbFont = new System.Windows.Forms.ComboBox();
-            this.nUDFontSize = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.nUDAddressRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDAddressY = new System.Windows.Forms.NumericUpDown();
-            this.nUDAddressX = new System.Windows.Forms.NumericUpDown();
-            this.nUDGenderRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDGenderY = new System.Windows.Forms.NumericUpDown();
-            this.nUDGenderX = new System.Windows.Forms.NumericUpDown();
-            this.nUDBirthdayRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDBirthdayY = new System.Windows.Forms.NumericUpDown();
-            this.nUDBirthdayX = new System.Windows.Forms.NumericUpDown();
-            this.nUDLastNameRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDLastNameY = new System.Windows.Forms.NumericUpDown();
-            this.nUDLastNameX = new System.Windows.Forms.NumericUpDown();
-            this.nUDFirstNameRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDFirstNameY = new System.Windows.Forms.NumericUpDown();
-            this.nUDFirstNameX = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ckFullName = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.nUDImgSecondLocationRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgSecondLocationY = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgSecondLocationX = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgFirstLocationRotate = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgFirstLocationY = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgFirstLocationX = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgSecondHeight = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgSecondWidth = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgFirstHeight = new System.Windows.Forms.NumericUpDown();
-            this.nUDImgFirstWidth = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.btnSaveConfig = new System.Windows.Forms.Button();
-            this.btnPreviewImg = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.ptBoxOriginal)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptBoxEdit)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFontSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameX)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationRotate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstWidth)).BeginInit();
-            this.SuspendLayout();
+            ptBoxOriginal = new PictureBox();
+            groupBox1 = new GroupBox();
+            groupBox2 = new GroupBox();
+            ptBoxEdit = new PictureBox();
+            btnLoadImg = new Button();
+            groupBox3 = new GroupBox();
+            groupBox5 = new GroupBox();
+            cbFontColor = new ComboBox();
+            cbFontStyle = new ComboBox();
+            cbFont = new ComboBox();
+            nUDFontSize = new NumericUpDown();
+            label12 = new Label();
+            label11 = new Label();
+            label10 = new Label();
+            nUDAddressRotate = new NumericUpDown();
+            nUDAddressY = new NumericUpDown();
+            nUDAddressX = new NumericUpDown();
+            nUDGenderRotate = new NumericUpDown();
+            nUDGenderY = new NumericUpDown();
+            nUDGenderX = new NumericUpDown();
+            nUDBirthdayRotate = new NumericUpDown();
+            nUDBirthdayY = new NumericUpDown();
+            nUDBirthdayX = new NumericUpDown();
+            nUDLastNameRotate = new NumericUpDown();
+            nUDLastNameY = new NumericUpDown();
+            nUDLastNameX = new NumericUpDown();
+            nUDFirstNameRotate = new NumericUpDown();
+            nUDFirstNameY = new NumericUpDown();
+            nUDFirstNameX = new NumericUpDown();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            lblLastName = new Label();
+            lblFistName = new Label();
+            ckFullName = new CheckBox();
+            groupBox4 = new GroupBox();
+            nUDImgSecondLocationRotate = new NumericUpDown();
+            nUDImgSecondLocationY = new NumericUpDown();
+            nUDImgSecondLocationX = new NumericUpDown();
+            nUDImgFirstLocationRotate = new NumericUpDown();
+            nUDImgFirstLocationY = new NumericUpDown();
+            nUDImgFirstLocationX = new NumericUpDown();
+            nUDImgSecondHeight = new NumericUpDown();
+            nUDImgSecondWidth = new NumericUpDown();
+            nUDImgFirstHeight = new NumericUpDown();
+            nUDImgFirstWidth = new NumericUpDown();
+            label9 = new Label();
+            label8 = new Label();
+            label7 = new Label();
+            label6 = new Label();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            btnSaveConfig = new Button();
+            btnPreviewImg = new Button();
+            txtName = new TextBox();
+            label13 = new Label();
+            ((System.ComponentModel.ISupportInitialize)ptBoxOriginal).BeginInit();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ptBoxEdit).BeginInit();
+            groupBox3.SuspendLayout();
+            groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDFontSize).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameX).BeginInit();
+            groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationRotate).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondHeight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondWidth).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstHeight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstWidth).BeginInit();
+            SuspendLayout();
             // 
             // ptBoxOriginal
             // 
-            this.ptBoxOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ptBoxOriginal.Location = new System.Drawing.Point(3, 16);
-            this.ptBoxOriginal.Name = "ptBoxOriginal";
-            this.ptBoxOriginal.Size = new System.Drawing.Size(444, 255);
-            this.ptBoxOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ptBoxOriginal.TabIndex = 0;
-            this.ptBoxOriginal.TabStop = false;
+            ptBoxOriginal.Dock = DockStyle.Fill;
+            ptBoxOriginal.Location = new Point(3, 19);
+            ptBoxOriginal.Name = "ptBoxOriginal";
+            ptBoxOriginal.Size = new Size(444, 252);
+            ptBoxOriginal.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptBoxOriginal.TabIndex = 0;
+            ptBoxOriginal.TabStop = false;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.ptBoxOriginal);
-            this.groupBox1.Location = new System.Drawing.Point(15, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(450, 274);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Ảnh gốc";
+            groupBox1.Controls.Add(ptBoxOriginal);
+            groupBox1.Location = new Point(15, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(450, 274);
+            groupBox1.TabIndex = 1;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Ảnh gốc";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.ptBoxEdit);
-            this.groupBox2.Location = new System.Drawing.Point(471, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(450, 274);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Ảnh chỉnh sửa";
+            groupBox2.Controls.Add(ptBoxEdit);
+            groupBox2.Location = new Point(471, 12);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(450, 274);
+            groupBox2.TabIndex = 2;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Ảnh chỉnh sửa";
             // 
             // ptBoxEdit
             // 
-            this.ptBoxEdit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ptBoxEdit.Location = new System.Drawing.Point(3, 16);
-            this.ptBoxEdit.Name = "ptBoxEdit";
-            this.ptBoxEdit.Size = new System.Drawing.Size(444, 255);
-            this.ptBoxEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ptBoxEdit.TabIndex = 0;
-            this.ptBoxEdit.TabStop = false;
+            ptBoxEdit.Dock = DockStyle.Fill;
+            ptBoxEdit.Location = new Point(3, 19);
+            ptBoxEdit.Name = "ptBoxEdit";
+            ptBoxEdit.Size = new Size(444, 252);
+            ptBoxEdit.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptBoxEdit.TabIndex = 0;
+            ptBoxEdit.TabStop = false;
             // 
             // btnLoadImg
             // 
-            this.btnLoadImg.Location = new System.Drawing.Point(360, 481);
-            this.btnLoadImg.Name = "btnLoadImg";
-            this.btnLoadImg.Size = new System.Drawing.Size(100, 23);
-            this.btnLoadImg.TabIndex = 3;
-            this.btnLoadImg.Text = "Load phôi ảnh";
-            this.btnLoadImg.UseVisualStyleBackColor = true;
-            this.btnLoadImg.Click += new System.EventHandler(this.btnLoadImg_Click);
+            btnLoadImg.Location = new Point(175, 481);
+            btnLoadImg.Name = "btnLoadImg";
+            btnLoadImg.Size = new Size(100, 23);
+            btnLoadImg.TabIndex = 3;
+            btnLoadImg.Text = "Load phôi ảnh";
+            btnLoadImg.UseVisualStyleBackColor = true;
+            btnLoadImg.Click += btnLoadImg_Click;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.groupBox5);
-            this.groupBox3.Controls.Add(this.nUDAddressRotate);
-            this.groupBox3.Controls.Add(this.nUDAddressY);
-            this.groupBox3.Controls.Add(this.nUDAddressX);
-            this.groupBox3.Controls.Add(this.nUDGenderRotate);
-            this.groupBox3.Controls.Add(this.nUDGenderY);
-            this.groupBox3.Controls.Add(this.nUDGenderX);
-            this.groupBox3.Controls.Add(this.nUDBirthdayRotate);
-            this.groupBox3.Controls.Add(this.nUDBirthdayY);
-            this.groupBox3.Controls.Add(this.nUDBirthdayX);
-            this.groupBox3.Controls.Add(this.nUDLastNameRotate);
-            this.groupBox3.Controls.Add(this.nUDLastNameY);
-            this.groupBox3.Controls.Add(this.nUDLastNameX);
-            this.groupBox3.Controls.Add(this.nUDFirstNameRotate);
-            this.groupBox3.Controls.Add(this.nUDFirstNameY);
-            this.groupBox3.Controls.Add(this.nUDFirstNameX);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.ckFullName);
-            this.groupBox3.Location = new System.Drawing.Point(18, 292);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(598, 183);
-            this.groupBox3.TabIndex = 4;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Vị trí [NGANG x DỌC x XOAY CHIỀU]";
+            groupBox3.Controls.Add(groupBox5);
+            groupBox3.Controls.Add(nUDAddressRotate);
+            groupBox3.Controls.Add(nUDAddressY);
+            groupBox3.Controls.Add(nUDAddressX);
+            groupBox3.Controls.Add(nUDGenderRotate);
+            groupBox3.Controls.Add(nUDGenderY);
+            groupBox3.Controls.Add(nUDGenderX);
+            groupBox3.Controls.Add(nUDBirthdayRotate);
+            groupBox3.Controls.Add(nUDBirthdayY);
+            groupBox3.Controls.Add(nUDBirthdayX);
+            groupBox3.Controls.Add(nUDLastNameRotate);
+            groupBox3.Controls.Add(nUDLastNameY);
+            groupBox3.Controls.Add(nUDLastNameX);
+            groupBox3.Controls.Add(nUDFirstNameRotate);
+            groupBox3.Controls.Add(nUDFirstNameY);
+            groupBox3.Controls.Add(nUDFirstNameX);
+            groupBox3.Controls.Add(label5);
+            groupBox3.Controls.Add(label4);
+            groupBox3.Controls.Add(label3);
+            groupBox3.Controls.Add(lblLastName);
+            groupBox3.Controls.Add(lblFistName);
+            groupBox3.Controls.Add(ckFullName);
+            groupBox3.Location = new Point(18, 292);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(598, 183);
+            groupBox3.TabIndex = 4;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Vị trí [NGANG x DỌC x XOAY CHIỀU]";
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.cbFontColor);
-            this.groupBox5.Controls.Add(this.cbFontStyle);
-            this.groupBox5.Controls.Add(this.cbFont);
-            this.groupBox5.Controls.Add(this.nUDFontSize);
-            this.groupBox5.Controls.Add(this.label12);
-            this.groupBox5.Controls.Add(this.label11);
-            this.groupBox5.Controls.Add(this.label10);
-            this.groupBox5.Location = new System.Drawing.Point(308, 33);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(284, 134);
-            this.groupBox5.TabIndex = 6;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Thiết lập chữ";
+            groupBox5.Controls.Add(cbFontColor);
+            groupBox5.Controls.Add(cbFontStyle);
+            groupBox5.Controls.Add(cbFont);
+            groupBox5.Controls.Add(nUDFontSize);
+            groupBox5.Controls.Add(label12);
+            groupBox5.Controls.Add(label11);
+            groupBox5.Controls.Add(label10);
+            groupBox5.Location = new Point(308, 33);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(284, 134);
+            groupBox5.TabIndex = 6;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Thiết lập chữ";
             // 
             // cbFontColor
             // 
-            this.cbFontColor.FormattingEnabled = true;
-            this.cbFontColor.Location = new System.Drawing.Point(71, 85);
-            this.cbFontColor.Name = "cbFontColor";
-            this.cbFontColor.Size = new System.Drawing.Size(63, 21);
-            this.cbFontColor.TabIndex = 20;
+            cbFontColor.FormattingEnabled = true;
+            cbFontColor.Location = new Point(71, 85);
+            cbFontColor.Name = "cbFontColor";
+            cbFontColor.Size = new Size(63, 23);
+            cbFontColor.TabIndex = 20;
             // 
             // cbFontStyle
             // 
-            this.cbFontStyle.FormattingEnabled = true;
-            this.cbFontStyle.Location = new System.Drawing.Point(71, 56);
-            this.cbFontStyle.Name = "cbFontStyle";
-            this.cbFontStyle.Size = new System.Drawing.Size(63, 21);
-            this.cbFontStyle.TabIndex = 18;
+            cbFontStyle.FormattingEnabled = true;
+            cbFontStyle.Location = new Point(71, 56);
+            cbFontStyle.Name = "cbFontStyle";
+            cbFontStyle.Size = new Size(63, 23);
+            cbFontStyle.TabIndex = 18;
             // 
             // cbFont
             // 
-            this.cbFont.FormattingEnabled = true;
-            this.cbFont.Location = new System.Drawing.Point(148, 56);
-            this.cbFont.Name = "cbFont";
-            this.cbFont.Size = new System.Drawing.Size(129, 21);
-            this.cbFont.TabIndex = 19;
+            cbFont.FormattingEnabled = true;
+            cbFont.Location = new Point(148, 56);
+            cbFont.Name = "cbFont";
+            cbFont.Size = new Size(129, 23);
+            cbFont.TabIndex = 19;
             // 
             // nUDFontSize
             // 
-            this.nUDFontSize.Location = new System.Drawing.Point(71, 23);
-            this.nUDFontSize.Name = "nUDFontSize";
-            this.nUDFontSize.Size = new System.Drawing.Size(63, 20);
-            this.nUDFontSize.TabIndex = 17;
+            nUDFontSize.Location = new Point(71, 23);
+            nUDFontSize.Name = "nUDFontSize";
+            nUDFontSize.Size = new Size(63, 23);
+            nUDFontSize.TabIndex = 17;
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(16, 93);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(28, 13);
-            this.label12.TabIndex = 29;
-            this.label12.Text = "Màu";
+            label12.AutoSize = true;
+            label12.Location = new Point(16, 93);
+            label12.Name = "label12";
+            label12.Size = new Size(31, 15);
+            label12.TabIndex = 29;
+            label12.Text = "Màu";
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(16, 59);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(28, 13);
-            this.label11.TabIndex = 28;
-            this.label11.Text = "Kiểu";
+            label11.AutoSize = true;
+            label11.Location = new Point(16, 59);
+            label11.Name = "label11";
+            label11.Size = new Size(30, 15);
+            label11.TabIndex = 28;
+            label11.Text = "Kiểu";
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(16, 25);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(45, 13);
-            this.label10.TabIndex = 27;
-            this.label10.Text = "Kích cỡ";
+            label10.AutoSize = true;
+            label10.Location = new Point(16, 25);
+            label10.Name = "label10";
+            label10.Size = new Size(46, 15);
+            label10.TabIndex = 27;
+            label10.Text = "Kích cỡ";
             // 
             // nUDAddressRotate
             // 
-            this.nUDAddressRotate.Location = new System.Drawing.Point(242, 145);
-            this.nUDAddressRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDAddressRotate.Name = "nUDAddressRotate";
-            this.nUDAddressRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDAddressRotate.TabIndex = 16;
+            nUDAddressRotate.Location = new Point(242, 145);
+            nUDAddressRotate.Name = "nUDAddressRotate";
+            nUDAddressRotate.Size = new Size(48, 23);
+            nUDAddressRotate.TabIndex = 16;
             // 
             // nUDAddressY
             // 
-            this.nUDAddressY.Location = new System.Drawing.Point(157, 145);
-            this.nUDAddressY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDAddressY.Name = "nUDAddressY";
-            this.nUDAddressY.Size = new System.Drawing.Size(48, 20);
-            this.nUDAddressY.TabIndex = 15;
+            nUDAddressY.Location = new Point(157, 145);
+            nUDAddressY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDAddressY.Name = "nUDAddressY";
+            nUDAddressY.Size = new Size(48, 23);
+            nUDAddressY.TabIndex = 15;
             // 
             // nUDAddressX
             // 
-            this.nUDAddressX.Location = new System.Drawing.Point(72, 145);
-            this.nUDAddressX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDAddressX.Name = "nUDAddressX";
-            this.nUDAddressX.Size = new System.Drawing.Size(48, 20);
-            this.nUDAddressX.TabIndex = 14;
+            nUDAddressX.Location = new Point(72, 145);
+            nUDAddressX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDAddressX.Name = "nUDAddressX";
+            nUDAddressX.Size = new Size(48, 23);
+            nUDAddressX.TabIndex = 14;
             // 
             // nUDGenderRotate
             // 
-            this.nUDGenderRotate.Location = new System.Drawing.Point(242, 119);
-            this.nUDGenderRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDGenderRotate.Name = "nUDGenderRotate";
-            this.nUDGenderRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDGenderRotate.TabIndex = 13;
+            nUDGenderRotate.Location = new Point(242, 119);
+            nUDGenderRotate.Name = "nUDGenderRotate";
+            nUDGenderRotate.Size = new Size(48, 23);
+            nUDGenderRotate.TabIndex = 13;
             // 
             // nUDGenderY
             // 
-            this.nUDGenderY.Location = new System.Drawing.Point(157, 119);
-            this.nUDGenderY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDGenderY.Name = "nUDGenderY";
-            this.nUDGenderY.Size = new System.Drawing.Size(48, 20);
-            this.nUDGenderY.TabIndex = 12;
+            nUDGenderY.Location = new Point(157, 119);
+            nUDGenderY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDGenderY.Name = "nUDGenderY";
+            nUDGenderY.Size = new Size(48, 23);
+            nUDGenderY.TabIndex = 12;
             // 
             // nUDGenderX
             // 
-            this.nUDGenderX.Location = new System.Drawing.Point(72, 119);
-            this.nUDGenderX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDGenderX.Name = "nUDGenderX";
-            this.nUDGenderX.Size = new System.Drawing.Size(48, 20);
-            this.nUDGenderX.TabIndex = 11;
+            nUDGenderX.Location = new Point(72, 119);
+            nUDGenderX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDGenderX.Name = "nUDGenderX";
+            nUDGenderX.Size = new Size(48, 23);
+            nUDGenderX.TabIndex = 11;
             // 
             // nUDBirthdayRotate
             // 
-            this.nUDBirthdayRotate.Location = new System.Drawing.Point(242, 93);
-            this.nUDBirthdayRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDBirthdayRotate.Name = "nUDBirthdayRotate";
-            this.nUDBirthdayRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDBirthdayRotate.TabIndex = 10;
+            nUDBirthdayRotate.Location = new Point(242, 93);
+            nUDBirthdayRotate.Name = "nUDBirthdayRotate";
+            nUDBirthdayRotate.Size = new Size(48, 23);
+            nUDBirthdayRotate.TabIndex = 10;
             // 
             // nUDBirthdayY
             // 
-            this.nUDBirthdayY.Location = new System.Drawing.Point(157, 93);
-            this.nUDBirthdayY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDBirthdayY.Name = "nUDBirthdayY";
-            this.nUDBirthdayY.Size = new System.Drawing.Size(48, 20);
-            this.nUDBirthdayY.TabIndex = 9;
+            nUDBirthdayY.Location = new Point(157, 93);
+            nUDBirthdayY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDBirthdayY.Name = "nUDBirthdayY";
+            nUDBirthdayY.Size = new Size(48, 23);
+            nUDBirthdayY.TabIndex = 9;
             // 
             // nUDBirthdayX
             // 
-            this.nUDBirthdayX.Location = new System.Drawing.Point(72, 93);
-            this.nUDBirthdayX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDBirthdayX.Name = "nUDBirthdayX";
-            this.nUDBirthdayX.Size = new System.Drawing.Size(48, 20);
-            this.nUDBirthdayX.TabIndex = 8;
+            nUDBirthdayX.Location = new Point(72, 93);
+            nUDBirthdayX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDBirthdayX.Name = "nUDBirthdayX";
+            nUDBirthdayX.Size = new Size(48, 23);
+            nUDBirthdayX.TabIndex = 8;
             // 
             // nUDLastNameRotate
             // 
-            this.nUDLastNameRotate.Location = new System.Drawing.Point(242, 67);
-            this.nUDLastNameRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDLastNameRotate.Name = "nUDLastNameRotate";
-            this.nUDLastNameRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDLastNameRotate.TabIndex = 7;
+            nUDLastNameRotate.Location = new Point(242, 67);
+            nUDLastNameRotate.Name = "nUDLastNameRotate";
+            nUDLastNameRotate.Size = new Size(48, 23);
+            nUDLastNameRotate.TabIndex = 7;
             // 
             // nUDLastNameY
             // 
-            this.nUDLastNameY.Location = new System.Drawing.Point(157, 67);
-            this.nUDLastNameY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDLastNameY.Name = "nUDLastNameY";
-            this.nUDLastNameY.Size = new System.Drawing.Size(48, 20);
-            this.nUDLastNameY.TabIndex = 6;
+            nUDLastNameY.Location = new Point(157, 67);
+            nUDLastNameY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDLastNameY.Name = "nUDLastNameY";
+            nUDLastNameY.Size = new Size(48, 23);
+            nUDLastNameY.TabIndex = 6;
             // 
             // nUDLastNameX
             // 
-            this.nUDLastNameX.Location = new System.Drawing.Point(72, 67);
-            this.nUDLastNameX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDLastNameX.Name = "nUDLastNameX";
-            this.nUDLastNameX.Size = new System.Drawing.Size(48, 20);
-            this.nUDLastNameX.TabIndex = 5;
+            nUDLastNameX.Location = new Point(72, 67);
+            nUDLastNameX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDLastNameX.Name = "nUDLastNameX";
+            nUDLastNameX.Size = new Size(48, 23);
+            nUDLastNameX.TabIndex = 5;
             // 
             // nUDFirstNameRotate
             // 
-            this.nUDFirstNameRotate.Location = new System.Drawing.Point(242, 41);
-            this.nUDFirstNameRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDFirstNameRotate.Name = "nUDFirstNameRotate";
-            this.nUDFirstNameRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDFirstNameRotate.TabIndex = 4;
+            nUDFirstNameRotate.Location = new Point(242, 41);
+            nUDFirstNameRotate.Name = "nUDFirstNameRotate";
+            nUDFirstNameRotate.Size = new Size(48, 23);
+            nUDFirstNameRotate.TabIndex = 4;
             // 
             // nUDFirstNameY
             // 
-            this.nUDFirstNameY.Location = new System.Drawing.Point(157, 41);
-            this.nUDFirstNameY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDFirstNameY.Name = "nUDFirstNameY";
-            this.nUDFirstNameY.Size = new System.Drawing.Size(48, 20);
-            this.nUDFirstNameY.TabIndex = 3;
+            nUDFirstNameY.Location = new Point(157, 41);
+            nUDFirstNameY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDFirstNameY.Name = "nUDFirstNameY";
+            nUDFirstNameY.Size = new Size(48, 23);
+            nUDFirstNameY.TabIndex = 3;
             // 
             // nUDFirstNameX
             // 
-            this.nUDFirstNameX.Location = new System.Drawing.Point(72, 41);
-            this.nUDFirstNameX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDFirstNameX.Name = "nUDFirstNameX";
-            this.nUDFirstNameX.Size = new System.Drawing.Size(48, 20);
-            this.nUDFirstNameX.TabIndex = 2;
+            nUDFirstNameX.Location = new Point(72, 41);
+            nUDFirstNameX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDFirstNameX.Name = "nUDFirstNameX";
+            nUDFirstNameX.Size = new Size(48, 23);
+            nUDFirstNameX.TabIndex = 2;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 151);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(40, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Địa chỉ";
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 151);
+            label5.Name = "label5";
+            label5.Size = new Size(43, 15);
+            label5.TabIndex = 11;
+            label5.Text = "Địa chỉ";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 124);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Giới tính";
+            label4.AutoSize = true;
+            label4.Location = new Point(15, 124);
+            label4.Name = "label4";
+            label4.Size = new Size(52, 15);
+            label4.TabIndex = 10;
+            label4.Text = "Giới tính";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 97);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Ngày sinh";
+            label3.AutoSize = true;
+            label3.Location = new Point(15, 97);
+            label3.Name = "label3";
+            label3.Size = new Size(60, 15);
+            label3.TabIndex = 9;
+            label3.Text = "Ngày sinh";
             // 
-            // label2
+            // lblLastName
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 70);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Tên";
+            lblLastName.AutoSize = true;
+            lblLastName.Location = new Point(15, 70);
+            lblLastName.Name = "lblLastName";
+            lblLastName.Size = new Size(25, 15);
+            lblLastName.TabIndex = 8;
+            lblLastName.Text = "Tên";
             // 
-            // label1
+            // lblFistName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 43);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(21, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Họ";
+            lblFistName.AutoSize = true;
+            lblFistName.Location = new Point(15, 43);
+            lblFistName.Name = "lblFistName";
+            lblFistName.Size = new Size(23, 15);
+            lblFistName.TabIndex = 7;
+            lblFistName.Text = "Họ";
             // 
             // ckFullName
             // 
-            this.ckFullName.AutoSize = true;
-            this.ckFullName.Location = new System.Drawing.Point(15, 19);
-            this.ckFullName.Name = "ckFullName";
-            this.ckFullName.Size = new System.Drawing.Size(154, 17);
-            this.ckFullName.TabIndex = 1;
-            this.ckFullName.Text = "Họ và tên hay Họ tên riêng";
-            this.ckFullName.UseVisualStyleBackColor = true;
+            ckFullName.AutoSize = true;
+            ckFullName.Location = new Point(15, 19);
+            ckFullName.Name = "ckFullName";
+            ckFullName.Size = new Size(168, 19);
+            ckFullName.TabIndex = 1;
+            ckFullName.Text = "Họ và tên hay Họ tên riêng";
+            ckFullName.UseVisualStyleBackColor = true;
+            ckFullName.CheckedChanged += ckFullName_CheckedChanged;
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.nUDImgSecondLocationRotate);
-            this.groupBox4.Controls.Add(this.nUDImgSecondLocationY);
-            this.groupBox4.Controls.Add(this.nUDImgSecondLocationX);
-            this.groupBox4.Controls.Add(this.nUDImgFirstLocationRotate);
-            this.groupBox4.Controls.Add(this.nUDImgFirstLocationY);
-            this.groupBox4.Controls.Add(this.nUDImgFirstLocationX);
-            this.groupBox4.Controls.Add(this.nUDImgSecondHeight);
-            this.groupBox4.Controls.Add(this.nUDImgSecondWidth);
-            this.groupBox4.Controls.Add(this.nUDImgFirstHeight);
-            this.groupBox4.Controls.Add(this.nUDImgFirstWidth);
-            this.groupBox4.Controls.Add(this.label9);
-            this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Controls.Add(this.label6);
-            this.groupBox4.Location = new System.Drawing.Point(622, 292);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(297, 183);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Thiết lập phôi ảnh";
+            groupBox4.Controls.Add(nUDImgSecondLocationRotate);
+            groupBox4.Controls.Add(nUDImgSecondLocationY);
+            groupBox4.Controls.Add(nUDImgSecondLocationX);
+            groupBox4.Controls.Add(nUDImgFirstLocationRotate);
+            groupBox4.Controls.Add(nUDImgFirstLocationY);
+            groupBox4.Controls.Add(nUDImgFirstLocationX);
+            groupBox4.Controls.Add(nUDImgSecondHeight);
+            groupBox4.Controls.Add(nUDImgSecondWidth);
+            groupBox4.Controls.Add(nUDImgFirstHeight);
+            groupBox4.Controls.Add(nUDImgFirstWidth);
+            groupBox4.Controls.Add(label9);
+            groupBox4.Controls.Add(label8);
+            groupBox4.Controls.Add(label7);
+            groupBox4.Controls.Add(label6);
+            groupBox4.Location = new Point(622, 292);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(297, 183);
+            groupBox4.TabIndex = 5;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Thiết lập phôi ảnh";
             // 
             // nUDImgSecondLocationRotate
             // 
-            this.nUDImgSecondLocationRotate.Location = new System.Drawing.Point(214, 147);
-            this.nUDImgSecondLocationRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDImgSecondLocationRotate.Name = "nUDImgSecondLocationRotate";
-            this.nUDImgSecondLocationRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgSecondLocationRotate.TabIndex = 30;
+            nUDImgSecondLocationRotate.Location = new Point(214, 147);
+            nUDImgSecondLocationRotate.Name = "nUDImgSecondLocationRotate";
+            nUDImgSecondLocationRotate.Size = new Size(48, 23);
+            nUDImgSecondLocationRotate.TabIndex = 30;
             // 
             // nUDImgSecondLocationY
             // 
-            this.nUDImgSecondLocationY.Location = new System.Drawing.Point(148, 147);
-            this.nUDImgSecondLocationY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgSecondLocationY.Name = "nUDImgSecondLocationY";
-            this.nUDImgSecondLocationY.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgSecondLocationY.TabIndex = 29;
+            nUDImgSecondLocationY.Location = new Point(148, 147);
+            nUDImgSecondLocationY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgSecondLocationY.Name = "nUDImgSecondLocationY";
+            nUDImgSecondLocationY.Size = new Size(48, 23);
+            nUDImgSecondLocationY.TabIndex = 29;
             // 
             // nUDImgSecondLocationX
             // 
-            this.nUDImgSecondLocationX.Location = new System.Drawing.Point(82, 147);
-            this.nUDImgSecondLocationX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgSecondLocationX.Name = "nUDImgSecondLocationX";
-            this.nUDImgSecondLocationX.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgSecondLocationX.TabIndex = 28;
+            nUDImgSecondLocationX.Location = new Point(82, 147);
+            nUDImgSecondLocationX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgSecondLocationX.Name = "nUDImgSecondLocationX";
+            nUDImgSecondLocationX.Size = new Size(48, 23);
+            nUDImgSecondLocationX.TabIndex = 28;
             // 
             // nUDImgFirstLocationRotate
             // 
-            this.nUDImgFirstLocationRotate.Location = new System.Drawing.Point(214, 66);
-            this.nUDImgFirstLocationRotate.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.nUDImgFirstLocationRotate.Name = "nUDImgFirstLocationRotate";
-            this.nUDImgFirstLocationRotate.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgFirstLocationRotate.TabIndex = 25;
+            nUDImgFirstLocationRotate.Location = new Point(214, 66);
+            nUDImgFirstLocationRotate.Name = "nUDImgFirstLocationRotate";
+            nUDImgFirstLocationRotate.Size = new Size(48, 23);
+            nUDImgFirstLocationRotate.TabIndex = 25;
             // 
             // nUDImgFirstLocationY
             // 
-            this.nUDImgFirstLocationY.Location = new System.Drawing.Point(148, 66);
-            this.nUDImgFirstLocationY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgFirstLocationY.Name = "nUDImgFirstLocationY";
-            this.nUDImgFirstLocationY.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgFirstLocationY.TabIndex = 24;
+            nUDImgFirstLocationY.Location = new Point(148, 66);
+            nUDImgFirstLocationY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgFirstLocationY.Name = "nUDImgFirstLocationY";
+            nUDImgFirstLocationY.Size = new Size(48, 23);
+            nUDImgFirstLocationY.TabIndex = 24;
             // 
             // nUDImgFirstLocationX
             // 
-            this.nUDImgFirstLocationX.Location = new System.Drawing.Point(82, 66);
-            this.nUDImgFirstLocationX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgFirstLocationX.Name = "nUDImgFirstLocationX";
-            this.nUDImgFirstLocationX.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgFirstLocationX.TabIndex = 23;
+            nUDImgFirstLocationX.Location = new Point(82, 66);
+            nUDImgFirstLocationX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgFirstLocationX.Name = "nUDImgFirstLocationX";
+            nUDImgFirstLocationX.Size = new Size(48, 23);
+            nUDImgFirstLocationX.TabIndex = 23;
             // 
             // nUDImgSecondHeight
             // 
-            this.nUDImgSecondHeight.Location = new System.Drawing.Point(215, 111);
-            this.nUDImgSecondHeight.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgSecondHeight.Name = "nUDImgSecondHeight";
-            this.nUDImgSecondHeight.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgSecondHeight.TabIndex = 27;
+            nUDImgSecondHeight.Location = new Point(215, 111);
+            nUDImgSecondHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgSecondHeight.Name = "nUDImgSecondHeight";
+            nUDImgSecondHeight.Size = new Size(48, 23);
+            nUDImgSecondHeight.TabIndex = 27;
             // 
             // nUDImgSecondWidth
             // 
-            this.nUDImgSecondWidth.Location = new System.Drawing.Point(148, 111);
-            this.nUDImgSecondWidth.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgSecondWidth.Name = "nUDImgSecondWidth";
-            this.nUDImgSecondWidth.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgSecondWidth.TabIndex = 26;
+            nUDImgSecondWidth.Location = new Point(148, 111);
+            nUDImgSecondWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgSecondWidth.Name = "nUDImgSecondWidth";
+            nUDImgSecondWidth.Size = new Size(48, 23);
+            nUDImgSecondWidth.TabIndex = 26;
             // 
             // nUDImgFirstHeight
             // 
-            this.nUDImgFirstHeight.Location = new System.Drawing.Point(215, 31);
-            this.nUDImgFirstHeight.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgFirstHeight.Name = "nUDImgFirstHeight";
-            this.nUDImgFirstHeight.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgFirstHeight.TabIndex = 22;
+            nUDImgFirstHeight.Location = new Point(215, 31);
+            nUDImgFirstHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgFirstHeight.Name = "nUDImgFirstHeight";
+            nUDImgFirstHeight.Size = new Size(48, 23);
+            nUDImgFirstHeight.TabIndex = 22;
             // 
             // nUDImgFirstWidth
             // 
-            this.nUDImgFirstWidth.Location = new System.Drawing.Point(148, 31);
-            this.nUDImgFirstWidth.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nUDImgFirstWidth.Name = "nUDImgFirstWidth";
-            this.nUDImgFirstWidth.Size = new System.Drawing.Size(48, 20);
-            this.nUDImgFirstWidth.TabIndex = 21;
+            nUDImgFirstWidth.Location = new Point(148, 31);
+            nUDImgFirstWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            nUDImgFirstWidth.Name = "nUDImgFirstWidth";
+            nUDImgFirstWidth.Size = new Size(48, 23);
+            nUDImgFirstWidth.TabIndex = 21;
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(17, 149);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 13);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "Vị trí ảnh 2";
+            label9.AutoSize = true;
+            label9.Location = new Point(17, 149);
+            label9.Name = "label9";
+            label9.Size = new Size(63, 15);
+            label9.TabIndex = 11;
+            label9.Text = "Vị trí ảnh 2";
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(17, 113);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(90, 13);
-            this.label8.TabIndex = 10;
-            this.label8.Text = "Kích thước ảnh 2";
+            label8.AutoSize = true;
+            label8.Location = new Point(17, 113);
+            label8.Name = "label8";
+            label8.Size = new Size(96, 15);
+            label8.TabIndex = 10;
+            label8.Text = "Kích thước ảnh 2";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 68);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 13);
-            this.label7.TabIndex = 9;
-            this.label7.Text = "Vị trí ảnh 1";
+            label7.AutoSize = true;
+            label7.Location = new Point(17, 68);
+            label7.Name = "label7";
+            label7.Size = new Size(63, 15);
+            label7.TabIndex = 9;
+            label7.Text = "Vị trí ảnh 1";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 33);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(90, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "Kích thước ảnh 1";
+            label6.AutoSize = true;
+            label6.Location = new Point(17, 33);
+            label6.Name = "label6";
+            label6.Size = new Size(96, 15);
+            label6.TabIndex = 8;
+            label6.Text = "Kích thước ảnh 1";
             // 
             // btnSaveConfig
             // 
-            this.btnSaveConfig.Location = new System.Drawing.Point(821, 481);
-            this.btnSaveConfig.Name = "btnSaveConfig";
-            this.btnSaveConfig.Size = new System.Drawing.Size(100, 23);
-            this.btnSaveConfig.TabIndex = 6;
-            this.btnSaveConfig.Text = "Lưu cấu hình phôi";
-            this.btnSaveConfig.UseVisualStyleBackColor = true;
+            btnSaveConfig.Location = new Point(821, 481);
+            btnSaveConfig.Name = "btnSaveConfig";
+            btnSaveConfig.Size = new Size(100, 23);
+            btnSaveConfig.TabIndex = 6;
+            btnSaveConfig.Text = "Lưu cấu hình phôi";
+            btnSaveConfig.UseVisualStyleBackColor = true;
+            btnSaveConfig.Click += btnSaveConfig_Click;
             // 
             // btnPreviewImg
             // 
-            this.btnPreviewImg.Location = new System.Drawing.Point(474, 481);
-            this.btnPreviewImg.Name = "btnPreviewImg";
-            this.btnPreviewImg.Size = new System.Drawing.Size(100, 23);
-            this.btnPreviewImg.TabIndex = 7;
-            this.btnPreviewImg.Text = "Xem kết quả";
-            this.btnPreviewImg.UseVisualStyleBackColor = true;
-            this.btnPreviewImg.Click += new System.EventHandler(this.btnPreviewImg_Click);
+            btnPreviewImg.Location = new Point(288, 482);
+            btnPreviewImg.Name = "btnPreviewImg";
+            btnPreviewImg.Size = new Size(100, 23);
+            btnPreviewImg.TabIndex = 7;
+            btnPreviewImg.Text = "Xem kết quả";
+            btnPreviewImg.UseVisualStyleBackColor = true;
+            btnPreviewImg.Click += btnPreviewImg_Click;
+            // 
+            // txtName
+            // 
+            txtName.Location = new Point(569, 481);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(243, 23);
+            txtName.TabIndex = 8;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(511, 485);
+            label13.Name = "label13";
+            label13.Size = new Size(52, 15);
+            label13.TabIndex = 9;
+            label13.Text = "Tên phôi";
             // 
             // ConfigImage
             // 
-            this.ClientSize = new System.Drawing.Size(931, 512);
-            this.Controls.Add(this.btnPreviewImg);
-            this.Controls.Add(this.btnSaveConfig);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.btnLoadImg);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Name = "ConfigImage";
-            this.Text = " Chỉnh sửa phôi xác minh danh tính";
-            ((System.ComponentModel.ISupportInitialize)(this.ptBoxOriginal)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ptBoxEdit)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFontSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDAddressX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDGenderX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDBirthdayX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDLastNameX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDFirstNameX)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondLocationX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationRotate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstLocationX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgSecondWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nUDImgFirstWidth)).EndInit();
-            this.ResumeLayout(false);
-
+            ClientSize = new Size(931, 512);
+            Controls.Add(label13);
+            Controls.Add(txtName);
+            Controls.Add(btnPreviewImg);
+            Controls.Add(btnSaveConfig);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox3);
+            Controls.Add(btnLoadImg);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
+            Name = "ConfigImage";
+            Text = " Chỉnh sửa phôi xác minh danh tính";
+            ((System.ComponentModel.ISupportInitialize)ptBoxOriginal).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)ptBoxEdit).EndInit();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDFontSize).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDAddressX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDGenderX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthdayX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDLastNameX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDFirstNameX).EndInit();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondLocationX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationRotate).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstLocationX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondHeight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgSecondWidth).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstHeight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nUDImgFirstWidth).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -768,8 +683,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblLastName;
+        private System.Windows.Forms.Label lblFistName;
         private System.Windows.Forms.CheckBox ckFullName;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -811,6 +726,8 @@
         private System.Windows.Forms.ComboBox cbFont;
         private System.Windows.Forms.Button btnSaveConfig;
         private System.Windows.Forms.Button btnPreviewImg;
+        private TextBox txtName;
+        private Label label13;
     }
 }
 

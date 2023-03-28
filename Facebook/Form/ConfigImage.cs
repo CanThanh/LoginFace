@@ -7,7 +7,7 @@ namespace Facebook
     public partial class ConfigImage : Form
     {
         string imgPath = "";
-        Bitmap bitmap= null;
+        Bitmap bitmap = null;
 
         public ConfigImage()
         {
@@ -59,7 +59,7 @@ namespace Facebook
             cbFontStyle.ValueMember = "Value";
             cbFontStyle.SelectedIndex = 0;
             //Khởi tạo màu sắc
-            cbFontColor.Items.Add(new { Text = "Đỏ" , Value = "#ff0000" });
+            cbFontColor.Items.Add(new { Text = "Đỏ", Value = "#ff0000" });
             cbFontColor.Items.Add(new { Text = "Vàng", Value = "#ffff00" });
             cbFontColor.Items.Add(new { Text = "Xanh", Value = "#00ff00" });
             cbFontColor.Items.Add(new { Text = "Đen", Value = "#000000" });
@@ -79,7 +79,7 @@ namespace Facebook
             {
                 imgPath = dialog.FileName;
                 ptBoxOriginal.Image = Image.FromFile(dialog.FileName);
-                ptBoxEdit.Image = Image.FromFile(dialog.FileName);                
+                ptBoxEdit.Image = Image.FromFile(dialog.FileName);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Facebook
                 {
                     FirtName = "Nguyen Tien",
                     LastName = "Long",
-                    DateOfBirth = "19/05/1981",
+                    DateOfBirth = "19.05.81",
                     Gender = "Male",
                     Address = "Thien Hien, My Dinh, Tu Liem, Ha Noi",
                     ImageUrl = "https://content.fakeface.rest/female_32_0d3d9bedb2171ff4b3a0f111d6dd756a681fe395.jpg",
@@ -108,42 +108,76 @@ namespace Facebook
                 Console.WriteLine(ex.Message);
             }
         }
-        
+
         private ConfigIdentityModel GetConfigIdentityForm()
         {
             var configIdentity = new ConfigIdentityModel
             {
-                nUDFirstNameRotate = (int) nUDFirstNameRotate.Value,
-                nUDFirstNameY = (int) nUDFirstNameY.Value,
-                nUDFirstNameX = (int) nUDFirstNameX.Value,
-                nUDImgFirstHeight = (int) nUDImgFirstHeight.Value,
-                nUDImgFirstWidth = (int) nUDImgFirstWidth.Value,
-                nUDImgSecondHeight = (int) nUDImgSecondHeight.Value,
-                nUDImgSecondWidth = (int) nUDImgSecondWidth.Value,
-                nUDImgFirstLocationRotate = (int) nUDImgFirstLocationRotate.Value,
-                nUDImgFirstLocationY = (int) nUDImgFirstLocationY.Value,
-                nUDImgFirstLocationX = (int) nUDImgFirstLocationX.Value,
-                nUDAddressRotate = (int) nUDAddressRotate.Value,
-                nUDAddressY = (int) nUDAddressY.Value,
-                nUDAddressX = (int) nUDAddressX.Value,
-                nUDGenderRotate = (int) nUDGenderRotate.Value,
-                nUDGenderY =  (int) nUDGenderY.Value,
-                nUDGenderX = (int) nUDGenderX.Value,
-                nUDBirthdayRotate = (int) nUDBirthdayRotate.Value,
-                nUDBirthdayY = (int) nUDBirthdayY.Value,
-                nUDBirthdayX = (int) nUDBirthdayX.Value,
-                nUDLastNameRotate = (int) nUDLastNameRotate.Value,
-                nUDLastNameY = (int) nUDLastNameY.Value,
-                nUDLastNameX = (int) nUDLastNameX.Value,
-                nUDImgSecondLocationRotate = (int) nUDImgSecondLocationRotate.Value,
-                nUDImgSecondLocationY = (int) nUDImgSecondLocationY.Value,
-                nUDImgSecondLocationX = (int) nUDImgSecondLocationX.Value,
-                nUDFontSize = (int) nUDFontSize.Value,
+                nUDFirstNameRotate = (int)nUDFirstNameRotate.Value,
+                nUDFirstNameY = (int)nUDFirstNameY.Value,
+                nUDFirstNameX = (int)nUDFirstNameX.Value,
+                nUDImgFirstHeight = (int)nUDImgFirstHeight.Value,
+                nUDImgFirstWidth = (int)nUDImgFirstWidth.Value,
+                nUDImgSecondHeight = (int)nUDImgSecondHeight.Value,
+                nUDImgSecondWidth = (int)nUDImgSecondWidth.Value,
+                nUDImgFirstLocationRotate = (int)nUDImgFirstLocationRotate.Value,
+                nUDImgFirstLocationY = (int)nUDImgFirstLocationY.Value,
+                nUDImgFirstLocationX = (int)nUDImgFirstLocationX.Value,
+                nUDAddressRotate = (int)nUDAddressRotate.Value,
+                nUDAddressY = (int)nUDAddressY.Value,
+                nUDAddressX = (int)nUDAddressX.Value,
+                nUDGenderRotate = (int)nUDGenderRotate.Value,
+                nUDGenderY = (int)nUDGenderY.Value,
+                nUDGenderX = (int)nUDGenderX.Value,
+                nUDBirthdayRotate = (int)nUDBirthdayRotate.Value,
+                nUDBirthdayY = (int)nUDBirthdayY.Value,
+                nUDBirthdayX = (int)nUDBirthdayX.Value,
+                nUDLastNameRotate = ckFullName.Checked ? 0 : (int)nUDLastNameRotate.Value,
+                nUDLastNameY = ckFullName.Checked ? 0 : (int)nUDLastNameY.Value,
+                nUDLastNameX = ckFullName.Checked ? 0 : (int)nUDLastNameX.Value,
+                nUDImgSecondLocationRotate = (int)nUDImgSecondLocationRotate.Value,
+                nUDImgSecondLocationY = (int)nUDImgSecondLocationY.Value,
+                nUDImgSecondLocationX = (int)nUDImgSecondLocationX.Value,
+                nUDFontSize = (int)nUDFontSize.Value,
                 cbFontColor = (cbFontColor.SelectedItem as dynamic).Value,
                 cbFontStyle = (cbFontStyle.SelectedItem as dynamic).Value,
                 cbFont = cbFont.Text,
             };
             return configIdentity;
+        }
+
+        private void btnSaveConfig_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtName.Text))
+            {
+                MessageBox.Show("Vui lòng nhập tên phôi muốn lưu");
+            }
+            else
+            {
+                SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
+                sqLiteProcessing.InsertOrUpdateConfigIndentity(txtName.Text, GetConfigIdentityForm(), imgPath);
+            }
+        }
+
+        private void ckFullName_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckFullName.Checked)
+            {
+                lblFistName.Text = "Họ và tên";
+                nUDLastNameX.Visible = false;
+                nUDLastNameY.Visible = false;
+                nUDLastNameRotate.Visible = false;
+                lblLastName.Visible = false;
+            }
+            else
+            {
+                lblFistName.Text = "Họ";
+                lblLastName.Visible = true;
+                nUDLastNameX.Visible = true;
+                nUDLastNameY.Visible = true;
+                nUDLastNameRotate.Visible = true;
+            }
+
         }
     }
 }
