@@ -496,14 +496,19 @@ namespace Facebook.Core
                     while (count < 5 && string.IsNullOrEmpty(number))
                     {
                         number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
-                        CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
-                        driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
-                        Thread.Sleep(random.Next(1000, 2000));
-                        source = driver.PageSource;
-                        if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                        Thread.Sleep(random.Next(2000, 3000));
+                        if (!string.IsNullOrEmpty(number))
                         {
-                            number = "";
-                            otpProcessing.CancelByAppId(apiKey, idNumber);
+                            CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                            Thread.Sleep(random.Next(1000, 2000));
+                            driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                            Thread.Sleep(random.Next(1000, 2000));
+                            source = driver.PageSource;
+                            if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                            {
+                                number = "";
+                                otpProcessing.CancelByAppId(apiKey, idNumber);
+                            }
                         }
                         count++;
                     }
@@ -525,6 +530,7 @@ namespace Facebook.Core
                     else
                     {
                         CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
+                        Thread.Sleep(random.Next(1000, 2000));
                         driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
                         Thread.Sleep(random.Next(1000, 2000));
                         source = driver.PageSource;
