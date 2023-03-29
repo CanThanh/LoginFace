@@ -19,14 +19,14 @@ namespace Facebook.Core.AccountQuality
 {
     internal class FacebookAccountQuality
     {
-        public bool Proccess(AccountInfo account, int rowIndex, string idFile, string idConfigIndentity, string resolveCaptchaKey, bool loginCookie = false)
+        public bool Proccess(AccountInfo account, int rowIndex, string idFile, string idConfigIndentity, string resolveCaptchaKey, string apiKey, bool loginCookie = false)
         {
             bool result = true;
             Random random = new Random();
             string source = "";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var driver = facebookProcessing.InitChromeDriver(account);
-            string url = "https://m.facebook.com/";
+            string url = FacebookLinkUrl.MFacebook;
             try
             {
                 if (loginCookie)
@@ -41,7 +41,7 @@ namespace Facebook.Core.AccountQuality
 
                 if (string.IsNullOrEmpty(account.Info))
                 {
-                    driver.Navigate().GoToUrl("https://business.facebook.com/business_locations/");
+                    driver.Navigate().GoToUrl(FacebookLinkUrl.FacebookBusinessLocations);
                     Thread.Sleep(TimeSpan.FromSeconds(3));
 
                     string faCode = new Totp(Base32Encoding.ToBytes(account.TwoFA)).ComputeTotp();
@@ -84,7 +84,7 @@ namespace Facebook.Core.AccountQuality
                 string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Identity") + "\\" + faceInfo.id + ".jpg";
                 bitmap.Save(imgIdentityPath);
 
-                url = "https://www.facebook.com/accountquality/" + account.Id;
+                url = FacebookLinkUrl.FacebookAccountQuality + account.Id;
                 driver.Navigate().GoToUrl(url);
                 Thread.Sleep(2000);
 
@@ -99,94 +99,8 @@ namespace Facebook.Core.AccountQuality
                 Thread.Sleep(random.Next(1000, 2000));
                 source = driver.PageSource;
 
-                if (source.Contains("captcha_persist_data"))
-                {
-                    var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-                    account.DTSG = dtsg;
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Captcha");
-                    var elementImage = driver.FindElement(By.XPath("//div[@id='captcha']//img"));
-                    ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
-                    byte[] byteArray = screenshotDriver.GetScreenshot().AsByteArray;
-                    Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
-                    Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
-                    screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
-                    string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
-                    screenShot.Save(imgPath, ImageFormat.Png);
-                    ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
-                    resolveCaptcha.APIKey = resolveCaptchaKey;
-                    string outputCapcha = "";
-                    resolveCaptcha.SolveNormalCapcha(CommonFunction.ConvertImageToBase64String(imgPath), out outputCapcha);
-
-                    if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
-                    {
-                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
-                    }
-                    else
-                    {
-                        CommonFunction.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
-                        Thread.Sleep(300);
-                        driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
-                        driver.Navigate().GoToUrl(url);
-                        Thread.Sleep(2000);
-                        source = driver.PageSource;
-                    }
-                }
-
-                if (source.Contains("action_set_contact_point"))
-                {
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
-                    IOtp otpProcessing = new OtpSell();
-                    //string apiKey = "90e2b1f8fa419d46", appName = "Facebook";
-                    string apiKey = "172c280613d44fc194b2143054690b7e", appName = "Facebook";
-                    string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
-                    string number = "", idNumber = "", code = "";
-                    int count = 0;
-                    while (count < 5 && string.IsNullOrEmpty(number))
-                    {
-                        number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
-                        CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
-                        driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
-                        Thread.Sleep(random.Next(1000));
-                        source = driver.PageSource;
-                        if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
-                        {
-                            number = "";
-                            otpProcessing.CancelByAppId(apiKey, idNumber);
-                        }
-                        count++;
-                    }
-                    count = 0;
-                    if (!string.IsNullOrEmpty(number))
-                    {
-                        while (count < 5 && string.IsNullOrEmpty(code))
-                        {
-                            Thread.Sleep(60000);
-                            code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
-                            count++;
-                        }
-                    }
-                    if (string.IsNullOrEmpty(code))
-                    {
-                        otpProcessing.CancelByAppId(apiKey, idNumber);
-                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
-                    }
-                    else
-                    {
-                        CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
-                        driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
-                        Thread.Sleep(random.Next(500, 1000));
-                        source = driver.PageSource;
-                    }
-                }
-
-                if (source.Contains("mobile_image_data"))
-                {                   
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
-                    var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
-                    mobile_image_data.SendKeys(imgIdentityPath);
-                    Thread.Sleep(200);
-                    driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
-                }
+                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, imgIdentityPath);
+               
                 sqLiteProcessing.InsertOrUpdateAccount(account, idFile);
             }
             catch (Exception ex)

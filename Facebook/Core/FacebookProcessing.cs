@@ -7,6 +7,11 @@ using Facebook.Core;
 using OtpNet;
 using OpenQA.Selenium.Chromium;
 using OpenQA.Selenium.Chrome.ChromeDriverExtensions;
+using Facebook.Otp;
+using System.Drawing.Imaging;
+using System.Security.Policy;
+using System.Security.Principal;
+using System;
 
 namespace Facebook.Core
 {
@@ -261,7 +266,7 @@ namespace Facebook.Core
         public bool LoginCookieGetEAAB(ChromeDriver driver, string cookie)
         {
             bool result = false;
-            driver.Navigate().GoToUrl("https://www.facebook.com");
+            driver.Navigate().GoToUrl(FacebookLinkUrl.Facebook); 
             driver.Manage().Cookies.DeleteAllCookies();
             var lstCookie = cookie.Split(';');
             for (int i = 0; i < lstCookie.Length; i++)
@@ -272,7 +277,7 @@ namespace Facebook.Core
                 OpenQA.Selenium.Cookie osCookie = new Cookie(key, value);
                 driver.Manage().Cookies.AddCookie(osCookie);
             }
-            driver.Navigate().GoToUrl("https://www.facebook.com");
+            driver.Navigate().GoToUrl(FacebookLinkUrl.Facebook);
             if (!string.IsNullOrEmpty(GetEAABToken(driver)))
             {
                 result = true;
@@ -282,8 +287,6 @@ namespace Facebook.Core
 
         public void LoginCookie(ChromeDriver driver,string url, string cookie)
         {
-            //driver.Navigate().GoToUrl("https://mbasic.facebook.com/");
-            //driver.Navigate().GoToUrl("https://www.facebook.com");
             driver.Navigate().GoToUrl(url);
             driver.Manage().Cookies.DeleteAllCookies();
             var lstCookie = cookie.Split(';');
@@ -306,14 +309,12 @@ namespace Facebook.Core
         {
             string token = "EAAG";
             //Vào trang business lấy token
-            driver.Url = "https://business.facebook.com/business_locations/";
+            driver.Url = FacebookLinkUrl.FacebookBusinessLocations;;
             Thread.Sleep(3000);
             var respone = CallAuthenTwoFa(user, twoFA, dtsg, cookie);
             Thread.Sleep(5000);
             if (respone.Contains("codeConfirmed\":true"))
             {
-                //driver.Url = "https://business.facebook.com/business_locations/";
-                //Thread.Sleep(10000);
                 string source = driver.PageSource;
 
                 if (source.Contains("EAAG"))
@@ -329,13 +330,10 @@ namespace Facebook.Core
         {
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
             HttpRequest httprequest = new HttpRequest();
-            //httprequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
-            //httprequest.AddHeader("origin", "https://business.facebook.com");
-            //httprequest.AddHeader("referer", "https://business.facebook.com/security/twofactor/reauth/?twofac_next=https%3A%2F%2Fbusiness.facebook.com%2Fbusiness_locations%2F&type=avoid_bypass&app_id=0&save_device=0");
             CommonFunction.AddCookie(httprequest, cookie);
             var data = "approvals_code=" + faCode + "&save_device=false&__user=" + user + "&__a=1&__dyn=7xeUmF3EfXpUS2q3mbwyyVuC2-m2q3Kq2i5U4e1Fx-ewSxu68uxa2e1Ezobo9E5KcwayaxG4o2vwho3Ywv9E4WUc417mu11x-9xm1WxO4Uowuo9oeUa85vzo1eE4aUS1vwnE2PwBgK7k48W18wnE4K5E5WEeEgzE8Emy84CfwOw8y0RE5a2W2K4E7K1uDwau58Gm0hi4Ejyo-3qazo8U3ywbS1bwzwqo2awNwmo&__csr=&__req=6&__hs=19443.BP%3ADEFAULT.2.0..0.0&dpr=1&__ccg=GOOD&__rev=1007183526&__s=jj5qaf%3A46u6l7%3Aamtubg&__hsi=7215233148342221029&__comet_req=0&fb_dtsg=" + dtsg + "&jazoest=25390&lsd=x122Doj0kkTQe8TdeLWoDJ&__aaid=158820340401185&__spin_r=1007183526&__spin_b=trunk&__spin_t=1679927378&__jssesw=1";
             //var data = "approvals_code=" + faCode + "&save_device=false&__user=" + user + "&__a=1&__dyn=7xeUmF3EfXpUS2q3mbwyyVuC2-m2q3Kq2i5Uf9E6C7UW3q5UgDxW4E8U6ydwJwCwmUO0BoiyEqx68w9q15wfO1YCwjHwuk9wgovyolwuEsxe687C2m3K2y1nUS0jG12KdwnU5W0IU9kbxR12ewi85W1bxq1uG3G48W2a5Ey19zUcE28wdq1iwKwHxa1XwnFU2DxiaBw4kxa4UCfwSyES2e0UE2ZwiU8U6C0yEco5C&__csr=&__req=8&__hs=19395.BP%3ADEFAULT.2.0.0.0.0&dpr=1.5&__ccg=GOOD&__rev=1006920906&__s=6hjwrm%3A3vhtq1%3Aspfsji&__hsi=7197324973317924624&__comet_req=0&fb_dtsg=" + dtsg + "&jazoest=25525&lsd=Q7Feqpz-TcfK27ydcQVNhN&__aaid=191881262750333&__spin_r=1006920906&__spin_b=trunk&__spin_t=1675757806&__jssesw=1";
-            var response = httprequest.Post("https://business.facebook.com/security/twofactor/reauth/enter/", data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
+            var response = httprequest.Post(FacebookLinkUrl.FacebookReauth, data, "application/x-www-form-urlencoded; charset=UTF-8").ToString();
             return response;
         }
 
@@ -343,8 +341,7 @@ namespace Facebook.Core
         {
             HttpRequest request = new HttpRequest();
             CommonFunction.AddCookie(request, cookie);
-            var respone = request.Get("https://business.facebook.com/business_locations/").ToString();
-            //var respone = request.Get("https://business.facebook.com/content_management/").ToString();
+            var respone = request.Get(FacebookLinkUrl.FacebookContentManagement).ToString();
             string token = "EAAG";
             if (respone.Contains("EAAG"))
             {
@@ -355,7 +352,7 @@ namespace Facebook.Core
         public string GetEAABToken(ChromeDriver driver)
         {
             //Vào trang quảng cáo pe lấy token
-            driver.Url = "https://www.facebook.com/pe";
+            driver.Url = FacebookLinkUrl.FacebookAdsmanager;
             Thread.Sleep(2000);
             string source = driver.PageSource;
             string token = "EAAB";
@@ -443,6 +440,105 @@ namespace Facebook.Core
             finally
             {
                 //driver.Close();
+            }
+            return result;
+        }
+        
+        public bool FacebookError282MBasic(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string apiKey, string imgFacePath)
+        {
+            var result = false;
+            Random random = new Random();
+            string source = "";
+            if (driver.Url.Contains("1501092823525282")) //1501092823525282
+            {
+                var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
+                account.DTSG = dtsg;
+                ////Get base64 captcha
+                source = driver.PageSource;
+                if (source.Contains("captcha_persist_data"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Captcha");
+                    var elementImage = driver.FindElement(By.XPath("//div[@id='captcha']//img"));
+                    ITakesScreenshot screenshotDriver = driver as ITakesScreenshot;
+                    byte[] byteArray = screenshotDriver.GetScreenshot().AsByteArray;
+                    Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
+                    Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
+                    screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
+                    string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                    screenShot.Save(imgPath, ImageFormat.Png);
+                    ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
+                    resolveCaptcha.APIKey = resolveCaptchaKey;
+                    string outputCapcha = "";
+                    resolveCaptcha.SolveNormalCapcha(CommonFunction.ConvertImageToBase64String(imgPath), out outputCapcha);
+
+                    if (string.IsNullOrEmpty(outputCapcha) || outputCapcha.Length > 6)
+                    {
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi giả mã captcha");
+                    }
+                    else
+                    {
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='captcha_response']", outputCapcha);
+                        Thread.Sleep(300);
+                        driver.FindElement(By.XPath("//input[@name='action_submit_bot_captcha_response']")).Click();
+                        //driver.Navigate().GoToUrl(url);
+                        Thread.Sleep(2000);
+                        source = driver.PageSource;
+                    }
+                }
+
+                if (source.Contains("action_set_contact_point"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
+                    IOtp otpProcessing = new OtpSell();
+                    string number = "", idNumber = "", code = "", appName = "Facebook";
+                    string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
+                    int count = 0;
+                    while (count < 5 && string.IsNullOrEmpty(number))
+                    {
+                        number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                        driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                        Thread.Sleep(random.Next(1000, 2000));
+                        source = driver.PageSource;
+                        if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                        {
+                            number = "";
+                            otpProcessing.CancelByAppId(apiKey, idNumber);
+                        }
+                        count++;
+                    }
+                    count = 0;
+                    if (!string.IsNullOrEmpty(number))
+                    {
+                        while (count < 10 && string.IsNullOrEmpty(code))
+                        {
+                            Thread.Sleep(30000);
+                            code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
+                            count++;
+                        }
+                    }
+                    if (string.IsNullOrEmpty(code))
+                    {
+                        otpProcessing.CancelByAppId(apiKey, idNumber);
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
+                    }
+                    else
+                    {
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
+                        driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
+                        Thread.Sleep(random.Next(1000, 2000));
+                        source = driver.PageSource;
+                    }
+                }
+
+                if (source.Contains("mobile_image_data"))
+                {
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
+                    var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                    mobile_image_data.SendKeys(imgFacePath);
+                    Thread.Sleep(500);
+                    driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                }
             }
             return result;
         }

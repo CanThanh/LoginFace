@@ -25,4 +25,17 @@ namespace Facebook.Model
             Proxy
         }
     }
+    internal class FacebookLinkUrl
+    {
+        public const string MBasicFacebook = "https://mbasic.facebook.com/";
+        public const string MFacebook = "https://m.facebook.com/";
+        public const string Facebook = "https://www.facebook.com/";
+        public const string FacebookAccountQuality = "https://www.facebook.com/accountquality/";
+        public const string FacebookBusinessLocations = "https://business.facebook.com/business_locations/";
+        public const string FacebookContentManagement = "https://business.facebook.com/content_management/";
+        public const string FacebookAdsmanager = "https://www.facebook.com/pe";
+        public const string FacebookReauth = "https://business.facebook.com/security/twofactor/reauth/enter/";
+        public const string FacebookMProfile = "https://m.facebook.com/profile.php?v=info&_rdr";
+    }
+
 }

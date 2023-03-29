@@ -59,13 +59,14 @@
             cmsCheckPoint956 = new ToolStripTextBox();
             cmsCheckPoint282 = new ToolStripTextBox();
             cmsCheckStatusAccount = new ToolStripMenuItem();
+            cmsAccountQuality = new ToolStripTextBox();
+            cmsLogin = new ToolStripTextBox();
             label1 = new Label();
             cbFile = new ComboBox();
             btnRemoveAccount = new Button();
             label2 = new Label();
             rbLoginCookie = new RadioButton();
             rbLoginUP = new RadioButton();
-            cmsAccountQuality = new ToolStripTextBox();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgViewInput).BeginInit();
             contextMenuStrip.SuspendLayout();
@@ -241,12 +242,12 @@
             // 
             // contextMenuStrip
             // 
-            contextMenuStrip.Items.AddRange(new ToolStripItem[] { cmsSelected, cmsUnselectedAll, cmsCheckpointFacebook, cmsCheckStatusAccount, cmsAccountQuality });
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { cmsSelected, cmsUnselectedAll, cmsCheckpointFacebook, cmsCheckStatusAccount, cmsAccountQuality, cmsLogin });
             contextMenuStrip.Name = "contextMenuStrip";
             contextMenuStrip.RenderMode = ToolStripRenderMode.Professional;
             contextMenuStrip.ShowCheckMargin = true;
             contextMenuStrip.ShowImageMargin = false;
-            contextMenuStrip.Size = new Size(181, 142);
+            contextMenuStrip.Size = new Size(181, 167);
             // 
             // cmsSelected
             // 
@@ -307,6 +308,22 @@
             cmsCheckStatusAccount.Size = new Size(180, 22);
             cmsCheckStatusAccount.Text = "Check tài khoản";
             cmsCheckStatusAccount.Click += checkStatusAccount_Click;
+            // 
+            // cmsAccountQuality
+            // 
+            cmsAccountQuality.Name = "cmsAccountQuality";
+            cmsAccountQuality.ReadOnly = true;
+            cmsAccountQuality.Size = new Size(100, 23);
+            cmsAccountQuality.Text = "Xác minh danh tính";
+            cmsAccountQuality.Click += cmsAccountQuality_Click;
+            // 
+            // cmsLogin
+            // 
+            cmsLogin.Name = "cmsLogin";
+            cmsLogin.ReadOnly = true;
+            cmsLogin.Size = new Size(100, 23);
+            cmsLogin.Text = "Đăng nhập";
+            cmsLogin.Click += cmsLogin_Click;
             // 
             // label1
             // 
@@ -374,14 +391,6 @@
             rbLoginUP.Text = "Đăng nhập U/P";
             rbLoginUP.UseVisualStyleBackColor = true;
             // 
-            // cmsAccountQuality
-            // 
-            cmsAccountQuality.Name = "cmsAccountQuality";
-            cmsAccountQuality.ReadOnly = true;
-            cmsAccountQuality.Size = new Size(100, 23);
-            cmsAccountQuality.Text = "Xác minh danh tính";
-            cmsAccountQuality.Click += cmsAccountQuality_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -446,5 +455,6 @@
         private System.Windows.Forms.ToolStripMenuItem cmsCheckStatusAccount;
         private ToolStripTextBox cmsCheckPoint282;
         private ToolStripTextBox cmsAccountQuality;
+        private ToolStripTextBox cmsLogin;
     }
 }

@@ -21,7 +21,7 @@ namespace Facebook
         //ConfigUserAgent_Proxy configUserAgent_Proxy;
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
-        string KeyResovelCatcha;
+        string KeyResovelCatcha, apiKey;
         int countThread = 3;
         List<int> lstRowDataRun = new List<int>();
         public MainForm()
@@ -33,7 +33,8 @@ namespace Facebook
             //sQLiteProcessing.createTable();
             InitComboBoxFile();
             LoadDataGridView();
-            KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";            
+            KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
+            apiKey = "172c280613d44fc194b2143054690b7e";
         }
 
         //private async Task<string> TestApi()
@@ -243,7 +244,7 @@ namespace Facebook
             ImageProcessing imageProcessing = new ImageProcessing();
             var account = lstAccountInfo[rowIndex];
             string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
-            
+
             if (string.IsNullOrEmpty(account.Info))
             {
                 Random random = new Random();
@@ -253,16 +254,16 @@ namespace Facebook
                 imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                 account.ImgFacePath = imgFaceFakePath;
             }
-            else 
+            else
             {
                 var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
                 var birthdaySplit = faceInfo.birthday.Split("/");
                 string yearOfBirthday = birthdaySplit[2];
                 var faceFakeUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
                 imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
-            } 
+            }
 
-            var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, imgFaceFakePath, KeyResovelCatcha, rbLoginCookie.Checked);
+            var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, imgFaceFakePath, KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
         #endregion
@@ -390,14 +391,37 @@ namespace Facebook
             }
             RunMultiThread(FacebookAccountQuality);
         }
-        private void FacebookAccountQuality(int rowIndex) 
+        private void FacebookAccountQuality(int rowIndex)
         {
             var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
             var account = lstAccountInfo[rowIndex];
             //Set mau phoi o dau so 1
-            var result = facebookAccountQuality.Proccess(account, rowIndex, itemSelected.Value, "1", KeyResovelCatcha, rbLoginCookie.Checked);
-            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";           
+            var result = facebookAccountQuality.Proccess(account, rowIndex, itemSelected.Value, "1", KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
+        }
+        #endregion
+
+        #region Login
+        private void cmsLogin_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void FacebookLogin(int rowIndex)
+        {
+            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            FacebookProcessing facebookProcessing = new FacebookProcessing();
+            var account = lstAccountInfo[rowIndex];
+            var result = false;
+            if (rbLoginCookie.Checked)
+            {
+                //facebookProcessing.LoginCookie(account);
+            }else if (rbLoginUP.Checked)
+            {
+
+            }
+
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
         #endregion
     }

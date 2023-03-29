@@ -191,7 +191,7 @@ namespace Facebook.Core
                         }
                         else
                         {
-                            command.CommandText = "UPDATE ACCOUNTS SET INFO = @info WHERE Uid = @uid AND IdFile = @idfile";
+                            command.CommandText = "UPDATE ACCOUNTS SET INFO = @info, Active = 1 WHERE Uid = @uid AND IdFile = @idfile";
                             command.Parameters.AddWithValue("@info", JsonConvert.SerializeObject(accountInfo));
                             command.ExecuteNonQuery();
                         }
