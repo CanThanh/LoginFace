@@ -150,6 +150,7 @@ namespace Facebook
 
         private void CheckPointMBasic282(int rowIndex)
         {
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
             FacebookError282 facebookError282 = new FacebookError282();            
             var account = lstAccountInfo[rowIndex];
             
@@ -277,6 +278,7 @@ namespace Facebook
         }
         private void CheckStatusAccount(int rowIndex)
         {
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             string url = "https://mbasic.facebook.com/";
             var result = facebookProcessing.CheckStatusAccount(lstAccountInfo[rowIndex], url, rowIndex, rbLoginCookie.Checked);
@@ -300,6 +302,7 @@ namespace Facebook
         }
         private void FacebookAccountQuality(int rowIndex)
         {
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
             FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
             var account = lstAccountInfo[rowIndex];
             //Set mau phoi o dau so 1
@@ -324,6 +327,7 @@ namespace Facebook
         }
         private void FacebookLogin(int rowIndex)
         {
+            dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
             var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var account = lstAccountInfo[rowIndex];

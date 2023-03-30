@@ -16,6 +16,7 @@
         public string Proxy { get; set; }
         public string UserAgent { get; set; }
         public string ImgFacePath { get; set; }
+        public string ImgIdentityQuanlityPath { get; set; }
         public int TypeProxy { get; set; }
         public string Status { get; set; }
         public string Info { get; set; }

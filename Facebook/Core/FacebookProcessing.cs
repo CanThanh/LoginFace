@@ -501,6 +501,10 @@ namespace Facebook.Core
                         Thread.Sleep(random.Next(2000, 3000));
                         if (!string.IsNullOrEmpty(number))
                         {
+                            if(number.Length == 9)
+                            {
+                                number = "+84" + number;
+                            }
                             CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
                             Thread.Sleep(random.Next(1000, 2000));
                             driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
@@ -562,13 +566,17 @@ namespace Facebook.Core
                             var faceFakeUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
                             imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                         }
-                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
-                        var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
-                        mobile_image_data.SendKeys(imgFaceFakePath);
-                        Thread.Sleep(500);
-                        driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                        if (!string.IsNullOrEmpty(imgFaceFakePath))
+                        {
+                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
+                            var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                            mobile_image_data.SendKeys(imgFaceFakePath);
+                            Thread.Sleep(500);
+                            driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                        }
+
                     }
-                    else
+                    else if(!string.IsNullOrEmpty(imgFacePath))
                     {
                         MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
                         var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));

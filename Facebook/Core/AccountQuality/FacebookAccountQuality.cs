@@ -21,6 +21,7 @@ namespace Facebook.Core.AccountQuality
     {
         public bool Proccess(AccountInfo account, int rowIndex, string idFile, string idConfigIndentity, string resolveCaptchaKey, string apiKey, bool loginCookie = false)
         {
+            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Bắt đầu");
             bool result = true;
             Random random = new Random();
             string source = "";
@@ -65,9 +66,13 @@ namespace Facebook.Core.AccountQuality
                         driver.NewTab();
                         driver.SwitchTo().Window(driver.WindowHandles.Last());
                         driver.Navigate().GoToUrl(FacebookLinkUrl.FacebookGetAccountInfo + token);
-                        Thread.Sleep(random.Next(3000, 5000));
-                        account.Info = driver.PageSource;
-                    }
+                        Thread.Sleep(random.Next(1000, 2000));
+                        account.Info = driver.FindElement(By.XPath("//html//body//pre")).GetInnerHTML();
+                    }                                    
+                }
+
+                if (string.IsNullOrEmpty(account.ImgIdentityQuanlityPath))
+                {
                     //Change get config
                     var configIdentityDbModel = sqLiteProcessing.GetConfigIndentityById(idConfigIndentity);
                     ImageProcessing imageProcessing = new ImageProcessing();
@@ -84,32 +89,47 @@ namespace Facebook.Core.AccountQuality
                     imageProcessing.ProcessImage(faceInfo, bitmap, configIdentityDbModel.configIdentityModel, Image.FromFile(imgFaceFakePath));
                     string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Identity") + "\\" + faceInfo.id + ".jpg";
                     bitmap.Save(imgIdentityPath);
+                    account.ImgIdentityQuanlityPath = imgIdentityPath;
+                    bitmap.Dispose();
                 }
 
+                //driver.NewTab();
+                //driver.SwitchTo().Window(driver.WindowHandles.Last());
+                url = FacebookLinkUrl.FacebookAccountQuality + account.Id;
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(600);
+                driver.Navigate().GoToUrl(url);
                 Thread.Sleep(2000);
+                source = driver.PageSource;
+
+                if (source.Contains("xeuugli x2lwn1j x1cy8zhl x78zum5 x1q0g3np x1yztbdb"))
+                {
+                    driver.FindElement(By.XPath("//div[@class='xeuugli x2lwn1j x1cy8zhl x78zum5 x1q0g3np x1yztbdb']//div[@class='x3nfvp2 x193iq5w xxymvpz']")).Click();
+                    Thread.Sleep(2000);
+                    source = driver.PageSource;
+                }
+
+                if(source.Contains("x6s0dn4 x78zum5 xl56j7k x1608yet xljgi0e x1e0frkt"))
+                {
+                    driver.FindElement(By.XPath("//div[@class='x6s0dn4 x78zum5 xl56j7k x1608yet xljgi0e x1e0frkt']")).Click();
+                    Thread.Sleep(2000);
+                }
+ 
+   
+                url = driver.Url;
+                url = url.Replace("www", "mbasic");
                 driver.NewTab();
                 driver.SwitchTo().Window(driver.WindowHandles.Last());
-                url = FacebookLinkUrl.FacebookAccountQuality;// + account.Id;
-                Thread.Sleep(2000);
+                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(random.Next(1000, 2000));
 
-                //driver.FindElement(By.XPath("//div[@class='xeuugli x2lwn1j x1cy8zhl x78zum5 x1q0g3np x1yztbdb']//div[@class='x3nfvp2 x193iq5w xxymvpz']")).Click();
-                //Thread.Sleep(2000);
+                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, account.ImgIdentityQuanlityPath, false);
 
-                //driver.FindElement(By.XPath("//div[@class='x6s0dn4 x78zum5 xl56j7k x1608yet xljgi0e x1e0frkt']")).Click();
-                //Thread.Sleep(2000);
-                //url = driver.Url;
-                //url = url.Replace("www", "mbasic");
-                //driver.Navigate().GoToUrl(url);
-                //Thread.Sleep(random.Next(1000, 2000));
-                //source = driver.PageSource;
-
-                //facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, imgIdentityPath, false);
-               
                 sqLiteProcessing.InsertOrUpdateAccount(account, idFile);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                result = false;
+                MainForm.Self.SetColNoteGridViewByRow(rowIndex, ex.Message);
             }
             finally
             {
