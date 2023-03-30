@@ -31,7 +31,7 @@ namespace Facebook.Otp
 
         public string GetNumberByAppId(string apiKey, string appId, out string idNumber)
         {
-            string url = "https://api.sellotp.com/request/get?token=" + apiKey + "&serviceId=" + appId + "&network=MOBIFONE|VINAPHONE|VIETNAMOBILE|ITELECOM";
+            string url = "https://api.sellotp.com/request/get?token=" + apiKey + "&serviceId=";// + appId + "&network=MOBIFONE|VINAPHONE|VIETNAMOBILE|ITELECOM";
             idNumber = "";
             try
             {

@@ -24,6 +24,7 @@ namespace Facebook
         string KeyResovelCatcha, apiKey;
         int countThread = 3;
         List<int> lstRowDataRun = new List<int>();
+        ComboboxItem itemSelected;
         public MainForm()
         {
             InitializeComponent();
@@ -34,8 +35,8 @@ namespace Facebook
             InitComboBoxFile();
             LoadDataGridView();
             KeyResovelCatcha = "90b9de403cd4c42f45a4f9048760dec0";
-            apiKey = "172c280613d44fc194b2143054690b7e"; //otp sell
-            //apiKey = "172c280613d44fc194b2143054690b7e"; //doi sang chothuesimcode
+            //apiKey = "172c280613d44fc194b2143054690b7e"; //otp sell
+            apiKey = "46398264a7d207e3"; //doi sang chothuesimcode
         }
         #region InitData when Form Load
         private void InitComboBoxFile()
@@ -149,30 +150,10 @@ namespace Facebook
 
         private void CheckPointMBasic282(int rowIndex)
         {
-            FacebookError282 facebookError282 = new FacebookError282();
-            ImageProcessing imageProcessing = new ImageProcessing();
+            FacebookError282 facebookError282 = new FacebookError282();            
             var account = lstAccountInfo[rowIndex];
-            string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
-
-            if (string.IsNullOrEmpty(account.Info))
-            {
-                Random random = new Random();
-                var age = random.Next(18, 60);
-                //fix gender or random o day male or female
-                string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, "male");
-                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
-                account.ImgFacePath = imgFaceFakePath;
-            }
-            else
-            {
-                var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
-                var birthdaySplit = faceInfo.birthday.Split("/");
-                string yearOfBirthday = birthdaySplit[2];
-                var faceFakeUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
-                imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
-            }
-
-            var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, imgFaceFakePath, KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
+            
+            var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, "", KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
         #endregion
@@ -208,11 +189,27 @@ namespace Facebook
                     {
                         if (!configUserAgentProxyModel.CheckExistData)
                         {
+                            if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
+                            {
+                                lstAccountInfo[dgViewInput.Rows.IndexOf(item)].Proxy = configUserAgentProxyModel.LstData[count];
+                            }
+                            else
+                            {
+                                lstAccountInfo[dgViewInput.Rows.IndexOf(item)].UserAgent = configUserAgentProxyModel.LstData[count];
+                            }
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
                             count++;
                         }
                         else if (!string.IsNullOrEmpty(Convert.ToString(item.Cells[colName].Value)))
                         {
+                            if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
+                            {
+                                lstAccountInfo[dgViewInput.Rows.IndexOf(item)].Proxy = configUserAgentProxyModel.LstData[count];
+                            }
+                            else
+                            {
+                                lstAccountInfo[dgViewInput.Rows.IndexOf(item)].UserAgent = configUserAgentProxyModel.LstData[count];
+                            }
                             item.Cells[colName].Value = configUserAgentProxyModel.LstData[count];
                             count++;
                         }
@@ -290,6 +287,7 @@ namespace Facebook
         private void cmsAccountQuality_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
+            itemSelected = (ComboboxItem)cbFile.SelectedItem;
             lstRowDataRun.Clear();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
@@ -302,7 +300,6 @@ namespace Facebook
         }
         private void FacebookAccountQuality(int rowIndex)
         {
-            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             FacebookAccountQuality facebookAccountQuality = new FacebookAccountQuality();
             var account = lstAccountInfo[rowIndex];
             //Set mau phoi o dau so 1
@@ -332,6 +329,9 @@ namespace Facebook
             var account = lstAccountInfo[rowIndex];
             var result = false;
             var driver = facebookProcessing.InitChromeDriver(account);
+
+
+
             if (rbLoginCookie.Checked)
             {
                 facebookProcessing.LoginCookie(driver, FacebookLinkUrl.MFacebook, account.Cookie);

@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Security.Policy;
 using System.Security.Principal;
 using System;
+using Newtonsoft.Json;
 
 namespace Facebook.Core
 {
@@ -36,7 +37,7 @@ namespace Facebook.Core
                     if (account.Proxy.Contains("@"))
                     {
                         var proxysplit = account.Proxy.Split('@');
-                        chromeOptions.AddHttpProxy(proxysplit[1].Split(':')[0], Convert.ToInt32(proxysplit[1].Split(':')[1]), proxysplit[0].Split(':')[0], proxysplit[0].Split(':')[0]);
+                        chromeOptions.AddHttpProxy(proxysplit[1].Split(':')[0], Convert.ToInt32(proxysplit[1].Split(':')[1]), proxysplit[0].Split(':')[0], proxysplit[0].Split(':')[1]);
                     }
                     else
                     {
@@ -201,6 +202,7 @@ namespace Facebook.Core
             Thread.Sleep(random.Next(2000, 3000));
             string faCode = new Totp(Base32Encoding.ToBytes(twoFA)).ComputeTotp();
             CommonFunction.SendKeyByXPath(driver, "//input[@name='approvals_code']", faCode);
+            Thread.Sleep(random.Next(2000, 3000));
             driver.FindElement(By.XPath(elementXpath + "[@type='submit']")).Click();
             Thread.Sleep(random.Next(1000, 1500));
             var radioBtn = driver.FindElements(By.Name("name_action_selected"));
@@ -444,7 +446,7 @@ namespace Facebook.Core
             return result;
         }
         
-        public bool FacebookError282MBasic(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string apiKey, string imgFacePath)
+        public bool FacebookError282MBasic(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string apiKey, string imgFacePath, bool isError282 = true)
         {
             var result = false;
             Random random = new Random();
@@ -489,7 +491,7 @@ namespace Facebook.Core
                 if (source.Contains("action_set_contact_point"))
                 {
                     MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
-                    IOtp otpProcessing = new OtpSell();
+                    IOtp otpProcessing = new OtpChoThueSimCode();
                     string number = "", idNumber = "", code = "", appName = "Facebook";
                     string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
                     int count = 0;
@@ -515,9 +517,9 @@ namespace Facebook.Core
                     count = 0;
                     if (!string.IsNullOrEmpty(number))
                     {
-                        while (count < 10 && string.IsNullOrEmpty(code))
+                        while (count < 30 && string.IsNullOrEmpty(code))
                         {
-                            Thread.Sleep(30000);
+                            Thread.Sleep(10000);
                             code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
                             count++;
                         }
@@ -539,11 +541,41 @@ namespace Facebook.Core
 
                 if (source.Contains("mobile_image_data"))
                 {
-                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
-                    var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
-                    mobile_image_data.SendKeys(imgFacePath);
-                    Thread.Sleep(500);
-                    driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                    if (isError282)
+                    {
+                        ImageProcessing imageProcessing = new ImageProcessing();
+                        string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
+
+                        if (string.IsNullOrEmpty(account.Info))
+                        {
+                            var age = random.Next(18, 60);
+                            //fix gender or random o day male or female
+                            string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, "male");
+                            imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+                            account.ImgFacePath = imgFaceFakePath;
+                        }
+                        else
+                        {
+                            var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
+                            var birthdaySplit = faceInfo.birthday.Split("/");
+                            string yearOfBirthday = birthdaySplit[2];
+                            var faceFakeUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
+                            imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
+                        }
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
+                        var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                        mobile_image_data.SendKeys(imgFaceFakePath);
+                        Thread.Sleep(500);
+                        driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                    }
+                    else
+                    {
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Upload ảnh");
+                        var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
+                        mobile_image_data.SendKeys(imgFacePath);
+                        Thread.Sleep(500);
+                        driver.FindElement(By.XPath("//input[@name='action_upload_image']")).Click();
+                    }
                 }
             }
             return result;

@@ -15,7 +15,7 @@ namespace Facebook.Model
         }
         public enum TypeProxy
         {
-            HttpProxy = 1,
+            HttpProxy = 0,
             Socks5Proxy
         }
 
@@ -36,6 +36,7 @@ namespace Facebook.Model
         public const string FacebookAdsmanager = "https://www.facebook.com/pe";
         public const string FacebookReauth = "https://business.facebook.com/security/twofactor/reauth/enter/";
         public const string FacebookMProfile = "https://m.facebook.com/profile.php?v=info&_rdr";
+        public const string FacebookGetAccountInfo = "https://graph.facebook.com/me?fields=first_name,last_name,middle_name,name,birthday,gender&access_token=";
     }
 
 }

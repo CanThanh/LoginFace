@@ -25,6 +25,7 @@ namespace Facebook.Core.AccountQuality
             Random random = new Random();
             string source = "";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
+            SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
             var driver = facebookProcessing.InitChromeDriver(account);
             string url = FacebookLinkUrl.MFacebook;
             try
@@ -61,45 +62,46 @@ namespace Facebook.Core.AccountQuality
                     if (token.Length > 4)
                     {
                         account.EAAG = token;
-                        string infor = facebookProcessing.GetUserInfoSecond(token, account.Cookie);
-                        account.Info = infor;
+                        driver.NewTab();
+                        driver.SwitchTo().Window(driver.WindowHandles.Last());
+                        driver.Navigate().GoToUrl(FacebookLinkUrl.FacebookGetAccountInfo + token);
+                        Thread.Sleep(random.Next(3000, 5000));
+                        account.Info = driver.PageSource;
                     }
+                    //Change get config
+                    var configIdentityDbModel = sqLiteProcessing.GetConfigIndentityById(idConfigIndentity);
+                    ImageProcessing imageProcessing = new ImageProcessing();
+                    var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
+                    var birthdaySplit = faceInfo.birthday.Split("/");
+                    string dayOfBirthday = birthdaySplit[1];
+                    string monthOfBirthday = birthdaySplit[0];
+                    string yearOfBirthday = birthdaySplit[2];
+                    faceInfo.birthday = dayOfBirthday + "." + monthOfBirthday + "." + yearOfBirthday.Substring(2, 2);
+                    var bitmap = (Bitmap)Image.FromFile(configIdentityDbModel.imageUrl);
+                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + faceInfo.id + ".jpg";
+                    var imageFaceUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
+                    imageProcessing.getImageFromUrl(imageFaceUrl.Substring(30), imageFaceUrl, imgFaceFakePath);
+                    imageProcessing.ProcessImage(faceInfo, bitmap, configIdentityDbModel.configIdentityModel, Image.FromFile(imgFaceFakePath));
+                    string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Identity") + "\\" + faceInfo.id + ".jpg";
+                    bitmap.Save(imgIdentityPath);
                 }
 
-                //Change get config
-                SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
-                var configIdentityDbModel = sqLiteProcessing.GetConfigIndentityById(idConfigIndentity);
-                ImageProcessing imageProcessing = new ImageProcessing();
-                var faceInfo = JsonConvert.DeserializeObject<FaceInfo>(account.Info);
-                var birthdaySplit = faceInfo.birthday.Split("/");
-                string dayOfBirthday = birthdaySplit[1];
-                string monthOfBirthday = birthdaySplit[0];
-                string yearOfBirthday = birthdaySplit[2];
-                faceInfo.birthday = dayOfBirthday + "." + monthOfBirthday + "." + yearOfBirthday.Substring(2, 2);
-                var bitmap = (Bitmap)Image.FromFile(configIdentityDbModel.imageUrl);
-                string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + faceInfo.id + ".jpg";
-                var imageFaceUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
-                imageProcessing.getImageFromUrl(imageFaceUrl.Substring(30), imageFaceUrl, imgFaceFakePath);
-                imageProcessing.ProcessImage(faceInfo, bitmap, configIdentityDbModel.configIdentityModel, Image.FromFile(imgFaceFakePath));
-                string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Identity") + "\\" + faceInfo.id + ".jpg";
-                bitmap.Save(imgIdentityPath);
-
-                url = FacebookLinkUrl.FacebookAccountQuality + account.Id;
-                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(2000);
+                url = FacebookLinkUrl.FacebookAccountQuality;// + account.Id;
                 Thread.Sleep(2000);
 
-                driver.FindElement(By.XPath("//div[@class='xeuugli x2lwn1j x1cy8zhl x78zum5 x1q0g3np x1yztbdb']//div[@class='x3nfvp2 x193iq5w xxymvpz']")).Click();
-                Thread.Sleep(2000);
+                //driver.FindElement(By.XPath("//div[@class='xeuugli x2lwn1j x1cy8zhl x78zum5 x1q0g3np x1yztbdb']//div[@class='x3nfvp2 x193iq5w xxymvpz']")).Click();
+                //Thread.Sleep(2000);
 
-                driver.FindElement(By.XPath("//div[@class='x6s0dn4 x78zum5 xl56j7k x1608yet xljgi0e x1e0frkt']")).Click();
-                Thread.Sleep(2000);
-                url = driver.Url;
-                url = url.Replace("www", "mbasic");
-                driver.Navigate().GoToUrl(url);
-                Thread.Sleep(random.Next(1000, 2000));
-                source = driver.PageSource;
+                //driver.FindElement(By.XPath("//div[@class='x6s0dn4 x78zum5 xl56j7k x1608yet xljgi0e x1e0frkt']")).Click();
+                //Thread.Sleep(2000);
+                //url = driver.Url;
+                //url = url.Replace("www", "mbasic");
+                //driver.Navigate().GoToUrl(url);
+                //Thread.Sleep(random.Next(1000, 2000));
+                //source = driver.PageSource;
 
-                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, imgIdentityPath);
+                //facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, imgIdentityPath, false);
                
                 sqLiteProcessing.InsertOrUpdateAccount(account, idFile);
             }
@@ -109,7 +111,7 @@ namespace Facebook.Core.AccountQuality
             }
             finally
             {
-                driver.Close();
+                //driver.Close();
             }
             return result;
         }
