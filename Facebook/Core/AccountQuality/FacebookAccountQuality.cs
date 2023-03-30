@@ -87,6 +87,8 @@ namespace Facebook.Core.AccountQuality
                 }
 
                 Thread.Sleep(2000);
+                driver.NewTab();
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
                 url = FacebookLinkUrl.FacebookAccountQuality;// + account.Id;
                 Thread.Sleep(2000);
 
