@@ -93,6 +93,11 @@ namespace Facebook.Core
                     command.Parameters.AddWithValue("@active", 1);
                     command.ExecuteNonQuery();
                 }
+                else
+                {
+                    command.CommandText = "UPDATE FILES SET Active = 1 WHERE Name =@name";
+                    command.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {

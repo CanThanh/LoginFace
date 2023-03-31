@@ -50,6 +50,7 @@ namespace Facebook
             if (lstFile.Count > 0)
             {
                 cbFile.SelectedIndex = 0;
+                itemSelected = (ComboboxItem)cbFile.SelectedItem;
             }
         }
         #endregion
@@ -64,7 +65,7 @@ namespace Facebook
         public void LoadDataGridView()
         {
             dgViewInput.Rows.Clear();
-            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
+
             lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
             foreach (var item in lstAccountInfo)
             {
@@ -72,6 +73,23 @@ namespace Facebook
                                     item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
             }
         }
+
+        #region MainForm
+        private void dgViewInput_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                var oldValue = Convert.ToBoolean(dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = !oldValue;
+            }
+        }
+
+        private void cbFile_SelectedValueChanged(object sender, EventArgs e)
+        {
+            itemSelected = (ComboboxItem)cbFile.SelectedItem;
+            LoadDataGridView();
+        }
+        #endregion MainForm
 
         #region Context Menu GridView
         private void SetCheckColUIdGridView()
@@ -151,9 +169,9 @@ namespace Facebook
         private void CheckPointMBasic282(int rowIndex)
         {
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
-            FacebookError282 facebookError282 = new FacebookError282();            
+            FacebookError282 facebookError282 = new FacebookError282();
             var account = lstAccountInfo[rowIndex];
-            
+
             var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, "", KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
         }
@@ -190,7 +208,7 @@ namespace Facebook
                     {
                         if (!configUserAgentProxyModel.CheckExistData)
                         {
-                            if(configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
+                            if (configUserAgentProxyModel.TypeForm == (int)TypeForm.Proxy)
                             {
                                 lstAccountInfo[dgViewInput.Rows.IndexOf(item)].Proxy = configUserAgentProxyModel.LstData[count];
                             }
@@ -250,7 +268,6 @@ namespace Facebook
             if (result == DialogResult.Yes)
             {
                 List<string> lstUserId = new List<string>();
-                var itemSelected = (ComboboxItem)cbFile.SelectedItem;
                 foreach (DataGridViewRow item in dgViewInput.Rows)
                 {
                     if (Convert.ToBoolean(item.Cells["colCheck"].Value))
@@ -289,7 +306,6 @@ namespace Facebook
         private void cmsAccountQuality_Click(object sender, EventArgs e)
         {
             dgViewInput.ContextMenuStrip.Close();
-            itemSelected = (ComboboxItem)cbFile.SelectedItem;
             lstRowDataRun.Clear();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
@@ -328,7 +344,6 @@ namespace Facebook
         private void FacebookLogin(int rowIndex)
         {
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
-            var itemSelected = (ComboboxItem)cbFile.SelectedItem;
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var account = lstAccountInfo[rowIndex];
             var result = false;
@@ -339,7 +354,8 @@ namespace Facebook
             if (rbLoginCookie.Checked)
             {
                 facebookProcessing.LoginCookie(driver, FacebookLinkUrl.MFacebook, account.Cookie);
-            }else if (rbLoginUP.Checked)
+            }
+            else if (rbLoginUP.Checked)
             {
                 if (string.IsNullOrEmpty(account.TwoFA))
                 {
@@ -353,6 +369,6 @@ namespace Facebook
 
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
-        #endregion
+        #endregion        
     }
 }

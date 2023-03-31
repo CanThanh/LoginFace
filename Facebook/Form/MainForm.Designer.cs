@@ -139,12 +139,14 @@
             dgViewInput.Location = new Point(0, 97);
             dgViewInput.Margin = new Padding(4, 3, 4, 3);
             dgViewInput.Name = "dgViewInput";
+            dgViewInput.ReadOnly = true;
             dgViewInput.RowHeadersVisible = false;
             dgViewInput.RowHeadersWidth = 62;
             dgViewInput.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgViewInput.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgViewInput.Size = new Size(1234, 530);
             dgViewInput.TabIndex = 3;
+            dgViewInput.CellClick += dgViewInput_CellClick;
             // 
             // colCheck
             // 
@@ -153,6 +155,7 @@
             colCheck.IndeterminateValue = "false";
             colCheck.MinimumWidth = 8;
             colCheck.Name = "colCheck";
+            colCheck.ReadOnly = true;
             colCheck.TrueValue = "true";
             colCheck.Width = 50;
             // 
@@ -161,6 +164,7 @@
             colIndex.HeaderText = "STT";
             colIndex.MinimumWidth = 8;
             colIndex.Name = "colIndex";
+            colIndex.ReadOnly = true;
             colIndex.Width = 50;
             // 
             // colID
@@ -168,6 +172,7 @@
             colID.HeaderText = "UID";
             colID.MinimumWidth = 8;
             colID.Name = "colID";
+            colID.ReadOnly = true;
             colID.Width = 80;
             // 
             // colPass
@@ -175,6 +180,7 @@
             colPass.HeaderText = "Mật khẩu";
             colPass.MinimumWidth = 8;
             colPass.Name = "colPass";
+            colPass.ReadOnly = true;
             colPass.Width = 80;
             // 
             // colTwoFA
@@ -182,6 +188,7 @@
             colTwoFA.HeaderText = "Mã 2 FA";
             colTwoFA.MinimumWidth = 8;
             colTwoFA.Name = "colTwoFA";
+            colTwoFA.ReadOnly = true;
             colTwoFA.Width = 80;
             // 
             // colCookie
@@ -189,6 +196,7 @@
             colCookie.HeaderText = "Cookie";
             colCookie.MinimumWidth = 8;
             colCookie.Name = "colCookie";
+            colCookie.ReadOnly = true;
             colCookie.Width = 150;
             // 
             // colEmail
@@ -196,6 +204,7 @@
             colEmail.HeaderText = "Email";
             colEmail.MinimumWidth = 8;
             colEmail.Name = "colEmail";
+            colEmail.ReadOnly = true;
             colEmail.Width = 80;
             // 
             // colPassMail
@@ -203,6 +212,7 @@
             colPassMail.HeaderText = "Pass email";
             colPassMail.MinimumWidth = 8;
             colPassMail.Name = "colPassMail";
+            colPassMail.ReadOnly = true;
             colPassMail.Width = 80;
             // 
             // colAccountInfo
@@ -210,6 +220,7 @@
             colAccountInfo.HeaderText = "Thông tin tài khoản";
             colAccountInfo.MinimumWidth = 8;
             colAccountInfo.Name = "colAccountInfo";
+            colAccountInfo.ReadOnly = true;
             colAccountInfo.Width = 150;
             // 
             // colProxy
@@ -217,6 +228,7 @@
             colProxy.HeaderText = "Proxy";
             colProxy.MinimumWidth = 8;
             colProxy.Name = "colProxy";
+            colProxy.ReadOnly = true;
             colProxy.Width = 80;
             // 
             // colUserAgent
@@ -224,6 +236,7 @@
             colUserAgent.HeaderText = "User Agent";
             colUserAgent.MinimumWidth = 8;
             colUserAgent.Name = "colUserAgent";
+            colUserAgent.ReadOnly = true;
             colUserAgent.Width = 150;
             // 
             // colStatus
@@ -231,6 +244,7 @@
             colStatus.HeaderText = "Tình trạng";
             colStatus.MinimumWidth = 8;
             colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
             colStatus.Width = 80;
             // 
             // colNote
@@ -238,6 +252,7 @@
             colNote.HeaderText = "Ghi chú";
             colNote.MinimumWidth = 8;
             colNote.Name = "colNote";
+            colNote.ReadOnly = true;
             colNote.Width = 150;
             // 
             // contextMenuStrip
@@ -247,13 +262,13 @@
             contextMenuStrip.RenderMode = ToolStripRenderMode.Professional;
             contextMenuStrip.ShowCheckMargin = true;
             contextMenuStrip.ShowImageMargin = false;
-            contextMenuStrip.Size = new Size(181, 167);
+            contextMenuStrip.Size = new Size(161, 145);
             // 
             // cmsSelected
             // 
             cmsSelected.DropDownItems.AddRange(new ToolStripItem[] { cmsSelectAll, cmsSelectHightlight });
             cmsSelected.Name = "cmsSelected";
-            cmsSelected.Size = new Size(180, 22);
+            cmsSelected.Size = new Size(160, 22);
             cmsSelected.Text = "Chọn";
             // 
             // cmsSelectAll
@@ -284,7 +299,7 @@
             // 
             cmsCheckpointFacebook.DropDownItems.AddRange(new ToolStripItem[] { cmsCheckPoint956, cmsCheckPoint282 });
             cmsCheckpointFacebook.Name = "cmsCheckpointFacebook";
-            cmsCheckpointFacebook.Size = new Size(180, 22);
+            cmsCheckpointFacebook.Size = new Size(160, 22);
             cmsCheckpointFacebook.Text = "Giải check point";
             // 
             // cmsCheckPoint956
@@ -305,7 +320,7 @@
             // cmsCheckStatusAccount
             // 
             cmsCheckStatusAccount.Name = "cmsCheckStatusAccount";
-            cmsCheckStatusAccount.Size = new Size(180, 22);
+            cmsCheckStatusAccount.Size = new Size(160, 22);
             cmsCheckStatusAccount.Text = "Check tài khoản";
             cmsCheckStatusAccount.Click += checkStatusAccount_Click;
             // 
@@ -343,6 +358,7 @@
             cbFile.Name = "cbFile";
             cbFile.Size = new Size(140, 23);
             cbFile.TabIndex = 8;
+            cbFile.SelectedValueChanged += cbFile_SelectedValueChanged;
             // 
             // btnRemoveAccount
             // 
