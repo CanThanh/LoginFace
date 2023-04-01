@@ -39,4 +39,12 @@ namespace Facebook.Model
         public const string FacebookGetAccountInfo = "https://graph.facebook.com/me?fields=first_name,last_name,middle_name,name,birthday,gender&access_token=";
     }
 
+    internal class FilePath
+    {
+        public const string ConfigOtp =  "\\File\\setting\\configOtp.json";
+        public const string Face = "\\File\\setting\\configOtp.json";
+        public const string ScreenShot = "\\File\\setting\\configOtp.json";
+        public const string Indentity = "\\File\\setting\\configOtp.json";
+        public const string Captcha = "\\File\\setting\\configOtp.json";
+    }
 }

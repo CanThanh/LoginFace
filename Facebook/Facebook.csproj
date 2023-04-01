@@ -38,6 +38,9 @@
     <Compile Update="Form\ConfigUserAgent_Proxy.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Form\ConfigOtp.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Form\FormCore.cs">
       <SubType>Form</SubType>
     </Compile>

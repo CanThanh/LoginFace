@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Facebook.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using xNet;
 
 namespace Facebook.Otp
@@ -34,9 +36,13 @@ namespace Facebook.Otp
             return "";
         }
 
-        public string GetNumberByAppId(string apiKey, string appId, out string idNumber)
+        public string GetNumberByAppId(string apiKey, string appId, out string idNumber , string homenetwork = "")
         {
             string url = "https://chothuesimcode.com/api?act=number&apik="+ apiKey +"&appId=" + appId;
+            if (!string.IsNullOrEmpty(homenetwork))
+            {
+                url += "&carrier=" + homenetwork;
+            }
             idNumber = "";
             HttpRequest httpRequest = new HttpRequest();
             var response = httpRequest.Get(url).ToString();

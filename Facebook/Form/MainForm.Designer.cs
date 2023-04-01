@@ -36,6 +36,7 @@
             addProxy = new ToolStripMenuItem();
             config = new ToolStripMenuItem();
             configXMDT = new ToolStripMenuItem();
+            oTPToolStripMenuItem = new ToolStripMenuItem();
             dgViewInput = new DataGridView();
             colCheck = new DataGridViewCheckBoxColumn();
             colIndex = new DataGridViewTextBoxColumn();
@@ -113,7 +114,7 @@
             // 
             // config
             // 
-            config.DropDownItems.AddRange(new ToolStripItem[] { configXMDT });
+            config.DropDownItems.AddRange(new ToolStripItem[] { configXMDT, oTPToolStripMenuItem });
             config.Name = "config";
             config.Size = new Size(67, 22);
             config.Text = "Cấu hình";
@@ -125,17 +126,26 @@
             configXMDT.Text = "Phôi xác minh danh tính";
             configXMDT.Click += configXMDT_Click;
             // 
+            // oTPToolStripMenuItem
+            // 
+            oTPToolStripMenuItem.Name = "oTPToolStripMenuItem";
+            oTPToolStripMenuItem.Size = new Size(204, 22);
+            oTPToolStripMenuItem.Text = "OTP";
+            oTPToolStripMenuItem.Click += oTPToolStripMenuItem_Click;
+            // 
             // dgViewInput
             // 
             dgViewInput.AllowUserToAddRows = false;
+            dgViewInput.AllowUserToDeleteRows = false;
             dgViewInput.AllowUserToOrderColumns = true;
+            dgViewInput.AllowUserToResizeColumns = false;
             dgViewInput.AllowUserToResizeRows = false;
             dgViewInput.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgViewInput.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             dgViewInput.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgViewInput.Columns.AddRange(new DataGridViewColumn[] { colCheck, colIndex, colID, colPass, colTwoFA, colCookie, colEmail, colPassMail, colAccountInfo, colProxy, colUserAgent, colStatus, colNote });
             dgViewInput.ContextMenuStrip = contextMenuStrip;
-            dgViewInput.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgViewInput.EditMode = DataGridViewEditMode.EditProgrammatically;
             dgViewInput.Location = new Point(0, 97);
             dgViewInput.Margin = new Padding(4, 3, 4, 3);
             dgViewInput.Name = "dgViewInput";
@@ -385,19 +395,18 @@
             // rbLoginCookie
             // 
             rbLoginCookie.AutoSize = true;
-            rbLoginCookie.Checked = true;
             rbLoginCookie.Location = new Point(464, 50);
             rbLoginCookie.Margin = new Padding(4, 3, 4, 3);
             rbLoginCookie.Name = "rbLoginCookie";
             rbLoginCookie.Size = new Size(121, 19);
             rbLoginCookie.TabIndex = 11;
-            rbLoginCookie.TabStop = true;
             rbLoginCookie.Text = "Đăng nhập cookie";
             rbLoginCookie.UseVisualStyleBackColor = true;
             // 
             // rbLoginUP
             // 
             rbLoginUP.AutoSize = true;
+            rbLoginUP.Checked = true;
             rbLoginUP.Location = new Point(604, 52);
             rbLoginUP.Margin = new Padding(4, 3, 4, 3);
             rbLoginUP.Name = "rbLoginUP";
@@ -472,5 +481,6 @@
         private ToolStripTextBox cmsCheckPoint282;
         private ToolStripTextBox cmsAccountQuality;
         private ToolStripTextBox cmsLogin;
+        private ToolStripMenuItem oTPToolStripMenuItem;
     }
 }

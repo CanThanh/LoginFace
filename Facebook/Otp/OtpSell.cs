@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Facebook.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using xNet;
 
 namespace Facebook.Otp
@@ -29,9 +31,13 @@ namespace Facebook.Otp
             return "";
         }
 
-        public string GetNumberByAppId(string apiKey, string appId, out string idNumber)
+        public string GetNumberByAppId(string apiKey, string appId, out string idNumber, string homenetwork = "")
         {
-            string url = "https://api.sellotp.com/request/get?token=" + apiKey + "&serviceId=";// + appId + "&network=MOBIFONE|VINAPHONE|VIETNAMOBILE|ITELECOM";
+            string url = "https://api.sellotp.com/request/get?token=" + apiKey + "&serviceId=" + appId;
+            if(!string.IsNullOrEmpty(homenetwork))
+            {
+                url += "&network=" + homenetwork;
+            }
             idNumber = "";
             try
             {

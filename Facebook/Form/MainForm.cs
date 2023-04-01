@@ -12,6 +12,7 @@ using System.Text;
 using xNet;
 using static Facebook.Model.CommonConstant;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Facebook.Otp;
 
 namespace Facebook
 {
@@ -92,17 +93,16 @@ namespace Facebook
         #endregion MainForm
 
         #region Context Menu GridView
-        private void SetCheckColUIdGridView()
-        {
-            dgViewInput.ContextMenuStrip.Close();
-            if (dgViewInput.SelectedRows.Count > 0)
-            {
-                dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
-            }
-        }
+        //private void SetCheckColUIdGridView()
+        //{
+        //    dgViewInput.ContextMenuStrip.Close();
+        //    if (dgViewInput.SelectedRows.Count > 0)
+        //    {
+        //        dgViewInput.CurrentCell = dgViewInput.SelectedRows[0].Cells["colID"];
+        //    }
+        //}
         private void cmsUnselectedAll_Click(object sender, EventArgs e)
         {
-            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
                 item.Cells["colCheck"].Value = 0;
@@ -111,7 +111,6 @@ namespace Facebook
 
         private void cmsSelectAll_Click(object sender, EventArgs e)
         {
-            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.Rows)
             {
                 item.Cells["colCheck"].Value = true;
@@ -120,7 +119,6 @@ namespace Facebook
 
         private void cmsSelectHightlight_Click(object sender, EventArgs e)
         {
-            SetCheckColUIdGridView();
             foreach (DataGridViewRow item in dgViewInput.SelectedRows)
             {
                 item.Cells["colCheck"].Value = true;
@@ -369,6 +367,12 @@ namespace Facebook
 
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
-        #endregion        
+        #endregion
+
+        private void oTPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigOtp configOtp = new ConfigOtp();
+            configOtp.Show();
+        }
     }
 }

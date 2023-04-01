@@ -446,7 +446,7 @@ namespace Facebook.Core
             return result;
         }
         
-        public bool FacebookError282MBasic(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string apiKey, string imgFacePath, bool isError282 = true)
+        public bool FacebookError282MBasic2345(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string imgFacePath, bool isError282 = true)
         {
             var result = false;
             Random random = new Random();
@@ -491,55 +491,79 @@ namespace Facebook.Core
                 if (source.Contains("action_set_contact_point"))
                 {
                     MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
-                    IOtp otpProcessing = new OtpChoThueSimCode();
-                    string number = "", idNumber = "", code = "", appName = "Facebook";
-                    string appId = otpProcessing.GetIdApplicationByName(apiKey, appName);
-                    int count = 0;
-                    while (count < 5 && string.IsNullOrEmpty(number))
+   
+                    string filePath = Environment.CurrentDirectory + FilePath.ConfigOtp;
+                    ConfigOtpModel configOtpModel = new ConfigOtpModel();
+                    if (File.Exists(filePath))
                     {
-                        number = otpProcessing.GetNumberByAppId(apiKey, appId, out idNumber);
-                        Thread.Sleep(random.Next(2000, 3000));
-                        if (!string.IsNullOrEmpty(number))
+                        FileHelper fileHelper = new FileHelper();
+                        var configOtp = fileHelper.Read(filePath);
+                        try
                         {
-                            if(number.Length == 9)
-                            {
-                                number = "+84" + number;
-                            }
-                            CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
-                            Thread.Sleep(random.Next(1000, 2000));
-                            driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
-                            Thread.Sleep(random.Next(1000, 2000));
-                            source = driver.PageSource;
-                            if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
-                            {
-                                number = "";
-                                otpProcessing.CancelByAppId(apiKey, idNumber);
-                            }
+                            configOtpModel = JsonConvert.DeserializeObject<ConfigOtpModel>(configOtp);
                         }
-                        count++;
-                    }
-                    count = 0;
-                    if (!string.IsNullOrEmpty(number))
-                    {
-                        while (count < 30 && string.IsNullOrEmpty(code))
+                        catch (Exception)
                         {
-                            Thread.Sleep(10000);
-                            code = otpProcessing.GetCodeByIdService(apiKey, idNumber);
-                            count++;
+                            configOtpModel = new ConfigOtpModel();
                         }
                     }
-                    if (string.IsNullOrEmpty(code))
+                    if (string.IsNullOrEmpty(configOtpModel.ApiKey))
                     {
-                        otpProcessing.CancelByAppId(apiKey, idNumber);
-                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
+                        MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Cấu hình OTP lỗi");
                     }
                     else
                     {
-                        CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
-                        Thread.Sleep(random.Next(1000, 2000));
-                        driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
-                        Thread.Sleep(random.Next(1000, 2000));
-                        source = driver.PageSource;
+                        string homenetwork = "";
+                        IOtp otpProcessing = GetOtp(configOtpModel, out homenetwork);
+                        string number = "", idNumber = "", code = "", appName = "Facebook";
+                        string appId = otpProcessing.GetIdApplicationByName(configOtpModel.ApiKey, appName);
+                        int count = 0;
+                        while (count < 5 && string.IsNullOrEmpty(number))
+                        {
+                            number = otpProcessing.GetNumberByAppId(configOtpModel.ApiKey, appId, out idNumber, homenetwork);
+                            Thread.Sleep(random.Next(2000, 3000));
+                            if (!string.IsNullOrEmpty(number))
+                            {
+                                if (number.Length == 9)
+                                {
+                                    number = "+84" + number;
+                                }
+                                CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                                Thread.Sleep(random.Next(1000, 2000));
+                                driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                                Thread.Sleep(random.Next(1000, 2000));
+                                source = driver.PageSource;
+                                if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                                {
+                                    number = "";
+                                    otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
+                                }
+                            }
+                            count++;
+                        }
+                        count = 0;
+                        if (!string.IsNullOrEmpty(number))
+                        {
+                            while (count < 30 && string.IsNullOrEmpty(code))
+                            {
+                                Thread.Sleep(10000);
+                                code = otpProcessing.GetCodeByIdService(configOtpModel.ApiKey, idNumber);
+                                count++;
+                            }
+                        }
+                        if (string.IsNullOrEmpty(code))
+                        {
+                            otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
+                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
+                        }
+                        else
+                        {
+                            CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
+                            Thread.Sleep(random.Next(1000, 2000));
+                            driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
+                            Thread.Sleep(random.Next(1000, 2000));
+                            source = driver.PageSource;
+                        }
                     }
                 }
 
@@ -587,6 +611,80 @@ namespace Facebook.Core
                 }
             }
             return result;
+        }
+
+        private IOtp GetOtp(ConfigOtpModel configOtpModel, out string homenetwork)
+        {
+            IOtp otpProcessing;
+            homenetwork = "";
+            //Cấu hình link get OTP
+            if (configOtpModel.LinkGetOtp == (int)EnumLinkGetOtp.Sell)
+            {
+                otpProcessing = new OtpSell();
+                //Cấu hình nhà mạng
+                if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Vinaphone)
+                {
+                    homenetwork = "VINAPHONE";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Viettel)
+                {
+                    homenetwork = "VIETTEL";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Mobifone)
+                {
+                    homenetwork = "MOBIFONE";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Vietnamobile)
+                {
+                    homenetwork = "VIETNAMOBILE";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Gmobile)
+                {
+                    homenetwork = "";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.ITelecom)
+                {
+                    homenetwork = "ITELECOM";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Reddi)
+                {
+                    homenetwork = "";
+                }
+            }
+            else
+            {
+                otpProcessing = new OtpChoThueSimCode();
+                //Cấu hình nhà mạng
+                if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Vinaphone)
+                {
+                    homenetwork = "Vina";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Viettel)
+                {
+                    homenetwork = "Viettel";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Mobifone)
+                {
+                    homenetwork = "Mobi";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Vietnamobile)
+                {
+                    homenetwork = "VNMB";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Gmobile)
+                {
+                    homenetwork = "";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.ITelecom)
+                {
+                    homenetwork = "ITelecom";
+                }
+                else if (configOtpModel.HomeNetwork == (int)EnumHomeNetwork.Reddi)
+                {
+                    homenetwork = "";
+                }
+            }
+            return otpProcessing;
         }
     }
 }
