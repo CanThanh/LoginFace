@@ -105,7 +105,7 @@ namespace Facebook.Core.FacebookError
                 Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
                 Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
                 screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
-                string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Captcha) + "\\" + account.Id + "_captcha.png";
                 screenShot.Save(imgPath, ImageFormat.Png);
                 ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                 resolveCaptcha.APIKey = resolveCaptchaKey;
@@ -184,7 +184,7 @@ namespace Facebook.Core.FacebookError
 
                     ImageProcessing imageProcessing = new ImageProcessing();
                     string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, gender);
-                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
+                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Face) + "\\" + account.Id + ".jpg";
                     imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                     account.ImgFacePath = imgFaceFakePath;
                     var mobile_image_data = driver.FindElement(By.XPath("//input[@name='mobile_image_data']"));
@@ -242,7 +242,7 @@ namespace Facebook.Core.FacebookError
             }
             finally
             {
-                driver.Close();
+                //driver.Close();
             }
             return result;
         }        

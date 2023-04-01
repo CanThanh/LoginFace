@@ -23,7 +23,7 @@ namespace Facebook
         SQLiteProcessing sqLiteProcessing = new SQLiteProcessing();
         List<AccountInfo> lstAccountInfo = new List<AccountInfo>();
         string KeyResovelCatcha, apiKey;
-        int countThread = 3;
+        int countThread = 3, iFunctionRunning;
         List<int> lstRowDataRun = new List<int>();
         ComboboxItem itemSelected;
         public MainForm()
@@ -179,7 +179,9 @@ namespace Facebook
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            RunMultiThread(CheckPointMBasic282);
+            iFunctionRunning = (int)Function.Error282;
+            backgroundWorker1.RunWorkerAsync();
+            //RunMultiThread(CheckPointMBasic282);
         }
 
         private void CheckPointMBasic282(int rowIndex)
@@ -190,6 +192,15 @@ namespace Facebook
 
             var result = facebookError282.ProcessMBasicFacebook(account, rowIndex, "", KeyResovelCatcha, apiKey, rbLoginCookie.Checked);
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Hoàn thành" : "Có lỗi";
+        }
+
+        public int GetAge()
+        {
+            return (int)nUDBirthday.Value;
+        }
+        public string GetGender()
+        {
+            return rbFemale.Checked ? "female" : "male";
         }
         #endregion
 
@@ -343,7 +354,9 @@ namespace Facebook
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            RunMultiThread(CheckStatusAccount);
+            iFunctionRunning = (int)Function.CheckStatus;
+            backgroundWorker1.RunWorkerAsync();
+            //RunMultiThread(CheckStatusAccount);
         }
         private void CheckStatusAccount(int rowIndex)
         {
@@ -366,7 +379,9 @@ namespace Facebook
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            RunMultiThread(FacebookAccountQuality);
+            iFunctionRunning = (int)Function.AccountQuality;
+            backgroundWorker1.RunWorkerAsync();
+            //RunMultiThread(FacebookAccountQuality);
         }
         private void FacebookAccountQuality(int rowIndex)
         {
@@ -391,10 +406,12 @@ namespace Facebook
                     lstRowDataRun.Add(dgViewInput.Rows.IndexOf(item));
                 }
             }
-            RunMultiThread(FacebookLogin);
+            iFunctionRunning = (int)Function.Login;
+            backgroundWorker1.RunWorkerAsync();
         }
         private void FacebookLogin(int rowIndex)
         {
+            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Đăng nhập");
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = "";
             FacebookProcessing facebookProcessing = new FacebookProcessing();
             var account = lstAccountInfo[rowIndex];
@@ -421,6 +438,28 @@ namespace Facebook
 
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
-        #endregion               
+        #endregion
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            switch (iFunctionRunning)
+            {
+                case (int)Function.Login:
+                    RunMultiThread(FacebookLogin);
+                    break;
+                case (int)Function.CheckStatus:
+                    RunMultiThread(CheckStatusAccount);
+                    break;
+                case (int)Function.Error282:
+                    RunMultiThread(CheckPointMBasic282);
+                    break;
+                case (int)Function.AccountQuality:
+                    RunMultiThread(FacebookAccountQuality);
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
 }

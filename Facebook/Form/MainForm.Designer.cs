@@ -39,6 +39,22 @@
             addUserAgent = new ToolStripMenuItem();
             addProxy = new ToolStripMenuItem();
             dgViewInput = new DataGridView();
+            colCheck = new DataGridViewCheckBoxColumn();
+            colIndex = new DataGridViewTextBoxColumn();
+            colID = new DataGridViewTextBoxColumn();
+            colPass = new DataGridViewTextBoxColumn();
+            colTwoFA = new DataGridViewTextBoxColumn();
+            colCookie = new DataGridViewTextBoxColumn();
+            colEmail = new DataGridViewTextBoxColumn();
+            colPassMail = new DataGridViewTextBoxColumn();
+            colFullName = new DataGridViewTextBoxColumn();
+            colBirthday = new DataGridViewTextBoxColumn();
+            colGender = new DataGridViewTextBoxColumn();
+            colAccountInfo = new DataGridViewTextBoxColumn();
+            colProxy = new DataGridViewTextBoxColumn();
+            colUserAgent = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
+            colNote = new DataGridViewTextBoxColumn();
             contextMenuStrip = new ContextMenuStrip(components);
             cmsSelected = new ToolStripMenuItem();
             cmsSelectAll = new ToolStripTextBox();
@@ -64,22 +80,13 @@
             gpUserAgent = new GroupBox();
             btnUserAgentAdd = new Button();
             btnUserAgentRemove = new Button();
-            colCheck = new DataGridViewCheckBoxColumn();
-            colIndex = new DataGridViewTextBoxColumn();
-            colID = new DataGridViewTextBoxColumn();
-            colPass = new DataGridViewTextBoxColumn();
-            colTwoFA = new DataGridViewTextBoxColumn();
-            colCookie = new DataGridViewTextBoxColumn();
-            colEmail = new DataGridViewTextBoxColumn();
-            colPassMail = new DataGridViewTextBoxColumn();
-            colFullName = new DataGridViewTextBoxColumn();
-            colBirthday = new DataGridViewTextBoxColumn();
-            colGender = new DataGridViewTextBoxColumn();
-            colAccountInfo = new DataGridViewTextBoxColumn();
-            colProxy = new DataGridViewTextBoxColumn();
-            colUserAgent = new DataGridViewTextBoxColumn();
-            colStatus = new DataGridViewTextBoxColumn();
-            colNote = new DataGridViewTextBoxColumn();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            groupBox1 = new GroupBox();
+            rbFemale = new RadioButton();
+            rbMale = new RadioButton();
+            label3 = new Label();
+            nUDBirthday = new NumericUpDown();
+            label2 = new Label();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgViewInput).BeginInit();
             contextMenuStrip.SuspendLayout();
@@ -87,6 +94,8 @@
             gbAccount.SuspendLayout();
             gbProxy.SuspendLayout();
             gpUserAgent.SuspendLayout();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthday).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -153,7 +162,7 @@
             dgViewInput.Columns.AddRange(new DataGridViewColumn[] { colCheck, colIndex, colID, colPass, colTwoFA, colCookie, colEmail, colPassMail, colFullName, colBirthday, colGender, colAccountInfo, colProxy, colUserAgent, colStatus, colNote });
             dgViewInput.ContextMenuStrip = contextMenuStrip;
             dgViewInput.EditMode = DataGridViewEditMode.EditProgrammatically;
-            dgViewInput.Location = new Point(0, 93);
+            dgViewInput.Location = new Point(0, 101);
             dgViewInput.Margin = new Padding(4, 3, 4, 3);
             dgViewInput.Name = "dgViewInput";
             dgViewInput.ReadOnly = true;
@@ -161,9 +170,134 @@
             dgViewInput.RowHeadersWidth = 62;
             dgViewInput.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dgViewInput.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgViewInput.Size = new Size(1234, 534);
+            dgViewInput.Size = new Size(1234, 526);
             dgViewInput.TabIndex = 3;
             dgViewInput.CellClick += dgViewInput_CellClick;
+            // 
+            // colCheck
+            // 
+            colCheck.FalseValue = "false";
+            colCheck.HeaderText = "Chọn";
+            colCheck.IndeterminateValue = "false";
+            colCheck.MinimumWidth = 8;
+            colCheck.Name = "colCheck";
+            colCheck.ReadOnly = true;
+            colCheck.TrueValue = "true";
+            colCheck.Width = 50;
+            // 
+            // colIndex
+            // 
+            colIndex.HeaderText = "STT";
+            colIndex.MinimumWidth = 8;
+            colIndex.Name = "colIndex";
+            colIndex.ReadOnly = true;
+            colIndex.Width = 50;
+            // 
+            // colID
+            // 
+            colID.HeaderText = "UID";
+            colID.MinimumWidth = 8;
+            colID.Name = "colID";
+            colID.ReadOnly = true;
+            colID.Width = 80;
+            // 
+            // colPass
+            // 
+            colPass.HeaderText = "Mật khẩu";
+            colPass.MinimumWidth = 8;
+            colPass.Name = "colPass";
+            colPass.ReadOnly = true;
+            colPass.Width = 80;
+            // 
+            // colTwoFA
+            // 
+            colTwoFA.HeaderText = "Mã 2 FA";
+            colTwoFA.MinimumWidth = 8;
+            colTwoFA.Name = "colTwoFA";
+            colTwoFA.ReadOnly = true;
+            colTwoFA.Width = 80;
+            // 
+            // colCookie
+            // 
+            colCookie.HeaderText = "Cookie";
+            colCookie.MinimumWidth = 8;
+            colCookie.Name = "colCookie";
+            colCookie.ReadOnly = true;
+            colCookie.Width = 150;
+            // 
+            // colEmail
+            // 
+            colEmail.HeaderText = "Email";
+            colEmail.MinimumWidth = 8;
+            colEmail.Name = "colEmail";
+            colEmail.ReadOnly = true;
+            colEmail.Width = 80;
+            // 
+            // colPassMail
+            // 
+            colPassMail.HeaderText = "Pass email";
+            colPassMail.MinimumWidth = 8;
+            colPassMail.Name = "colPassMail";
+            colPassMail.ReadOnly = true;
+            colPassMail.Width = 80;
+            // 
+            // colFullName
+            // 
+            colFullName.HeaderText = "Full Name";
+            colFullName.Name = "colFullName";
+            colFullName.ReadOnly = true;
+            // 
+            // colBirthday
+            // 
+            colBirthday.HeaderText = "Birthday";
+            colBirthday.Name = "colBirthday";
+            colBirthday.ReadOnly = true;
+            // 
+            // colGender
+            // 
+            colGender.HeaderText = "Gender";
+            colGender.Name = "colGender";
+            colGender.ReadOnly = true;
+            // 
+            // colAccountInfo
+            // 
+            colAccountInfo.HeaderText = "Thông tin tài khoản";
+            colAccountInfo.MinimumWidth = 8;
+            colAccountInfo.Name = "colAccountInfo";
+            colAccountInfo.ReadOnly = true;
+            colAccountInfo.Width = 150;
+            // 
+            // colProxy
+            // 
+            colProxy.HeaderText = "Proxy";
+            colProxy.MinimumWidth = 8;
+            colProxy.Name = "colProxy";
+            colProxy.ReadOnly = true;
+            colProxy.Width = 80;
+            // 
+            // colUserAgent
+            // 
+            colUserAgent.HeaderText = "User Agent";
+            colUserAgent.MinimumWidth = 8;
+            colUserAgent.Name = "colUserAgent";
+            colUserAgent.ReadOnly = true;
+            colUserAgent.Width = 150;
+            // 
+            // colStatus
+            // 
+            colStatus.HeaderText = "Tình trạng";
+            colStatus.MinimumWidth = 8;
+            colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
+            colStatus.Width = 80;
+            // 
+            // colNote
+            // 
+            colNote.HeaderText = "Ghi chú";
+            colNote.MinimumWidth = 8;
+            colNote.Name = "colNote";
+            colNote.ReadOnly = true;
+            colNote.Width = 150;
             // 
             // contextMenuStrip
             // 
@@ -312,7 +446,7 @@
             gbLogin.Controls.Add(rbLoginCookie);
             gbLogin.Location = new Point(370, 23);
             gbLogin.Name = "gbLogin";
-            gbLogin.Size = new Size(176, 60);
+            gbLogin.Size = new Size(176, 72);
             gbLogin.TabIndex = 13;
             gbLogin.TabStop = false;
             gbLogin.Text = "Đăng nhập";
@@ -325,7 +459,7 @@
             gbAccount.Controls.Add(btnRemoveAccount);
             gbAccount.Location = new Point(12, 27);
             gbAccount.Name = "gbAccount";
-            gbAccount.Size = new Size(335, 60);
+            gbAccount.Size = new Size(335, 68);
             gbAccount.TabIndex = 14;
             gbAccount.TabStop = false;
             gbAccount.Text = "Tài khoản";
@@ -346,9 +480,9 @@
             // 
             gbProxy.Controls.Add(btnProxyAdd);
             gbProxy.Controls.Add(btnProxyRemove);
-            gbProxy.Location = new Point(562, 31);
+            gbProxy.Location = new Point(562, 23);
             gbProxy.Name = "gbProxy";
-            gbProxy.Size = new Size(93, 52);
+            gbProxy.Size = new Size(93, 72);
             gbProxy.TabIndex = 15;
             gbProxy.TabStop = false;
             gbProxy.Text = "Proxy";
@@ -357,7 +491,7 @@
             // 
             btnProxyAdd.BackgroundImage = (Image)resources.GetObject("btnProxyAdd.BackgroundImage");
             btnProxyAdd.BackgroundImageLayout = ImageLayout.Stretch;
-            btnProxyAdd.Location = new Point(7, 18);
+            btnProxyAdd.Location = new Point(7, 27);
             btnProxyAdd.Margin = new Padding(4, 3, 4, 3);
             btnProxyAdd.Name = "btnProxyAdd";
             btnProxyAdd.Size = new Size(35, 27);
@@ -369,7 +503,7 @@
             // 
             btnProxyRemove.BackgroundImage = Properties.Resources.minus;
             btnProxyRemove.BackgroundImageLayout = ImageLayout.Stretch;
-            btnProxyRemove.Location = new Point(50, 17);
+            btnProxyRemove.Location = new Point(50, 26);
             btnProxyRemove.Margin = new Padding(4, 3, 4, 3);
             btnProxyRemove.Name = "btnProxyRemove";
             btnProxyRemove.Size = new Size(35, 27);
@@ -381,9 +515,9 @@
             // 
             gpUserAgent.Controls.Add(btnUserAgentAdd);
             gpUserAgent.Controls.Add(btnUserAgentRemove);
-            gpUserAgent.Location = new Point(661, 31);
+            gpUserAgent.Location = new Point(661, 23);
             gpUserAgent.Name = "gpUserAgent";
-            gpUserAgent.Size = new Size(95, 52);
+            gpUserAgent.Size = new Size(95, 72);
             gpUserAgent.TabIndex = 16;
             gpUserAgent.TabStop = false;
             gpUserAgent.Text = "UserAgent";
@@ -392,7 +526,7 @@
             // 
             btnUserAgentAdd.BackgroundImage = (Image)resources.GetObject("btnUserAgentAdd.BackgroundImage");
             btnUserAgentAdd.BackgroundImageLayout = ImageLayout.Stretch;
-            btnUserAgentAdd.Location = new Point(7, 18);
+            btnUserAgentAdd.Location = new Point(7, 27);
             btnUserAgentAdd.Margin = new Padding(4, 3, 4, 3);
             btnUserAgentAdd.Name = "btnUserAgentAdd";
             btnUserAgentAdd.Size = new Size(35, 27);
@@ -404,7 +538,7 @@
             // 
             btnUserAgentRemove.BackgroundImage = Properties.Resources.minus;
             btnUserAgentRemove.BackgroundImageLayout = ImageLayout.Stretch;
-            btnUserAgentRemove.Location = new Point(50, 17);
+            btnUserAgentRemove.Location = new Point(50, 26);
             btnUserAgentRemove.Margin = new Padding(4, 3, 4, 3);
             btnUserAgentRemove.Name = "btnUserAgentRemove";
             btnUserAgentRemove.Size = new Size(35, 27);
@@ -412,136 +546,83 @@
             btnUserAgentRemove.UseVisualStyleBackColor = true;
             btnUserAgentRemove.Click += btnUserAgentRemove_Click;
             // 
-            // colCheck
+            // backgroundWorker1
             // 
-            colCheck.FalseValue = "false";
-            colCheck.HeaderText = "Chọn";
-            colCheck.IndeterminateValue = "false";
-            colCheck.MinimumWidth = 8;
-            colCheck.Name = "colCheck";
-            colCheck.ReadOnly = true;
-            colCheck.TrueValue = "true";
-            colCheck.Width = 50;
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
             // 
-            // colIndex
+            // groupBox1
             // 
-            colIndex.HeaderText = "STT";
-            colIndex.MinimumWidth = 8;
-            colIndex.Name = "colIndex";
-            colIndex.ReadOnly = true;
-            colIndex.Width = 50;
+            groupBox1.Controls.Add(rbFemale);
+            groupBox1.Controls.Add(rbMale);
+            groupBox1.Controls.Add(label3);
+            groupBox1.Controls.Add(nUDBirthday);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Location = new Point(771, 23);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(208, 72);
+            groupBox1.TabIndex = 17;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Check point";
             // 
-            // colID
+            // rbFemale
             // 
-            colID.HeaderText = "UID";
-            colID.MinimumWidth = 8;
-            colID.Name = "colID";
-            colID.ReadOnly = true;
-            colID.Width = 80;
+            rbFemale.AutoSize = true;
+            rbFemale.Location = new Point(150, 45);
+            rbFemale.Margin = new Padding(4, 3, 4, 3);
+            rbFemale.Name = "rbFemale";
+            rbFemale.Size = new Size(41, 19);
+            rbFemale.TabIndex = 14;
+            rbFemale.Text = "Nữ";
+            rbFemale.UseVisualStyleBackColor = true;
             // 
-            // colPass
+            // rbMale
             // 
-            colPass.HeaderText = "Mật khẩu";
-            colPass.MinimumWidth = 8;
-            colPass.Name = "colPass";
-            colPass.ReadOnly = true;
-            colPass.Width = 80;
+            rbMale.AutoSize = true;
+            rbMale.Checked = true;
+            rbMale.Location = new Point(148, 20);
+            rbMale.Margin = new Padding(4, 3, 4, 3);
+            rbMale.Name = "rbMale";
+            rbMale.Size = new Size(51, 19);
+            rbMale.TabIndex = 13;
+            rbMale.TabStop = true;
+            rbMale.Text = "Nam";
+            rbMale.UseVisualStyleBackColor = true;
             // 
-            // colTwoFA
+            // label3
             // 
-            colTwoFA.HeaderText = "Mã 2 FA";
-            colTwoFA.MinimumWidth = 8;
-            colTwoFA.Name = "colTwoFA";
-            colTwoFA.ReadOnly = true;
-            colTwoFA.Width = 80;
+            label3.AutoSize = true;
+            label3.Location = new Point(88, 32);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(52, 15);
+            label3.TabIndex = 10;
+            label3.Text = "Giới tính";
             // 
-            // colCookie
+            // nUDBirthday
             // 
-            colCookie.HeaderText = "Cookie";
-            colCookie.MinimumWidth = 8;
-            colCookie.Name = "colCookie";
-            colCookie.ReadOnly = true;
-            colCookie.Width = 150;
+            nUDBirthday.Location = new Point(44, 27);
+            nUDBirthday.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
+            nUDBirthday.Name = "nUDBirthday";
+            nUDBirthday.Size = new Size(37, 23);
+            nUDBirthday.TabIndex = 9;
+            nUDBirthday.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
-            // colEmail
+            // label2
             // 
-            colEmail.HeaderText = "Email";
-            colEmail.MinimumWidth = 8;
-            colEmail.Name = "colEmail";
-            colEmail.ReadOnly = true;
-            colEmail.Width = 80;
-            // 
-            // colPassMail
-            // 
-            colPassMail.HeaderText = "Pass email";
-            colPassMail.MinimumWidth = 8;
-            colPassMail.Name = "colPassMail";
-            colPassMail.ReadOnly = true;
-            colPassMail.Width = 80;
-            // 
-            // colFullName
-            // 
-            colFullName.HeaderText = "Full Name";
-            colFullName.Name = "colFullName";
-            colFullName.ReadOnly = true;
-            // 
-            // colBirthday
-            // 
-            colBirthday.HeaderText = "Birthday";
-            colBirthday.Name = "colBirthday";
-            colBirthday.ReadOnly = true;
-            // 
-            // colGender
-            // 
-            colGender.HeaderText = "Gender";
-            colGender.Name = "colGender";
-            colGender.ReadOnly = true;
-            // 
-            // colAccountInfo
-            // 
-            colAccountInfo.HeaderText = "Thông tin tài khoản";
-            colAccountInfo.MinimumWidth = 8;
-            colAccountInfo.Name = "colAccountInfo";
-            colAccountInfo.ReadOnly = true;
-            colAccountInfo.Width = 150;
-            // 
-            // colProxy
-            // 
-            colProxy.HeaderText = "Proxy";
-            colProxy.MinimumWidth = 8;
-            colProxy.Name = "colProxy";
-            colProxy.ReadOnly = true;
-            colProxy.Width = 80;
-            // 
-            // colUserAgent
-            // 
-            colUserAgent.HeaderText = "User Agent";
-            colUserAgent.MinimumWidth = 8;
-            colUserAgent.Name = "colUserAgent";
-            colUserAgent.ReadOnly = true;
-            colUserAgent.Width = 150;
-            // 
-            // colStatus
-            // 
-            colStatus.HeaderText = "Tình trạng";
-            colStatus.MinimumWidth = 8;
-            colStatus.Name = "colStatus";
-            colStatus.ReadOnly = true;
-            colStatus.Width = 80;
-            // 
-            // colNote
-            // 
-            colNote.HeaderText = "Ghi chú";
-            colNote.MinimumWidth = 8;
-            colNote.Name = "colNote";
-            colNote.ReadOnly = true;
-            colNote.Width = 150;
+            label2.AutoSize = true;
+            label2.Location = new Point(7, 33);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(30, 15);
+            label2.TabIndex = 8;
+            label2.Text = "Tuổi";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1234, 628);
+            Controls.Add(groupBox1);
             Controls.Add(gpUserAgent);
             Controls.Add(gbProxy);
             Controls.Add(gbAccount);
@@ -563,6 +644,9 @@
             gbAccount.PerformLayout();
             gbProxy.ResumeLayout(false);
             gpUserAgent.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nUDBirthday).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -618,5 +702,12 @@
         private DataGridViewTextBoxColumn colUserAgent;
         private DataGridViewTextBoxColumn colStatus;
         private DataGridViewTextBoxColumn colNote;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private GroupBox groupBox1;
+        private NumericUpDown nUDBirthday;
+        private Label label2;
+        private Label label3;
+        private RadioButton rbFemale;
+        private RadioButton rbMale;
     }
 }

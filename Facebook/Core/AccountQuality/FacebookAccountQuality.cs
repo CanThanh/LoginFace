@@ -83,11 +83,11 @@ namespace Facebook.Core.AccountQuality
                     string yearOfBirthday = birthdaySplit[2];
                     faceInfo.birthday = dayOfBirthday + "." + monthOfBirthday + "." + yearOfBirthday.Substring(2, 2);
                     var bitmap = (Bitmap)Image.FromFile(configIdentityDbModel.imageUrl);
-                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + faceInfo.id + ".jpg";
+                    string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Face) + "\\" + faceInfo.id + ".jpg";
                     var imageFaceUrl = CommonFunction.GetLinkFaceImage(DateTime.Now.Year - Convert.ToInt32(yearOfBirthday), faceInfo.gender);
                     imageProcessing.getImageFromUrl(imageFaceUrl.Substring(30), imageFaceUrl, imgFaceFakePath);
                     imageProcessing.ProcessImage(faceInfo, bitmap, configIdentityDbModel.configIdentityModel, Image.FromFile(imgFaceFakePath));
-                    string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Identity") + "\\" + faceInfo.id + ".jpg";
+                    string imgIdentityPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Identity) + "\\" + faceInfo.id + ".jpg";
                     bitmap.Save(imgIdentityPath);
                     account.ImgIdentityQuanlityPath = imgIdentityPath;
                     bitmap.Dispose();

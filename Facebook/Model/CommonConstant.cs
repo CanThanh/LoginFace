@@ -24,6 +24,14 @@ namespace Facebook.Model
             UserAgent,
             Proxy
         }
+
+        public enum Function
+        {
+            Login,
+            CheckStatus,
+            Error282,
+            AccountQuality
+        }
     }
     internal class FacebookLinkUrl
     {
@@ -42,9 +50,9 @@ namespace Facebook.Model
     internal class FilePath
     {
         public const string ConfigOtp =  "\\File\\setting\\configOtp.json";
-        public const string Face = "\\File\\setting\\configOtp.json";
-        public const string ScreenShot = "\\File\\setting\\configOtp.json";
-        public const string Indentity = "\\File\\setting\\configOtp.json";
-        public const string Captcha = "\\File\\setting\\configOtp.json";
+        public const string Face = "\\File\\Image\\Face";
+        public const string ScreenShot = "\\File\\Image\\ScreenShot";
+        public const string Identity = "\\File\\Image\\Identity";
+        public const string Captcha = "\\File\\Image\\Captcha";
     }
 }

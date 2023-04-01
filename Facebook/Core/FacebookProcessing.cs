@@ -453,8 +453,8 @@ namespace Facebook.Core
             string source = "";
             if (driver.Url.Contains("1501092823525282")) //1501092823525282
             {
-                var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
-                account.DTSG = dtsg;
+                //var dtsg = driver.FindElement(By.XPath("//input[@name='fb_dtsg']")).GetValue();
+                //account.DTSG = dtsg;
                 ////Get base64 captcha
                 source = driver.PageSource;
                 if (source.Contains("captcha_persist_data"))
@@ -466,7 +466,7 @@ namespace Facebook.Core
                     Bitmap screenShot = new Bitmap(new MemoryStream(byteArray));
                     Rectangle cropImage = new Rectangle(elementImage.Location.X, elementImage.Location.Y, elementImage.Size.Width, elementImage.Size.Height);
                     screenShot = screenShot.Clone(cropImage, screenShot.PixelFormat);
-                    string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Captcha") + "\\" + account.Id + "_captcha.png";
+                    string imgPath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Captcha) + "\\" + account.Id + "_captcha.png";
                     screenShot.Save(imgPath, ImageFormat.Png);
                     ResolveCaptcha resolveCaptcha = new ResolveCaptcha();
                     resolveCaptcha.APIKey = resolveCaptchaKey;
@@ -488,7 +488,7 @@ namespace Facebook.Core
                     }
                 }
 
-                if (source.Contains("action_set_contact_point"))
+                if (source.Contains("action_set_contact_point") || source.Contains("action_unset_contact_point"))
                 {
                     MainForm.Self.SetColNoteGridViewByRow(rowIndex, "OTP");
    
@@ -513,72 +513,27 @@ namespace Facebook.Core
                     }
                     else
                     {
-                        string homenetwork = "";
-                        IOtp otpProcessing = GetOtp(configOtpModel, out homenetwork);
-                        string number = "", idNumber = "", code = "", appName = "Facebook";
-                        string appId = otpProcessing.GetIdApplicationByName(configOtpModel.ApiKey, appName);
-                        int count = 0;
-                        while (count < 5 && string.IsNullOrEmpty(number))
-                        {
-                            number = otpProcessing.GetNumberByAppId(configOtpModel.ApiKey, appId, out idNumber, homenetwork);
-                            Thread.Sleep(random.Next(2000, 3000));
-                            if (!string.IsNullOrEmpty(number))
-                            {
-                                if (number.Length == 9)
-                                {
-                                    number = "+84" + number;
-                                }
-                                CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
-                                Thread.Sleep(random.Next(1000, 2000));
-                                driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
-                                Thread.Sleep(random.Next(1000, 2000));
-                                source = driver.PageSource;
-                                if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
-                                {
-                                    number = "";
-                                    otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
-                                }
-                            }
-                            count++;
-                        }
-                        count = 0;
-                        if (!string.IsNullOrEmpty(number))
-                        {
-                            while (count < 30 && string.IsNullOrEmpty(code))
-                            {
-                                Thread.Sleep(10000);
-                                code = otpProcessing.GetCodeByIdService(configOtpModel.ApiKey, idNumber);
-                                count++;
-                            }
-                        }
-                        if (string.IsNullOrEmpty(code))
-                        {
-                            otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
-                            MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
-                        }
-                        else
-                        {
-                            CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
-                            Thread.Sleep(random.Next(1000, 2000));
-                            driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
-                            Thread.Sleep(random.Next(1000, 2000));
-                            source = driver.PageSource;
-                        }
+                        GetCodeOtp(driver, rowIndex, configOtpModel, random, source);
                     }
                 }
 
+                source = driver.PageSource;
                 if (source.Contains("mobile_image_data"))
                 {
                     if (isError282)
                     {
                         ImageProcessing imageProcessing = new ImageProcessing();
-                        string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + "\\File\\Image\\Face") + "\\" + account.Id + ".jpg";
+                        string imgFaceFakePath = CommonFunction.CreatDirectory(Environment.CurrentDirectory + FilePath.Face) + "\\" + account.Id + ".jpg";
 
                         if (string.IsNullOrEmpty(account.Info))
                         {
-                            var age = random.Next(18, 60);
-                            //fix gender or random o day male or female
-                            string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, "male");
+                            var age = MainForm.Self.GetAge();
+                            if(age == 0)
+                            {
+                                age = random.Next(18, 60);
+                            }
+                            var gender = MainForm.Self.GetGender();
+                            string faceFakeUrl = CommonFunction.GetLinkFaceImage(age, gender);
                             imageProcessing.getImageFromUrl(faceFakeUrl.Substring(30), faceFakeUrl, imgFaceFakePath);
                             account.ImgFacePath = imgFaceFakePath;
                         }
@@ -685,6 +640,70 @@ namespace Facebook.Core
                 }
             }
             return otpProcessing;
+        }
+    
+        private void GetCodeOtp(ChromeDriver driver, int rowIndex, ConfigOtpModel configOtpModel, Random random, string source)
+        {
+
+            while (!source.Contains("mobile_image_data"))
+            {
+                if (source.Contains("action_unset_contact_point"))
+                {
+                    driver.FindElement(By.XPath("//input[@name='action_unset_contact_point']")).Click();
+                    Thread.Sleep(random.Next(1000, 2000));
+                }
+                string homenetwork = "";
+                IOtp otpProcessing = GetOtp(configOtpModel, out homenetwork);
+                string number = "", idNumber = "", code = "", appName = "Facebook";
+                string appId = otpProcessing.GetIdApplicationByName(configOtpModel.ApiKey, appName);
+                int count = 0;
+                while (count < 5 && string.IsNullOrEmpty(number))
+                {
+                    number = otpProcessing.GetNumberByAppId(configOtpModel.ApiKey, appId, out idNumber, homenetwork);
+                    Thread.Sleep(random.Next(2000, 3000));
+                    if (!string.IsNullOrEmpty(number))
+                    {
+                        if (number.Length == 9)
+                        {
+                            number = "+84" + number;
+                        }
+                        CommonFunction.SendKeyByXPath(driver, "//input[@name='contact_point']", number);
+                        Thread.Sleep(random.Next(1000, 2000));
+                        driver.FindElement(By.XPath("//input[@name='action_set_contact_point']")).Click();
+                        Thread.Sleep(random.Next(1000, 2000));
+                        source = driver.PageSource;
+                        if (source.Contains("This number has been used to verify too many accounts on Facebook. Please try a different number."))
+                        {
+                            number = "";
+                            otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
+                        }
+                    }
+                    count++;
+                }
+                count = 0;
+                if (!string.IsNullOrEmpty(number))
+                {
+                    while (count < 30 && string.IsNullOrEmpty(code))
+                    {
+                        Thread.Sleep(10000);
+                        code = otpProcessing.GetCodeByIdService(configOtpModel.ApiKey, idNumber);
+                        count++;
+                    }
+                }
+                if (string.IsNullOrEmpty(code))
+                {
+                    otpProcessing.CancelByAppId(configOtpModel.ApiKey, idNumber);
+                    MainForm.Self.SetColNoteGridViewByRow(rowIndex, "Lỗi nhận OTP");
+                }
+                else
+                {
+                    CommonFunction.SendKeyByXPath(driver, "//input[@name='code']", code);
+                    Thread.Sleep(random.Next(1000, 2000));
+                    driver.FindElement(By.XPath("//div[@class='ba']//input[@name='action_submit_code']")).Click();
+                    Thread.Sleep(random.Next(1000, 2000));
+                }
+                source = driver.PageSource;
+            }            
         }
     }
 }
