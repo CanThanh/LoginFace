@@ -70,8 +70,18 @@ namespace Facebook
             lstAccountInfo = sqLiteProcessing.getAllAccount(itemSelected.Value);
             foreach (var item in lstAccountInfo)
             {
-                dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
-                                    item.Email, item.PassMail, "", item.Proxy, item.UserAgent, "", "");
+                if (string.IsNullOrEmpty(item.Info))
+                {
+                    dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                    item.Email, item.PassMail, "", "", "", "", item.Proxy, item.UserAgent, "", "");
+                }
+                else
+                {
+                    var info = JsonConvert.DeserializeObject<FaceInfo>(item.Info);
+                    dgViewInput.Rows.Add(false, lstAccountInfo.IndexOf(item) + 1, item.Id, item.Pass, item.TwoFA, item.Cookie,
+                    item.Email, item.PassMail, info.name, info.birthday, info.gender, "", item.Proxy, item.UserAgent, "", "");
+                }
+
             }
         }
 
@@ -80,8 +90,16 @@ namespace Facebook
         {
             if (e.ColumnIndex == 0)
             {
-                var oldValue = Convert.ToBoolean(dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
-                dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = !oldValue;
+                try
+                {
+                    var oldValue = Convert.ToBoolean(dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                    dgViewInput.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = !oldValue;
+                }
+                catch (Exception)
+                {
+
+                }
+
             }
         }
 
@@ -176,21 +194,56 @@ namespace Facebook
         #endregion
 
         #region Data Input      
-        private void addAccount_Click(object sender, EventArgs e)
+        private void oTPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigOtp configOtp = new ConfigOtp();
+            configOtp.Show();
+        }
+
+        private void btnAddAccount_Click(object sender, EventArgs e)
         {
             ConfigInput configInput = new ConfigInput();
             configInput.Show();
         }
-        private void addUserAgent_Click(object sender, EventArgs e)
+
+        private void btnUserAgentAdd_Click(object sender, EventArgs e)
         {
             ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.UserAgent);
             configUserAgent_Proxy.Show();
         }
 
-        private void addProxy_Click(object sender, EventArgs e)
+        private void btnUserAgentRemove_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    var accountInfo = lstAccountInfo[dgViewInput.Rows.IndexOf(item)];
+                    accountInfo.UserAgent = "";
+                    item.Cells["colUserAgent"].Value = "";
+                    sqLiteProcessing.InsertOrUpdateAccount(accountInfo, itemSelected.Value);
+                }
+            }
+        }
+
+        private void btnProxyAdd_Click(object sender, EventArgs e)
         {
             ConfigUserAgent_Proxy configUserAgent_Proxy = new ConfigUserAgent_Proxy((int)TypeForm.Proxy);
             configUserAgent_Proxy.Show();
+        }
+
+        private void btnProxyRemove_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgViewInput.Rows)
+            {
+                if (Convert.ToBoolean(item.Cells["colCheck"].Value))
+                {
+                    var accountInfo = lstAccountInfo[dgViewInput.Rows.IndexOf(item)];
+                    accountInfo.Proxy = "";
+                    item.Cells["colProxy"].Value = "";
+                    sqLiteProcessing.InsertOrUpdateAccount(accountInfo, itemSelected.Value);
+                }
+            }
         }
 
         public void SetUserAgentOrProxyForAccount(ConfigUserAgentProxyModel configUserAgentProxyModel)
@@ -232,6 +285,7 @@ namespace Facebook
                         }
                     }
                 }
+                sqLiteProcessing.InsertOrUpdateLstAccount(lstAccountInfo, itemSelected.Value);
             }
             catch (Exception ex)
             {
@@ -367,12 +421,6 @@ namespace Facebook
 
             dgViewInput.Rows[rowIndex].Cells["colStatus"].Value = result ? "Thành công" : "Lỗi";
         }
-        #endregion
-
-        private void oTPToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConfigOtp configOtp = new ConfigOtp();
-            configOtp.Show();
-        }
+        #endregion               
     }
 }

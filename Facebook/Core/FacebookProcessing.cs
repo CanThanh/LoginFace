@@ -446,7 +446,7 @@ namespace Facebook.Core
             return result;
         }
         
-        public bool FacebookError282MBasic2345(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string imgFacePath, bool isError282 = true)
+        public bool FacebookError282MBasic(ChromeDriver driver, AccountInfo account, int rowIndex, string resolveCaptchaKey, string imgFacePath, bool isError282 = true)
         {
             var result = false;
             Random random = new Random();

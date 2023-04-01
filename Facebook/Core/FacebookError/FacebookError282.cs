@@ -232,7 +232,7 @@ namespace Facebook.Core.FacebookError
 
                 Thread.Sleep(random.Next(1000, 2000));
 
-                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey,  imgFacePath, true);
+                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, imgFacePath, true);
             }
             catch (Exception ex)
             {

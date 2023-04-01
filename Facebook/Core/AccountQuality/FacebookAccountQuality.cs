@@ -122,7 +122,7 @@ namespace Facebook.Core.AccountQuality
                 driver.Navigate().GoToUrl(url);
                 Thread.Sleep(random.Next(1000, 2000));
 
-                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, apiKey, account.ImgIdentityQuanlityPath, false);
+                facebookProcessing.FacebookError282MBasic(driver, account, rowIndex, resolveCaptchaKey, account.ImgIdentityQuanlityPath, false);
 
                 sqLiteProcessing.InsertOrUpdateAccount(account, idFile);
             }
