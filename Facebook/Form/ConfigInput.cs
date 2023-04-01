@@ -8,8 +8,7 @@ namespace Facebook
 {
     public partial class ConfigInput : Form
     {
-        string currentDirectory = Environment.CurrentDirectory;
-        string pathFile =  "\\File\\setting\\inputformat.json";
+        string pathFile = Environment.CurrentDirectory + FilePath.InputFormat;
         private bool lvInput_mDown, lvConfig_mDown;
         public ConfigInputModel configInputModel;
         public List<ConfigInputModel> lstConfigInputModel = new List<ConfigInputModel>();
@@ -60,7 +59,7 @@ namespace Facebook
         private void InitComboBoxInput()
         {
             FileHelper fileHelper = new FileHelper();
-            var content = fileHelper.Read(currentDirectory + pathFile);
+            var content = fileHelper.Read(pathFile);
             lstConfigInputModel.Clear();
             cbInput.Items.Clear();
             var lst = JsonConvert.DeserializeObject<List<ConfigInputModel>>(content);
@@ -188,7 +187,7 @@ namespace Facebook
         {
             FileHelper fileHelper = new FileHelper();
             string content = JsonConvert.SerializeObject(lstConfigInputModel);
-            fileHelper.Write(currentDirectory + pathFile, content);
+            fileHelper.Write(pathFile, content);
         }
 
         private void btnAddDirection_Click(object sender, EventArgs e)

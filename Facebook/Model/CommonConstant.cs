@@ -50,6 +50,7 @@ namespace Facebook.Model
     internal class FilePath
     {
         public const string ConfigOtp =  "\\File\\setting\\configOtp.json";
+        public const string InputFormat = "\\File\\setting\\inputformat.json";
         public const string Face = "\\File\\Image\\Face";
         public const string ScreenShot = "\\File\\Image\\ScreenShot";
         public const string Identity = "\\File\\Image\\Identity";
